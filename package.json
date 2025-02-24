@@ -10,12 +10,12 @@
         "watch": "ng build --watch --configuration development",
         "test": "ng test"
     },
-  "lint-staged": {
-    "*.{ts,js}": [
-      "npm run format",
-      "git add"
-    ]
-  },
+    "lint-staged": {
+        "*.{ts,js}": [
+            "npm run format",
+            "git add"
+        ]
+    },
     "private": true,
     "dependencies": {
         "@angular/animations": "^18.2.0",
