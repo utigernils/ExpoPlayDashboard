@@ -5,6 +5,7 @@
         "prepare": "husky",
         "format": "prettier --write .",
         "format:check": "prettier --check .",
+        "commitlint": "commitlint --edit",
         "start": "ng serve",
         "build": "ng build",
         "watch": "ng build --watch --configuration development",
@@ -46,6 +47,8 @@
         "lint-staged": "^15.4.3",
         "prettier": "3.5.2",
         "typescript": "~5.5.2",
-        "typescript-eslint": "8.23.0"
+        "typescript-eslint": "8.23.0",
+        "@commitlint/cli": "^19.7.1",
+        "@commitlint/config-conventional": "^19.7.1"
     }
 }
