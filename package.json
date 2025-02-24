@@ -11,10 +11,7 @@
         "test": "ng test"
     },
     "lint-staged": {
-        "*.{ts,js}": [
-            "npm run format",
-            "git add"
-        ]
+        "**/*": "prettier --write --ignore-unknown"
     },
     "private": true,
     "dependencies": {
