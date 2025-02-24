@@ -1,0 +1,65 @@
+/* Grund-Layout der Sidebar */
+.sidebar {
+    width: 220px;
+    min-height: 100vh; /* ganze Bildschirmhöhe */
+    background-color: #fff;
+    border-right: 1px solid #e0e0e0; /* dünne Linie am rechten Rand */
+    padding: 1rem;
+    box-sizing: border-box;
+    font-family: sans-serif;
+}
+
+/* Überschriften-Bereich */
+.sidebar-header {
+    margin-bottom: 2rem;
+}
+
+.logo {
+    font-size: 1.5rem;
+    color: #ff8200; /* kräftiges Orange */
+    margin: 0;
+    font-weight: 700;
+}
+
+.sub-logo {
+    font-size: 1rem;
+    color: #ff8200; /* ebenfalls Orange */
+    margin: 0;
+    font-weight: 500;
+}
+
+/* Navigation */
+.nav-items {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.nav-item {
+    display: flex;
+    align-items: center;
+    padding: 0.5rem 0;
+    color: #b3b3b3;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.nav-item:hover {
+    color: #ff8200; /* Hover-Effekt */
+}
+
+/* Icons */
+.nav-item i {
+    margin-right: 0.5rem;
+    font-size: 1rem;
+}
+
+/* Aktives/ausgewähltes Menüelement */
+.nav-item.active {
+    color: #ff8200;
+    font-weight: bold;
+}
+
+.nav-item.active i {
+    color: #ff8200;
+}
