@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { KonsoleTabelleComponent } from './konsole-tabelle.component';
+import { KonsoleComponent } from './konsole.component';
 
 describe('KonsoleTabelleComponent', () => {
-  let component: KonsoleTabelleComponent;
-  let fixture: ComponentFixture<KonsoleTabelleComponent>;
+  let component: KonsoleComponent;
+  let fixture: ComponentFixture<KonsoleComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [KonsoleTabelleComponent]
+      imports: [KonsoleComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(KonsoleTabelleComponent);
+    fixture = TestBed.createComponent(KonsoleComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
