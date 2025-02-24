@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ExpoTabelleComponent } from './expo-tabelle.component';
+import { SidebarComponent } from './sidebar.component';
 
-describe('ExpoTabelleComponent', () => {
-  let component: ExpoTabelleComponent;
-  let fixture: ComponentFixture<ExpoTabelleComponent>;
+describe('SidebarComponent', () => {
+  let component: SidebarComponent;
+  let fixture: ComponentFixture<SidebarComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ExpoTabelleComponent]
+      imports: [SidebarComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(ExpoTabelleComponent);
+    fixture = TestBed.createComponent(SidebarComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
