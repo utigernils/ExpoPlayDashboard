@@ -1,7 +1,7 @@
 ---
 name: Bug Report
 about: Report a bug
-title: '[BUG]'fe
+title: '[BUG]'
 labels: 'bug, triage'
 ---
 
