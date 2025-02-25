@@ -29,7 +29,10 @@
                                 "input": "public"
                             }
                         ],
-                        "styles": ["src/styles.scss"],
+                        "styles": [
+                            "src/styles.scss",
+                            "node_modules/@angular/material/prebuilt-themes/indigo-pink.css"
+                        ],
                         "scripts": []
                     },
                     "configurations": {
@@ -98,6 +101,6 @@
     },
     "cli": {
         "schematicCollections": ["angular-eslint"],
-        "analytics": "793e2fdc-4b7a-44c9-b3e4-406b8565e0b8"
+        "analytics": "100ebf0c-4ad2-43be-aadf-b18db797d5ad"
     }
 }
