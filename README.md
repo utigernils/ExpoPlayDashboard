@@ -61,7 +61,7 @@
 
 **Note:** Make sure to follow the [commit message conventions](https://www.conventionalcommits.org/en/v1.0.0/).
 
-3. Create a pull request to the `develop` or planned release branch.
+3. Create a pull request to the `main` or planned release branch.
 
 For more information, see the [CONTRIBUTING.md](CONTRIBUTING.md) file.
 
