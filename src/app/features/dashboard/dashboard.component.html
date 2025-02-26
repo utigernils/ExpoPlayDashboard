@@ -1,0 +1,122 @@
+<div class="wrapper">
+    <aside>
+        <app-sidebar></app-sidebar>
+    </aside>
+
+    <div class="dashboard">
+        <!-- Erste Zeile: Highscore & Quizzes -->
+        <div class="row">
+            <mat-card class="card-large">
+                <mat-card-title class="mat-card-title"
+                    >Highscore</mat-card-title
+                >
+                <mat-card-content>
+                    <canvas id="highscoreChart"></canvas>
+                </mat-card-content>
+            </mat-card>
+
+            <mat-card class="card-small">
+                <mat-card-title class="mat-card-title"
+                    >Quizzes gespielt</mat-card-title
+                >
+                <mat-card-content>
+                    <canvas id="quizzesChart"></canvas>
+                </mat-card-content>
+            </mat-card>
+
+            <mat-card class="card-small">
+                <mat-card-title class="mat-card-title"
+                    >Total gespielte Quizzes</mat-card-title
+                >
+                <mat-card-content>
+                    <h1 class="big-number">49</h1>
+                </mat-card-content>
+            </mat-card>
+        </div>
+
+        <!-- Zweite Zeile: Konsolen & Ausstellungen -->
+        <div class="row">
+            <mat-card class="card-large">
+                <mat-card-title class="mat-card-title">Konsolen</mat-card-title>
+                <mat-card-content> </mat-card-content>
+            </mat-card>
+
+            <mat-card class="super-large">
+                <mat-card-title class="mat-card-title"
+                    >Ausstellungen</mat-card-title
+                >
+                <mat-card-content>
+                    <table>
+                        <ng-container matColumnDef="name">
+                            <th mat-header-cell *matHeaderCellDef>
+                                Konsolen Name
+                            </th>
+                            <td mat-cell *matCellDef="let element">
+                                Konsole 1
+                            </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="austellung">
+                            <th mat-header-cell *matHeaderCellDef>
+                                Ausstellung
+                            </th>
+                            <td mat-cell *matCellDef="let element">
+                                Zebi Luzern
+                            </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="datum">
+                            <th mat-header-cell *matHeaderCellDef>
+                                Letzte Aktivität
+                            </th>
+                            <td mat-cell *matCellDef="let element">
+                                18 Apr 2025
+                            </td>
+                        </ng-container>
+                    </table>
+                </mat-card-content>
+            </mat-card>
+        </div>
+
+        <div class="row">
+            <mat-card class="card-large">
+                <mat-card-title class="mat-card-title"
+                    >Fragen-Sets</mat-card-title
+                >
+                <mat-card-content> </mat-card-content>
+            </mat-card>
+
+            <mat-card class="card-small">
+                <mat-card-title class="mat-card-title"
+                    >Spielerdaten</mat-card-title
+                >
+                <mat-card-content>
+                    <div class="player">
+                        <!-- *ngFor="let player of players" -->
+                        <!--<img [src]="player.image" alt="Player Image">
+          <div>
+            <h4>{{ player.name }}</h4>
+            <p>{{ player.city }}</p>
+          </div> -->
+                    </div>
+                </mat-card-content>
+            </mat-card>
+
+            <mat-card class="card-small">
+                <mat-card-title class="mat-card-title"
+                    >Benutzer | Dashboard</mat-card-title
+                >
+                <mat-card-content>
+                    <div class="player">
+                        <!-- *ngFor="let player of players" -->
+                        <!--<img [src]="player.image" alt="Player Image">
+          <div>
+            <h4>{{ player.name }}</h4>
+            <p>{{ player.city }}</p>
+          </div> -->
+                    </div>
+                </mat-card-content>
+            </mat-card>
+        </div>
+    </div>
+</div>
