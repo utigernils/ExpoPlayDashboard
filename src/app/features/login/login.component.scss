@@ -4,6 +4,7 @@
     align-items: center;
     justify-content: flex-start; /* Links ausgerichtet */
     padding-left: 10%;
+    gap: 30px; /* Abstand zwischen Card und Logo */
 }
 
 .login-card {
@@ -43,6 +44,11 @@
     background: #00bcd4;
     color: #fff;
     font-weight: bold;
+    border-radius: 10px;
+    height: 40px;
+    font-size: 13px;
+    text-transform: uppercase;
+    border: 2px solid #00bcd4;
 }
 
 .register-link {
@@ -53,4 +59,21 @@
 .register-link a {
     color: #00bcd4;
     text-decoration: none;
+}
+
+.mat-form-input {
+    height: 20px;
+    border-radius: 5px;
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 150px; /* Breite des Logos anpassen */
+}
+
+.logo-container img {
+    max-width: 100%;
+    height: auto;
 }
