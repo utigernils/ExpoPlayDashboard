@@ -4,7 +4,7 @@
         <p class="subtitle">Geben Sie Ihre Email ein zum Anmelden</p>
 
         <mat-card-content>
-            <form>
+            <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
                 <mat-form-field appearance="outline" class="full-width">
                     <input
                         matInput
