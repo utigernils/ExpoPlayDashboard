@@ -4,6 +4,65 @@
     </aside>
 
     <main>
-        <p>expo works!</p>
+        <h1 class="Site-title">Expo Tabelle</h1>
+        <mat-card class="Card">
+            <div class="card-header">
+                <mat-card-title class="mat-card-title"
+                    >Ausstellungen</mat-card-title
+                >
+
+                <div class="card-actions">
+                    <button mat-icon-button class="icon-button-orange">
+                        <mat-icon>block</mat-icon>
+                    </button>
+                    <button mat-icon-button class="icon-button-orange">
+                        <mat-icon>delete</mat-icon>
+                    </button>
+                    <button mat-icon-button class="icon-button-orange">
+                        <mat-icon>add</mat-icon>
+                    </button>
+                    <button mat-icon-button class="icon-button-orange">
+                        <mat-icon>more_horiz</mat-icon>
+                    </button>
+                </div>
+            </div>
+
+            <mat-card-content>
+                <table mat-table [dataSource]="dataSource" class="tableInMat">
+                    <ng-container matColumnDef="ausstellung">
+                        <th mat-header-cell *matHeaderCellDef>Ausstellung</th>
+                        <td mat-cell *matCellDef="let element">
+                            {{ element.ausstellung }}
+                        </td>
+                    </ng-container>
+
+                    <!-- Status Column -->
+                    <ng-container matColumnDef="status">
+                        <th mat-header-cell *matHeaderCellDef>Status</th>
+                        <td mat-cell *matCellDef="let element">
+                            <span
+                                class="status-dot"
+                                [ngClass]="element.statusClass"
+                            ></span>
+                            {{ element.status }}
+                        </td>
+                    </ng-container>
+
+                    <!-- Datum Column -->
+                    <ng-container matColumnDef="datum">
+                        <th mat-header-cell *matHeaderCellDef>Datum</th>
+                        <td mat-cell *matCellDef="let element">
+                            {{ element.datum }}
+                        </td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr
+                        mat-row
+                        *matRowDef="let row; columns: displayedColumns"
+                    ></tr>
+                </table>
+            </mat-card-content>
+        </mat-card>
     </main>
 </div>
