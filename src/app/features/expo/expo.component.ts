@@ -1,10 +1,15 @@
-import { Component } from '@angular/core'
+import { Component, ViewChild, AfterViewInit } from '@angular/core'
 import { SidebarComponent } from '../../shared/sidebar/sidebar.component'
 import { MatCardModule } from '@angular/material/card'
 import { MatIcon } from '@angular/material/icon'
 import { MatIconButton } from '@angular/material/button'
-import { MatHeaderCell, MatTableModule } from '@angular/material/table'
+import {
+    MatHeaderCell,
+    MatTableModule,
+    MatTableDataSource,
+} from '@angular/material/table'
 import { NgClass } from '@angular/common'
+import { MatSort, MatSortModule } from '@angular/material/sort'
 
 @Component({
     selector: 'app-expo',
@@ -17,32 +22,36 @@ import { NgClass } from '@angular/common'
         MatHeaderCell,
         MatTableModule,
         NgClass,
+        MatSortModule,
     ],
     templateUrl: './expo.component.html',
-    styleUrl: './expo.component.scss',
+    styleUrls: ['./expo.component.scss'],
 })
-export class ExpoComponent {
+export class ExpoComponent implements AfterViewInit {
     displayedColumns: string[] = ['ausstellung', 'status', 'datum']
 
-    dataSource: Expo[] = [
+    dataSource = new MatTableDataSource<Expo>([
         {
             ausstellung: 'ZEBI-Luzern',
             status: 'Bereit',
-            statusClass: 'status-bereit',
             datum: '10 Apr 2021',
         },
         {
             ausstellung: 'EXPO-Bern',
             status: 'Deaktiviert',
-            statusClass: 'status-deaktiviert',
             datum: '18 Apr 2021',
         },
-    ]
+    ])
+
+    @ViewChild(MatSort) sort!: MatSort
+
+    ngAfterViewInit(): void {
+        this.dataSource.sort = this.sort
+    }
 }
 
 interface Expo {
     ausstellung: string
     status: string
-    statusClass: string
     datum: string
 }
