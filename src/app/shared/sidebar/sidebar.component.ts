@@ -1,10 +1,28 @@
 import { Component } from '@angular/core'
+import {
+    Camera,
+    LucideAngularModule,
+    House,
+    FileQuestion,
+    Factory,
+    User,
+    FileUser,
+} from 'lucide-angular'
 
 @Component({
     selector: 'app-sidebar',
     standalone: true,
-    imports: [],
     templateUrl: './sidebar.component.html',
-    styleUrl: './sidebar.component.scss',
+    imports: [LucideAngularModule],
+    styleUrls: ['./sidebar.component.scss'],
 })
-export class SidebarComponent {}
+export class SidebarComponent {
+    icons = {
+        camera: Camera,
+        house: House,
+        FileQuestion: FileQuestion,
+        factory: Factory,
+        user: User,
+        FileUser: FileUser,
+    }
+}

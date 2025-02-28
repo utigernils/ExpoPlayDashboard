@@ -28,6 +28,7 @@
         "@angular/platform-browser-dynamic": "^18.2.0",
         "@angular/router": "^18.2.0",
         "chokidar": "^4.0.3",
+        "lucide-angular": "^0.476.0",
         "readdirp": "^4.1.2",
         "rxjs": "~7.8.0",
         "tslib": "^2.3.0",
