@@ -5,6 +5,7 @@ import { QuizQuestionsComponent } from './features/quiz-questions/quiz-questions
 import { ExpoComponent } from './features/expo/expo.component'
 import { PlayerDataComponent } from './features/player-data/player-data.component'
 import { UserComponent } from './features/user/user.component'
+import { LoginComponent } from './features/login/login.component'
 
 export const routes: Routes = [
     { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
@@ -14,4 +15,5 @@ export const routes: Routes = [
     { path: 'expo', component: ExpoComponent },
     { path: 'user', component: UserComponent },
     { path: 'player', component: PlayerDataComponent },
+    { path: 'login', component: LoginComponent },
 ]
