@@ -25,7 +25,81 @@
             </div>
 
             <mat-card-content>
-                <!-- Tabellen Inhalt -->
+                <table
+                    mat-table
+                    [dataSource]="dataSource"
+                    class="tableInMat"
+                    matSort
+                >
+                    <!-- ID Column -->
+                    <ng-container matColumnDef="id">
+                        <!-- Hier 'mat-sort-header' hinzufügen -->
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                            ID
+                        </th>
+                        <td mat-cell *matCellDef="let element">
+                            {{ element.id }}
+                        </td>
+                    </ng-container>
+
+                    <!-- Vorname Column -->
+                    <ng-container matColumnDef="vorname">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                            Vorname
+                        </th>
+                        <td mat-cell *matCellDef="let element">
+                            {{ element.vorname }}
+                        </td>
+                    </ng-container>
+
+                    <!-- Nachname Column -->
+                    <ng-container matColumnDef="nachname">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                            Nachname
+                        </th>
+                        <td mat-cell *matCellDef="let element">
+                            {{ element.nachname }}
+                        </td>
+                    </ng-container>
+
+                    <!-- Email Column -->
+                    <ng-container matColumnDef="email">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                            Email
+                        </th>
+                        <td mat-cell *matCellDef="let element">
+                            {{ element.email }}
+                        </td>
+                    </ng-container>
+
+                    <!-- Aktiv Column -->
+                    <ng-container matColumnDef="acitve">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                            Aktiv
+                        </th>
+                        <td mat-cell *matCellDef="let element">
+                            {{ element.acitve ? 'Ja' : 'Nein' }}
+                        </td>
+                    </ng-container>
+
+                    <!-- Score Column -->
+                    <ng-container matColumnDef="score">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                            Score
+                        </th>
+                        <td mat-cell *matCellDef="let element">
+                            {{ element.score }}
+                        </td>
+                    </ng-container>
+
+                    <!-- Header Row -->
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <!-- Data Row -->
+                    <tr
+                        mat-row
+                        *matRowDef="let row; columns: displayedColumns"
+                    ></tr>
+                </table>
             </mat-card-content>
         </mat-card>
     </main>
