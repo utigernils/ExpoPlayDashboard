@@ -1,4 +1,14 @@
-# Expoplay Dashboard
+<div align="center">
+    <h1>Expoplay Dashboard</h1>
+</div>
+
+<div align="center">
+  
+[![Build CI](https://github.com/utigernils/Expoplay---Dashboard/actions/workflows/node.js.yml/badge.svg)](https://github.com/utigernils/Expoplay---Dashboard/actions/workflows/node.js.yml)
+[![Linter](https://github.com/utigernils/Expoplay---Dashboard/actions/workflows/lint.yml/badge.svg)](https://github.com/utigernils/Expoplay---Dashboard/actions/workflows/lint.yml)
+[![Formatting](https://github.com/utigernils/Expoplay---Dashboard/actions/workflows/format.yml/badge.svg)](https://github.com/utigernils/Expoplay---Dashboard/actions/workflows/format.yml)
+
+</div>
 
 ## Table of Contents
 
@@ -51,7 +61,7 @@
 
 **Note:** Make sure to follow the [commit message conventions](https://www.conventionalcommits.org/en/v1.0.0/).
 
-3. Create a pull request to the `develop` or planned release branch.
+3. Create a pull request to the `main` or planned release branch.
 
 For more information, see the [CONTRIBUTING.md](CONTRIBUTING.md) file.
 
