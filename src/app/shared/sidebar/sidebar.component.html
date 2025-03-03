@@ -1,34 +1,65 @@
 <div class="sidenav">
-    <h1 class="logotitle">ExpoPlay Dashbaord</h1>
+    <div class="logo-container">
+        <img src="./ExpoPlay_Logo.png" alt="ExpoPlay Logo" class="logo" />
+    </div>
+
     <nav>
-        <a href="/dashboard" class="nav-item active">
-            <i>🏠</i>
-            <span class="nav-text">Dashboard</span>
-        </a>
-
-        <a href="/quiz-questions" class="nav-item">
-            <i>❓</i>
-            <span class="nav-text">Quiz Fragen</span>
-        </a>
-
-        <a href="/console" class="nav-item">
-            <i>📊</i>
-            <span class="nav-text">Konsolen Tabelle</span>
-        </a>
-
-        <a href="/expo" class="nav-item">
-            <i>📋</i>
-            <span class="nav-text">Expos Tabelle</span>
-        </a>
-
-        <a href="/user" class="nav-item">
-            <i>👤</i>
-            <span class="nav-text">Benutzer Tabelle</span>
-        </a>
-
-        <a href="/player" class="nav-item">
-            <i>🔒</i>
-            <span class="nav-text">Spieler Daten</span>
-        </a>
+        <ul>
+            <li>
+                <a href="/dashboard" routerLinkActive="active" class="nav-item">
+                    <lucide-icon
+                        [name]="icons.house"
+                        class="icon"
+                    ></lucide-icon>
+                    <span class="nav-text">Dashboard</span>
+                </a>
+            </li>
+            <li>
+                <a
+                    href="/quiz-questions"
+                    routerLinkActive="active"
+                    class="nav-item"
+                >
+                    <lucide-icon
+                        [name]="icons.FileQuestion"
+                        class="icon"
+                    ></lucide-icon>
+                    <span class="nav-text">Quiz Fragen</span>
+                </a>
+            </li>
+            <li>
+                <a href="/console" routerLinkActive="active" class="nav-item">
+                    <lucide-icon
+                        [name]="icons.camera"
+                        class="icon"
+                    ></lucide-icon>
+                    <span class="nav-text">Konsolen Tabelle</span>
+                </a>
+            </li>
+            <li>
+                <a href="/expo" routerLinkActive="active" class="nav-item">
+                    <lucide-icon
+                        [name]="icons.factory"
+                        class="icon"
+                    ></lucide-icon>
+                    <span class="nav-text">Expos Tabelle</span>
+                </a>
+            </li>
+            <li>
+                <a href="/user" routerLinkActive="active" class="nav-item">
+                    <lucide-icon [name]="icons.user" class="icon"></lucide-icon>
+                    <span class="nav-text">Benutzer Tabelle</span>
+                </a>
+            </li>
+            <li>
+                <a href="/player" routerLinkActive="active" class="nav-item">
+                    <lucide-icon
+                        [name]="icons.FileUser"
+                        class="icon"
+                    ></lucide-icon>
+                    <span class="nav-text">Spieler Daten</span>
+                </a>
+            </li>
+        </ul>
     </nav>
 </div>
