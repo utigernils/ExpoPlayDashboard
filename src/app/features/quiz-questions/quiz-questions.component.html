@@ -6,29 +6,90 @@
     <main>
         <h1 class="Site-title">Fragen | Dashboard</h1>
         <mat-card class="Card">
+            <!-- Header mit Titel und Aktions-Buttons -->
             <div class="card-header">
                 <mat-card-title class="mat-card-title"
                     >Fragen-Sets</mat-card-title
                 >
-
                 <div class="card-actions">
                     <button mat-icon-button class="icon-button-orange">
                         <mat-icon>add</mat-icon>
-                    </button>
-                    <button mat-icon-button class="icon-button-orange">
-                        <mat-icon>delete</mat-icon>
-                    </button>
-                    <button mat-icon-button class="icon-button-orange">
-                        <mat-icon>build</mat-icon>
-                    </button>
-                    <button mat-icon-button class="icon-button-orange">
-                        <mat-icon>more_horiz</mat-icon>
                     </button>
                 </div>
             </div>
 
             <mat-card-content>
-                <!-- Tabellen Inhalt -->
+                <!-- Accordion für alle Quizzes -->
+                <mat-accordion>
+                    <!-- Schleife über alle Quizzes -->
+                    <mat-expansion-panel
+                        class="ExpansionModel"
+                        *ngFor="let quiz of quizzes"
+                    >
+                        <mat-expansion-panel-header>
+                            <mat-panel-title>
+                                {{ quiz.name }}
+                            </mat-panel-title>
+                            <mat-panel-description>
+                                Aktiv: {{ quiz.isActive ? 'Ja' : 'Nein' }}
+                            </mat-panel-description>
+                        </mat-expansion-panel-header>
+
+                        <!-- Inhalt pro Quiz -->
+                        <div class="quiz-content">
+                            <!-- Hole alle Questions, die zu diesem Quiz gehören -->
+                            <div
+                                *ngFor="
+                                    let question of getQuestionsForQuiz(quiz.id)
+                                "
+                            >
+                                <mat-card class="questionModell">
+                                    <mat-card-title>
+                                        {{ question.question }}
+                                    </mat-card-title>
+                                    <mat-card-subtitle>
+                                        Typ: {{ question.questionType }} -
+                                        Punktefaktor:
+                                        {{ question.pointMultiplier }}
+                                    </mat-card-subtitle>
+                                    <p>
+                                        Aktiv:
+                                        {{ question.isActive ? 'Ja' : 'Nein' }}
+                                    </p>
+
+                                    <p>Mögliche Antworten:</p>
+                                    <ul>
+                                        <li
+                                            *ngFor="
+                                                let key of objectKeys(
+                                                    parseAnswerPossibilities(
+                                                        question.answerPossibilities
+                                                    )
+                                                )
+                                            "
+                                        >
+                                            <strong>{{ key }}:</strong>
+                                            {{
+                                                parseAnswerPossibilities(
+                                                    question.answerPossibilities
+                                                )[key]
+                                            }}
+                                        </li>
+                                    </ul>
+
+                                    <!-- Button zum Öffnen des Dialogs -->
+                                    <button
+                                        mat-raised-button
+                                        color="primary"
+                                        (click)="openEditDialog(question)"
+                                    >
+                                        Bearbeiten
+                                    </button>
+                                </mat-card>
+                            </div>
+                        </div>
+                    </mat-expansion-panel>
+                </mat-accordion>
             </mat-card-content>
         </mat-card>
     </main>

@@ -9,17 +9,13 @@
             <div class="card-header">
                 <mat-card-title class="mat-card-title">Konsole</mat-card-title>
                 <div class="card-actions">
-                    <button mat-icon-button class="icon-button-orange">
+                    <!-- Global-Action: Neue Konsole hinzufügen -->
+                    <button
+                        mat-icon-button
+                        class="icon-button-orange"
+                        (click)="openAddConsoleDialog()"
+                    >
                         <mat-icon>add</mat-icon>
-                    </button>
-                    <button mat-icon-button class="icon-button-orange">
-                        <mat-icon>delete</mat-icon>
-                    </button>
-                    <button mat-icon-button class="icon-button-orange">
-                        <mat-icon>build</mat-icon>
-                    </button>
-                    <button mat-icon-button class="icon-button-orange">
-                        <mat-icon>more_horiz</mat-icon>
                     </button>
                 </div>
             </div>
@@ -31,42 +27,69 @@
                     class="tableInMat"
                     matSort
                 >
-                    <ng-container matColumnDef="consoleName">
+                    <!-- Konsolen Name -->
+                    <!-- Name -->
+                    <ng-container matColumnDef="name">
                         <th mat-header-cell *matHeaderCellDef mat-sort-header>
-                            Konsolen Name
+                            Name
                         </th>
                         <td mat-cell *matCellDef="let element">
-                            {{ element.consoleName }}
+                            {{ element.name }}
                         </td>
                     </ng-container>
 
-                    <ng-container matColumnDef="austellung">
+                    <!-- currentExpo -->
+                    <ng-container matColumnDef="currentExpo">
                         <th mat-header-cell *matHeaderCellDef mat-sort-header>
-                            Austellung
+                            currentExpo
                         </th>
                         <td mat-cell *matCellDef="let element">
-                            {{ element.austellung }}
+                            {{ element.currentExpo ?? 'Keine Expo' }}
                         </td>
                     </ng-container>
 
-                    <ng-container matColumnDef="quiz">
+                    <!-- currentQuiz -->
+                    <ng-container matColumnDef="currentQuiz">
                         <th mat-header-cell *matHeaderCellDef mat-sort-header>
-                            Quiz
+                            currentQuiz
                         </th>
                         <td mat-cell *matCellDef="let element">
-                            {{ element.quiz }}
+                            {{ element.currentQuiz ?? 'Keine Quiz' }}
                         </td>
                     </ng-container>
 
-                    <ng-container matColumnDef="active">
+                    <!-- isActive -->
+                    <ng-container matColumnDef="isActive">
                         <th mat-header-cell *matHeaderCellDef mat-sort-header>
                             Aktiv
                         </th>
                         <td mat-cell *matCellDef="let element">
-                            {{ element.active ? 'Ja' : 'Nein' }}
+                            {{ element.isActive ? 'Ja' : 'Nein' }}
                         </td>
                     </ng-container>
 
+                    <!-- Aktionen (zeilenbezogene Buttons) -->
+                    <ng-container matColumnDef="actions">
+                        <th mat-header-cell *matHeaderCellDef>Aktionen</th>
+                        <td mat-cell *matCellDef="let element">
+                            <button
+                                mat-icon-button
+                                (click)="openEditConsoleDialog(element)"
+                            >
+                                <mat-icon style="color: #ff8200">edit</mat-icon>
+                            </button>
+                            <button
+                                mat-icon-button
+                                (click)="deleteConsole(element)"
+                            >
+                                <mat-icon style="color: #ff8200"
+                                    >delete</mat-icon
+                                >
+                            </button>
+                        </td>
+                    </ng-container>
+
+                    <!-- Tabellenzeilen -->
                     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                     <tr
                         mat-row
