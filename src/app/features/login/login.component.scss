@@ -1,79 +1,247 @@
-.login-container {
-    display: flex;
+.mainContainer {
     height: 100vh;
-    align-items: center;
-    justify-content: flex-start; /* Links ausgerichtet */
-    padding-left: 10%;
-    gap: 30px; /* Abstand zwischen Card und Logo */
-}
-
-.login-card {
-    width: 400px;
-    padding: 20px;
-}
-
-.title {
-    font-size: 24px;
-    font-weight: bold;
-    color: #ff8c00;
-}
-
-.subtitle {
-    color: #888;
-    margin-bottom: 20px;
-}
-
-.full-width {
-    width: 100%;
-}
-
-.options {
+    width: 100vw;
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 10px;
 }
 
-.forgot-password {
-    color: #00bcd4;
-    text-decoration: none;
-}
+.loginContainer {
+    height: 100vh;
+    flex: 1;
+    flex-direction: column;
 
-.login-btn {
-    margin-top: 20px;
-    background: #00bcd4;
-    color: #fff;
-    font-weight: bold;
-    border-radius: 10px;
-    height: 40px;
-    font-size: 13px;
-    text-transform: uppercase;
-    border: 2px solid #00bcd4;
-}
+    z-index: 1;
 
-.register-link {
-    text-align: center;
-    margin-top: 10px;
-}
-
-.register-link a {
-    color: #00bcd4;
-    text-decoration: none;
-}
-
-.mat-form-input {
-    height: 20px;
-    border-radius: 5px;
-}
-
-.logo-container {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 150px; /* Breite des Logos anpassen */
+
+    background-color: white;
+    box-shadow:
+        0 10px 20px #0003,
+        0 2px 10px #00000021,
+        0 2px 3px #00000012,
+        0 1px 1px #0000000d;
 }
 
-.logo-container img {
-    max-width: 100%;
-    height: auto;
+.suvaButton {
+    -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    --blue: #00b8cf;
+    --indigo: #6610f2;
+    --purple: #6f42c1;
+    --pink: #e83e8c;
+    --red: #eb0064;
+    --orange: #ff8200;
+    --yellow: #fce300;
+    --green: #c1e200;
+    --teal: #20c997;
+    --cyan: #17a2b8;
+    --white: #ffffff;
+    --gray: #8c8c8c;
+    --gray-dark: #b3b3b3;
+    --orange-light: #ffe0bf;
+    --topaz: #00b8cf;
+    --primary: #00b8cf;
+    --secondary: #ffffff;
+    --success: #208048;
+    --info: #ff8200;
+    --warning: #febf00;
+    --danger: #cc3333;
+    --light: #f2f2f2;
+    --dark: #b3b3b3;
+    --breakpoint-xs: 0;
+    --breakpoint-sm: 600px;
+    --breakpoint-md: 768px;
+    --breakpoint-lg: 1280px;
+    --breakpoint-xl: 1440px;
+    --font-family-sans-serif: HelveticaNeueLTW04-55Roman;
+    --font-family-monospace:
+        SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono',
+        'Courier New', monospace;
+    --swiper-theme-color: #007aff;
+    --swiper-navigation-size: 44px;
+    box-sizing: border-box;
+    text-decoration: none;
+    font-weight: 700;
+    text-align: center;
+    vertical-align: middle;
+    user-select: none;
+    border: 1px solid transparent;
+    padding: 12px 24px;
+    line-height: 22px;
+    transition:
+        transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+        background-color 0.2s ease,
+        border-color 0.2s ease,
+        color 0.2s ease;
+    background-color: #00b8cf;
+    border-color: #00b8cf;
+    position: relative;
+    font-family: HelveticaNeueLTW04;
+    min-height: 48px;
+    min-width: 140px;
+    max-width: 350px;
+    font-size: 14px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    border-radius: 48px !important;
+    cursor: pointer;
+    margin-top: 1vh;
+}
+
+.suvaInput {
+    -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    --blue: #00b8cf;
+    --indigo: #6610f2;
+    --purple: #6f42c1;
+    --pink: #e83e8c;
+    --red: #eb0064;
+    --orange: #ff8200;
+    --yellow: #fce300;
+    --green: #c1e200;
+    --teal: #20c997;
+    --cyan: #17a2b8;
+    --white: #ffffff;
+    --gray: #8c8c8c;
+    --gray-dark: #b3b3b3;
+    --orange-light: #ffe0bf;
+    --topaz: #00b8cf;
+    --primary: #00b8cf;
+    --secondary: #ffffff;
+    --success: #208048;
+    --info: #ff8200;
+    --warning: #febf00;
+    --danger: #cc3333;
+    --light: #f2f2f2;
+    --dark: #b3b3b3;
+    --breakpoint-xs: 0;
+    --breakpoint-sm: 600px;
+    --breakpoint-md: 768px;
+    --breakpoint-lg: 1280px;
+    --breakpoint-xl: 1440px;
+    --font-family-sans-serif: HelveticaNeueLTW04;
+    --font-family-monospace:
+        SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono',
+        'Courier New', monospace;
+    --swiper-theme-color: #007aff;
+    --swiper-navigation-size: 44px;
+    --label-left-width: 0;
+    --label-right-width: 0;
+    box-sizing: border-box;
+    margin: 0;
+    display: block;
+    width: 100%;
+    height: 48px;
+    padding: 11px 16px;
+    font-family: HelveticaNeueLTW04;
+    font-weight: 400;
+    line-height: 1.625;
+    color: #666;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #8c8c8c;
+    border-radius: 0;
+    transition: border-color 0.3s ease-in-out;
+    font-size: 16px;
+}
+
+.suvaInputLabel {
+    -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    --blue: #00b8cf;
+    --indigo: #6610f2;
+    --purple: #6f42c1;
+    --pink: #e83e8c;
+    --red: #eb0064;
+    --orange: #ff8200;
+    --yellow: #fce300;
+    --green: #c1e200;
+    --teal: #20c997;
+    --cyan: #17a2b8;
+    --white: #ffffff;
+    --gray: #8c8c8c;
+    --gray-dark: #b3b3b3;
+    --orange-light: #ffe0bf;
+    --topaz: #00b8cf;
+    --primary: #00b8cf;
+    --secondary: #ffffff;
+    --success: #208048;
+    --info: #ff8200;
+    --warning: #febf00;
+    --danger: #cc3333;
+    --light: #f2f2f2;
+    --dark: #b3b3b3;
+    --breakpoint-xs: 0;
+    --breakpoint-sm: 600px;
+    --breakpoint-md: 768px;
+    --breakpoint-lg: 1280px;
+    --breakpoint-xl: 1440px;
+    --font-family-sans-serif: HelveticaNeueLTW04-55Roman;
+    --font-family-monospace:
+        SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono',
+        'Courier New', monospace;
+    --swiper-theme-color: #007aff;
+    --swiper-navigation-size: 44px;
+    font-family: HelveticaNeueLTW04;
+    font-weight: 400;
+    line-height: 1.625;
+    text-align: left;
+    box-sizing: border-box;
+    margin-bottom: 4px;
+    color: #666;
+    font-size: 12px;
+    display: block;
+}
+
+.backgroundContainer {
+    height: 100vh;
+    flex: 2;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background-color: #f2f2f2;
+}
+
+.loginForm {
+    width: 60%;
+}
+
+.formGroup {
+    display: flex;
+    flex-direction: column;
+}
+
+.logoContainer {
+    display: flex;
+    flex-direction: row;
+    height: 10vh;
+    width: 100%;
+    justify-content: center;
+}
+
+.split {
+    height: 50%;
+    border: #b3b3b3;
+    border-style: solid;
+    border-width: 1px;
+}
+
+h1 {
+    color: #ff8200;
+    font-size: 48px;
+    line-height: 56px;
+    font-weight: 500;
+}
+
+img {
+    height: 5vh;
+    width: auto;
+    object-fit: contain;
+    margin-left: 2.5%;
+    margin-right: 2.5%;
 }
