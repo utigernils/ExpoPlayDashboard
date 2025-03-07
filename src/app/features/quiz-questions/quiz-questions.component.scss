@@ -7,3 +7,19 @@
 .questionModell {
     margin: 20px;
 }
+
+.questionModell {
+    position: relative;
+}
+
+.card-actions-top-right {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    display: flex;
+    gap: 8px;
+}
+
+.icon-orange {
+    color: #ff8200;
+}

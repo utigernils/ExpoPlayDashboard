@@ -9,8 +9,8 @@
             <!-- Header mit Titel und Aktions-Buttons -->
             <div class="card-header">
                 <mat-card-title class="mat-card-title"
-                    >Fragen-Sets</mat-card-title
-                >
+                    >Fragen-Sets
+                </mat-card-title>
                 <div class="card-actions">
                     <button mat-icon-button class="icon-button-orange">
                         <mat-icon>add</mat-icon>
@@ -44,8 +44,44 @@
                                 "
                             >
                                 <mat-card class="questionModell">
+                                    <!-- Container für die beiden Icons oben rechts -->
+                                    <div class="card-actions-top-right">
+                                        <button
+                                            mat-icon-button
+                                            class="icon-orange"
+                                            (click)="openEditDialog(question)"
+                                            aria-label="Frage bearbeiten"
+                                        >
+                                            <mat-icon>edit</mat-icon>
+                                        </button>
+
+                                        <button
+                                            mat-icon-button
+                                            class="icon-orange"
+                                            (click)="
+                                                confirmDeleteQuestion(question)
+                                            "
+                                            aria-label="Frage löschen"
+                                        >
+                                            <mat-icon>delete</mat-icon>
+                                        </button>
+
+                                        <button
+                                            mat-icon-button
+                                            class="icon-orange"
+                                            (click)="
+                                                openAddQuestionDialog(
+                                                    question.quiz
+                                                )
+                                            "
+                                        >
+                                            <mat-icon>add</mat-icon>
+                                        </button>
+                                    </div>
+
+                                    <!-- Restlicher Inhalt -->
                                     <mat-card-title>
-                                        {{ question.question }}
+                                        {{ question.Question }}
                                     </mat-card-title>
                                     <mat-card-subtitle>
                                         Typ: {{ question.questionType }} -
@@ -56,7 +92,6 @@
                                         Aktiv:
                                         {{ question.isActive ? 'Ja' : 'Nein' }}
                                     </p>
-
                                     <p>Mögliche Antworten:</p>
                                     <ul>
                                         <li
@@ -76,15 +111,6 @@
                                             }}
                                         </li>
                                     </ul>
-
-                                    <!-- Button zum Öffnen des Dialogs -->
-                                    <button
-                                        mat-raised-button
-                                        color="primary"
-                                        (click)="openEditDialog(question)"
-                                    >
-                                        Bearbeiten
-                                    </button>
                                 </mat-card>
                             </div>
                         </div>

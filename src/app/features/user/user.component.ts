@@ -58,8 +58,8 @@ export class UserComponent implements OnInit {
             .post(
                 'http://localhost/expoplayAPI/login',
                 {
-                    email: 'utigernils@gmail.com',
-                    password: 'demo',
+                    email: 'nicomarcuard@gmail.com',
+                    password: 'Kriens',
                 },
                 {
                     headers: {

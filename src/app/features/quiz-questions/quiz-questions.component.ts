@@ -10,6 +10,7 @@ import { Quiz } from './quiz.interface'
 import { QuestionSet } from './questions-set.interface'
 import { EditQuestionDialogComponent } from './edit-question-dialog.component'
 import { MatDialog } from '@angular/material/dialog'
+import { AddQuestionDialogComponent } from './add-questions-dialog.component'
 
 @Component({
     selector: 'app-quiz-with-questions',
@@ -38,15 +39,57 @@ export class QuizQuestionsComponent implements OnInit {
     openEditDialog(question: QuestionSet): void {
         const dialogRef = this.dialog.open(EditQuestionDialogComponent, {
             width: '600px',
-            data: { question: question },
+            data: { question },
         })
 
         dialogRef.afterClosed().subscribe((updatedQuestion: QuestionSet) => {
             if (updatedQuestion) {
-                // Hier kannst du die geänderte Frage weiterverarbeiten,
-                // z. B. in this.questionSets updaten oder an den Server senden.§
+                const quizId = updatedQuestion.quiz // Falls quiz als String kommt
+                const questionId = updatedQuestion.id
+                this.updateQuestion(quizId, questionId, updatedQuestion)
             }
         })
+    }
+
+    updateQuestion(
+        quizId: string,
+        questionId: string,
+        updatedData: Partial<QuestionSet>
+    ): void {
+        const dataToSend = { ...updatedData }
+        delete dataToSend.id
+        delete dataToSend.quiz
+
+        this.http
+            .put(
+                `http://localhost/expoplayAPI/question/${quizId}/${questionId}`,
+                dataToSend,
+                { withCredentials: true }
+            )
+            .subscribe({
+                next: (response) => {
+                    console.log('Update erfolgreich:', response)
+                    this.updateLocalQuestion(updatedData)
+                },
+                error: (err) => {
+                    console.error('Fehler beim Updaten:', err)
+                },
+            })
+    }
+
+    private updateLocalQuestion(updatedData: Partial<QuestionSet>): void {
+        if (!updatedData.id) {
+            return
+        }
+        const index = this.questionSets.findIndex(
+            (q) => q.id === updatedData.id
+        )
+        if (index !== -1) {
+            this.questionSets[index] = {
+                ...this.questionSets[index],
+                ...updatedData,
+            }
+        }
     }
 
     ngOnInit(): void {
@@ -94,16 +137,75 @@ export class QuizQuestionsComponent implements OnInit {
             })
     }
 
+    confirmDeleteQuestion(question: QuestionSet): void {
+        const isSure = confirm('Möchten Sie diese Frage wirklich löschen?')
+        if (!isSure) {
+            return
+        }
+        this.deleteQuestion(question)
+    }
+
+    deleteQuestion(question: QuestionSet): void {
+        // Hier gehen wir davon aus, dass question.quiz und question.id
+        // existieren und die nötigen IDs enthalten.
+        const quizId = question.quiz
+        const questionId = question.id
+
+        this.http
+            .delete(
+                `http://localhost/expoplayAPI/question/${quizId}/${questionId}`,
+                {
+                    withCredentials: true,
+                }
+            )
+            .subscribe({
+                next: (response) => {
+                    console.log('Löschung erfolgreich:', response)
+                    // Entferne die Frage lokal aus dem questionSets-Array,
+                    // damit das UI aktualisiert wird.
+                    this.removeLocalQuestion(questionId)
+                },
+                error: (err) => {
+                    console.error('Fehler beim Löschen:', err)
+                },
+            })
+    }
+
+    openAddQuestionDialog(quizId: string): void {
+        // Öffne den Dialog und übergebe (optional) die quizId
+        const dialogRef = this.dialog.open(AddQuestionDialogComponent, {
+            data: { quizId: quizId },
+        })
+
+        // Behandle das Ergebnis nach dem Schließen des Dialogs
+        dialogRef.afterClosed().subscribe((result) => {
+            if (result) {
+                console.log('Neue Frage wurde erstellt:', result)
+                // Hier kannst du z. B. eine Liste von Fragen neu laden oder aktualisieren
+            }
+        })
+    }
+
+    private removeLocalQuestion(questionId: string | number): void {
+        this.questionSets = this.questionSets.filter((q) => q.id !== questionId)
+    }
+
     parseAnswerPossibilities(possibilities: any): any {
-        // Falls es noch ein String ist, versuche ihn zu parsen
+        // Wenn possibilities null oder undefined ist, liefere einfach ein leeres Objekt
+        if (!possibilities) {
+            return {}
+        }
+
+        // Falls es ein String ist, versuchen zu parsen
         if (typeof possibilities === 'string') {
             try {
                 return JSON.parse(possibilities)
             } catch (error) {
                 console.error('Konnte answerPossibilities nicht parsen', error)
-                return {} // Fallback: leeres Objekt
+                return {}
             }
         }
+
         // Ansonsten direkt zurückgeben
         return possibilities
     }

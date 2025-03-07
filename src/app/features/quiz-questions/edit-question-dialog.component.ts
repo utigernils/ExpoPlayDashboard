@@ -1,10 +1,8 @@
 import { Component, Inject } from '@angular/core'
 import {
     MAT_DIALOG_DATA,
-    MatDialogContent,
     MatDialogModule,
     MatDialogRef,
-    MatDialogTitle,
 } from '@angular/material/dialog'
 import { QuestionSet } from './questions-set.interface'
 import { MatFormField } from '@angular/material/form-field'
@@ -28,7 +26,7 @@ import { MatButton } from '@angular/material/button'
             <!-- Eingabefeld für den Fragetext -->
             <mat-form-field appearance="fill" style="width: 100%;">
                 <mat-label>Frage</mat-label>
-                <input matInput [(ngModel)]="data.question.question" />
+                <input matInput [(ngModel)]="data.question.Question" />
             </mat-form-field>
 
             <!-- Eingabefeld für Antwortmöglichkeiten als JSON-String -->
@@ -77,7 +75,6 @@ export class EditQuestionDialogComponent {
         public dialogRef: MatDialogRef<EditQuestionDialogComponent>,
         @Inject(MAT_DIALOG_DATA) public data: { question: QuestionSet }
     ) {
-        // Wandelt das Objekt (z. B. { A: 'Paris', B: 'Berlin' }) in einen JSON-String um
         this.answerPossibilitiesString = JSON.stringify(
             this.data.question.answerPossibilities,
             null,
@@ -91,7 +88,7 @@ export class EditQuestionDialogComponent {
 
     save(): void {
         try {
-            // Versuchen, den JSON-String zu parsen
+            // JSON-String in Objekt parsen
             this.data.question.answerPossibilities = JSON.parse(
                 this.answerPossibilitiesString
             )
