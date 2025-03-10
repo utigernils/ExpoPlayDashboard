@@ -31,7 +31,7 @@
                         ],
                         "styles": [
                             "src/styles.scss",
-                            "src/app/shared/shared-layout.scss"
+                            "src/app/styles/shared-layout.scss"
                         ],
                         "scripts": []
                     },

@@ -4,11 +4,7 @@ import { SidebarComponent } from '../../shared/sidebar/sidebar.component'
 import { MatCardModule } from '@angular/material/card'
 import { MatIconModule } from '@angular/material/icon'
 import { MatIconButton } from '@angular/material/button'
-
-export interface User {
-    id: number
-    name: string
-}
+import { User } from '../../types/user.types'
 
 @Component({
     selector: 'app-user',
@@ -24,13 +20,9 @@ export interface User {
     styleUrls: ['./user.component.scss'],
 })
 export class UserComponent {
-    users: User[] = [
+    public users: User[] = [
         { id: 1, name: 'Nico Marcuard' },
         { id: 2, name: 'Nils Utiger' },
         { id: 3, name: 'Steven Mattmann' },
     ]
-
-    trackByUser(index: number, user: User): number {
-        return user.id
-    }
 }
