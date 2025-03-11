@@ -5,14 +5,19 @@
 
     <main>
         <h1 class="Site-title">Fragen | Dashboard</h1>
+
         <mat-card class="Card">
             <!-- Header mit Titel und Aktions-Buttons -->
             <div class="card-header">
                 <mat-card-title class="mat-card-title"
-                    >Fragen-Sets
-                </mat-card-title>
+                    >Fragen-Sets</mat-card-title
+                >
                 <div class="card-actions">
-                    <button mat-icon-button class="icon-button-orange">
+                    <button
+                        mat-icon-button
+                        class="icon-button-orange"
+                        (click)="openAddQuizDialog()"
+                    >
                         <mat-icon>add</mat-icon>
                     </button>
                 </div>
@@ -26,12 +31,36 @@
                         class="ExpansionModel"
                         *ngFor="let quiz of quizzes"
                     >
-                        <mat-expansion-panel-header>
+                        <!-- Header mit Quiz-Titel, Status und Buttons rechts -->
+                        <mat-expansion-panel-header class="quiz-header">
                             <mat-panel-title>
                                 {{ quiz.name }}
                             </mat-panel-title>
-                            <mat-panel-description>
-                                Aktiv: {{ quiz.isActive ? 'Ja' : 'Nein' }}
+                            <mat-panel-description
+                                class="quiz-header-description"
+                            >
+                                <!-- Text (Status) links -->
+                                <span class="quiz-status">
+                                    Aktiv: {{ quiz.isActive ? 'Ja' : 'Nein' }}
+                                </span>
+
+                                <!-- Buttons rechts (weiß hinterlegt, orangenes Icon) -->
+                                <div class="quiz-header-actions">
+                                    <button
+                                        mat-icon-button
+                                        class="icon-button-white-orange"
+                                        (click)="openAddQuestionDialog(quiz.id)"
+                                    >
+                                        <mat-icon>add</mat-icon>
+                                    </button>
+                                    <button
+                                        mat-icon-button
+                                        class="icon-button-white-orange"
+                                        (click)="confirmDeleteQuiz(quiz)"
+                                    >
+                                        <mat-icon>delete</mat-icon>
+                                    </button>
+                                </div>
                             </mat-panel-description>
                         </mat-expansion-panel-header>
 
@@ -44,7 +73,7 @@
                                 "
                             >
                                 <mat-card class="questionModell">
-                                    <!-- Container für die beiden Icons oben rechts -->
+                                    <!-- Container für die Icons oben rechts -->
                                     <div class="card-actions-top-right">
                                         <button
                                             mat-icon-button
@@ -65,35 +94,28 @@
                                         >
                                             <mat-icon>delete</mat-icon>
                                         </button>
-
-                                        <button
-                                            mat-icon-button
-                                            class="icon-orange"
-                                            (click)="
-                                                openAddQuestionDialog(
-                                                    question.quiz
-                                                )
-                                            "
-                                        >
-                                            <mat-icon>add</mat-icon>
-                                        </button>
                                     </div>
 
-                                    <!-- Restlicher Inhalt -->
+                                    <!-- Restlicher Inhalt der Frage -->
                                     <mat-card-title>
-                                        {{ question.Question }}
+                                        {{ question.question }}
                                     </mat-card-title>
-                                    <mat-card-subtitle>
-                                        Typ: {{ question.questionType }} -
-                                        Punktefaktor:
-                                        {{ question.pointMultiplier }}
-                                    </mat-card-subtitle>
-                                    <p>
-                                        Aktiv:
-                                        {{ question.isActive ? 'Ja' : 'Nein' }}
+
+                                    <p class="answer-possibilities-label">
+                                        Mögliche Antworten:
                                     </p>
-                                    <p>Mögliche Antworten:</p>
-                                    <ul>
+                                    <ul
+                                        *ngIf="
+                                            parseAnswerPossibilities(
+                                                question.answerPossibilities
+                                            ) &&
+                                            objectKeys(
+                                                parseAnswerPossibilities(
+                                                    question.answerPossibilities
+                                                )
+                                            ).length > 0
+                                        "
+                                    >
                                         <li
                                             *ngFor="
                                                 let key of objectKeys(
@@ -111,6 +133,32 @@
                                             }}
                                         </li>
                                     </ul>
+
+                                    <!-- Falls keine Antwortmöglichkeiten existieren, zeige eine Meldung -->
+                                    <p
+                                        *ngIf="
+                                            !parseAnswerPossibilities(
+                                                question.answerPossibilities
+                                            ) ||
+                                            objectKeys(
+                                                parseAnswerPossibilities(
+                                                    question.answerPossibilities
+                                                )
+                                            ).length === 0
+                                        "
+                                    >
+                                        Keine Antwortmöglichkeiten vorhanden.
+                                    </p>
+
+                                    <p class="question-info">
+                                        Aktiv:
+                                        {{
+                                            question.isActive ? 'Ja' : 'Nein'
+                                        }}
+                                        | Typ: {{ question.questionType }} |
+                                        Punktefaktor:
+                                        {{ question.pointMultiplier }}
+                                    </p>
                                 </mat-card>
                             </div>
                         </div>

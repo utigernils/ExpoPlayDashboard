@@ -27,7 +27,7 @@ import { QuestionSet } from './questions-set.interface'
         <div mat-dialog-content>
             <mat-form-field appearance="fill" style="width: 100%;">
                 <mat-label>Frage</mat-label>
-                <input matInput [(ngModel)]="question.Question" />
+                <input matInput [(ngModel)]="question.question" />
             </mat-form-field>
 
             <mat-form-field appearance="fill" style="width: 100%;">
@@ -81,7 +81,7 @@ export class AddQuestionDialogComponent {
             isActive: true,
             questionType: 0,
             pointMultiplier: 1,
-            Question: '',
+            question: '',
             answerPossibilities: {},
         }
     }
@@ -103,7 +103,7 @@ export class AddQuestionDialogComponent {
         }
 
         const createData = {
-            Question: this.question.Question,
+            Question: this.question.question,
             questionType: this.question.questionType,
             pointMultiplier: this.question.pointMultiplier,
             answerPossibilities: this.question.answerPossibilities,
@@ -117,7 +117,28 @@ export class AddQuestionDialogComponent {
             )
             .subscribe({
                 next: (response) => {
-                    this.dialogRef.close(response)
+                    const fixedResponse: QuestionSet = {
+                        id: response.id,
+                        quiz: response.quiz || this.data.quizId,
+                        isActive: response.isActive ?? true,
+                        questionType:
+                            response.questionType ?? createData.questionType,
+                        pointMultiplier:
+                            response.pointMultiplier ??
+                            createData.pointMultiplier,
+                        // Falls dein Backend "Question" statt "question" zurückgibt:
+                        question:
+                            (response as any).Question ||
+                            response.question ||
+                            createData.Question,
+                        // Falls "answerPossibilities" nicht drin ist, nimm's aus createData
+                        answerPossibilities:
+                            response.answerPossibilities ||
+                            createData.answerPossibilities,
+                    }
+
+                    // Jetzt schließen wir den Dialog mit dem angeglichenen Objekt
+                    this.dialogRef.close(fixedResponse)
                 },
                 error: (error) => {
                     console.error('Fehler beim Erstellen der Frage:', error)

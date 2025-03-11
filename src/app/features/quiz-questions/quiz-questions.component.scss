@@ -1,15 +1,172 @@
-@import '../../shared/shared-layout.scss';
+/*
+  ================
+  Allgemeines Layout
+  ================
+*/
+.wrapper {
+    display: flex;
+    min-height: 100vh;
+    background-color: #f9f9f9;
+    font-family: Roboto, Arial, sans-serif;
+}
 
+/* Optional: feste Breite für die Sidebar */
+aside {
+    width: 240px;
+}
+
+main {
+    flex: 1;
+    padding: 20px;
+}
+
+.Site-title {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+/*
+  ================
+  Card (Umrahmung)
+  ================
+*/
+.Card {
+    margin-bottom: 20px;
+    border-radius: 8px;
+}
+
+/* Kopfbereich in der Card (Titel + Aktionen) */
+.card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 8px;
+}
+
+.mat-card-title {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 0; /* Standard-Spacing verringern */
+}
+
+.card-actions {
+    display: flex;
+    gap: 8px;
+}
+
+/*
+  ======================
+  Buttons und Icon-Farben
+  ======================
+*/
+
+/* Orange Buttons (vollflächig) */
+.icon-button-orange {
+    background-color: #ff9200;
+    color: #fff;
+    transition: background-color 0.3s ease;
+
+    &:hover {
+        background-color: #ffa833;
+    }
+}
+
+/* Weißer Hintergrund, orange Icons */
+.icon-button-white-orange {
+    background-color: #fff !important;
+    color: #ff9200 !important;
+    border: 1px solid #ff9200 !important;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+
+    &:hover {
+        background-color: #fff7ee !important;
+    }
+
+    /* Das Icon selbst auf Orange setzen */
+    .mat-icon {
+        color: #ff9200 !important;
+    }
+}
+
+/*
+  Orange Icons (ohne Button-Hintergrund),
+  z. B. für die Fragen-Karten
+*/
+.icon-orange {
+    color: #ff9200 !important;
+}
+
+/*
+  ================
+  Accordion-Styling
+  ================
+*/
 .ExpansionModel {
+    margin-bottom: 10px;
+
+    .mat-expansion-panel {
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        margin-bottom: 8px;
+        overflow: hidden;
+    }
+
+    .mat-expansion-panel-header {
+        background-color: #f5f5f5;
+        border-bottom: 1px solid #ddd;
+        padding: 16px;
+    }
+}
+
+/*
+  ================
+  Header-Bereich im Panel
+  ================
+*/
+.quiz-header-description {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.quiz-status {
+    font-weight: 500;
+}
+
+.quiz-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+/*
+  ================
+  Inhalt pro Quiz
+  ================
+*/
+.quiz-content {
     margin: 20px;
 }
 
-.questionModell {
-    margin: 20px;
-}
-
+/*
+  ================
+  Fragen-Karten
+  ================
+*/
 .questionModell {
     position: relative;
+    margin-bottom: 20px;
+    padding: 16px 16px 8px 16px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #fff;
+    transition: box-shadow 0.3s ease;
+
+    &:hover {
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
 }
 
 .card-actions-top-right {
@@ -20,6 +177,15 @@
     gap: 8px;
 }
 
-.icon-orange {
-    color: #ff8200;
+/* Beschriftung für Antwortmöglichkeiten */
+.answer-possibilities-label {
+    font-weight: 600;
+    margin-top: 8px;
+}
+
+/* Info-Text (Aktiv, Typ, Punktefaktor) */
+.question-info {
+    font-size: 14px;
+    color: #555;
+    margin-top: 12px;
 }

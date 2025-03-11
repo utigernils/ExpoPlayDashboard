@@ -55,41 +55,16 @@ export class UserComponent implements OnInit {
 
     getAllUsers(): void {
         this.http
-            .post(
-                'http://localhost/expoplayAPI/login',
-                {
-                    email: 'nicomarcuard@gmail.com',
-                    password: 'Kriens',
-                },
-                {
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    withCredentials: true,
-                }
-            )
+            .get<User[]>('http://localhost/expoplayAPI/user/', {
+                withCredentials: true,
+            })
             .subscribe({
-                next: (postResponse) => {
-                    console.log('POST response:', postResponse)
-                    this.http
-                        .get<User[]>('http://localhost/expoplayAPI/user/', {
-                            withCredentials: true,
-                        })
-                        .subscribe({
-                            next: (response) => {
-                                this.users = response
-                                console.log('Users loaded:', this.users)
-                            },
-                            error: (error) => {
-                                console.error(
-                                    'Fehler beim Laden der User:',
-                                    error
-                                )
-                            },
-                        })
+                next: (response) => {
+                    this.users = response
+                    console.log('Users loaded:', this.users)
                 },
                 error: (error) => {
-                    console.error('Fehler beim POST-Request:', error)
+                    console.error('Fehler beim Laden der User:', error)
                 },
             })
     }

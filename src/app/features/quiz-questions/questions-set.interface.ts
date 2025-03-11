@@ -4,6 +4,6 @@ export interface QuestionSet {
     isActive: boolean
     questionType: number
     pointMultiplier: number
-    Question: string
+    question: string
     answerPossibilities: Record<string, string>
 }

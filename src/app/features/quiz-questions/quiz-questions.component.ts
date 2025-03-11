@@ -11,6 +11,7 @@ import { QuestionSet } from './questions-set.interface'
 import { EditQuestionDialogComponent } from './edit-question-dialog.component'
 import { MatDialog } from '@angular/material/dialog'
 import { AddQuestionDialogComponent } from './add-questions-dialog.component'
+import { AddQuizDialogComponent } from './add-quiz-dialog.component'
 
 @Component({
     selector: 'app-quiz-with-questions',
@@ -36,6 +37,43 @@ export class QuizQuestionsComponent implements OnInit {
         private dialog: MatDialog
     ) {}
 
+    ngOnInit(): void {
+        this.loadQuizzes()
+    }
+
+    loadQuizzes(): void {
+        this.http
+            .get<
+                Quiz[]
+            >('http://localhost/expoplayAPI/quiz', { withCredentials: true })
+            .subscribe({
+                next: (data) => {
+                    this.quizzes = data
+                    for (const quiz of data) {
+                        this.loadQuestionSetsForQuiz(quiz.id)
+                    }
+                },
+                error: (err) => {
+                    console.error('Fehler beim Laden der Quiz:', err)
+                },
+            })
+    }
+
+    loadQuestionSetsForQuiz(quizId: string): void {
+        this.http
+            .get<
+                QuestionSet[]
+            >(`http://localhost/expoplayAPI/question/${quizId}`, { withCredentials: true })
+            .subscribe({
+                next: (data) => {
+                    this.questionSets.push(...data)
+                },
+                error: (err) => {
+                    console.error('Fehler beim Laden der Fragen:', err)
+                },
+            })
+    }
+
     openEditDialog(question: QuestionSet): void {
         const dialogRef = this.dialog.open(EditQuestionDialogComponent, {
             width: '600px',
@@ -44,9 +82,12 @@ export class QuizQuestionsComponent implements OnInit {
 
         dialogRef.afterClosed().subscribe((updatedQuestion: QuestionSet) => {
             if (updatedQuestion) {
-                const quizId = updatedQuestion.quiz // Falls quiz als String kommt
-                const questionId = updatedQuestion.id
-                this.updateQuestion(quizId, questionId, updatedQuestion)
+                // Update erfolgt via PUT und anschließend im lokalen Array aktualisieren
+                this.updateQuestion(
+                    updatedQuestion.quiz,
+                    updatedQuestion.id,
+                    updatedQuestion
+                )
             }
         })
     }
@@ -67,8 +108,7 @@ export class QuizQuestionsComponent implements OnInit {
                 { withCredentials: true }
             )
             .subscribe({
-                next: (response) => {
-                    console.log('Update erfolgreich:', response)
+                next: () => {
                     this.updateLocalQuestion(updatedData)
                 },
                 error: (err) => {
@@ -78,9 +118,8 @@ export class QuizQuestionsComponent implements OnInit {
     }
 
     private updateLocalQuestion(updatedData: Partial<QuestionSet>): void {
-        if (!updatedData.id) {
-            return
-        }
+        if (!updatedData.id) return
+
         const index = this.questionSets.findIndex(
             (q) => q.id === updatedData.id
         )
@@ -92,77 +131,23 @@ export class QuizQuestionsComponent implements OnInit {
         }
     }
 
-    ngOnInit(): void {
-        // 1) Quizzes laden
-        this.loadQuizzes()
-    }
-
-    loadQuizzes(): void {
-        this.http
-            .get<
-                Quiz[]
-            >('http://localhost/expoplayAPI/quiz', { withCredentials: true })
-            .subscribe({
-                next: (data) => {
-                    this.quizzes = data
-
-                    // 2) Für jedes Quiz separat die Fragen laden
-                    for (const quiz of data) {
-                        this.loadQuestionSetsForQuiz(quiz.id)
-                    }
-                },
-                error: (err) => {
-                    console.error('Fehler beim Laden der Quiz:', err)
-                },
-            })
-    }
-
-    loadQuestionSetsForQuiz(quizId: number): void {
-        // Hier wird der quizId-Parameter an die URL angehängt
-        this.http
-            .get<QuestionSet[]>(
-                `http://localhost/expoplayAPI/question/${quizId}`,
-                {
-                    withCredentials: true,
-                }
-            )
-            .subscribe({
-                next: (data) => {
-                    // 3) Eingehende Fragen ins gemeinsame Array pushen
-                    this.questionSets.push(...data)
-                },
-                error: (err) => {
-                    console.error('Fehler beim Laden der Fragen:', err)
-                },
-            })
-    }
-
     confirmDeleteQuestion(question: QuestionSet): void {
         const isSure = confirm('Möchten Sie diese Frage wirklich löschen?')
-        if (!isSure) {
-            return
-        }
+        if (!isSure) return
         this.deleteQuestion(question)
     }
 
     deleteQuestion(question: QuestionSet): void {
-        // Hier gehen wir davon aus, dass question.quiz und question.id
-        // existieren und die nötigen IDs enthalten.
         const quizId = question.quiz
         const questionId = question.id
 
         this.http
             .delete(
                 `http://localhost/expoplayAPI/question/${quizId}/${questionId}`,
-                {
-                    withCredentials: true,
-                }
+                { withCredentials: true }
             )
             .subscribe({
-                next: (response) => {
-                    console.log('Löschung erfolgreich:', response)
-                    // Entferne die Frage lokal aus dem questionSets-Array,
-                    // damit das UI aktualisiert wird.
+                next: () => {
                     this.removeLocalQuestion(questionId)
                 },
                 error: (err) => {
@@ -172,16 +157,29 @@ export class QuizQuestionsComponent implements OnInit {
     }
 
     openAddQuestionDialog(quizId: string): void {
-        // Öffne den Dialog und übergebe (optional) die quizId
         const dialogRef = this.dialog.open(AddQuestionDialogComponent, {
-            data: { quizId: quizId },
+            data: { quizId },
         })
 
-        // Behandle das Ergebnis nach dem Schließen des Dialogs
         dialogRef.afterClosed().subscribe((result) => {
             if (result) {
-                console.log('Neue Frage wurde erstellt:', result)
-                // Hier kannst du z. B. eine Liste von Fragen neu laden oder aktualisieren
+                // Falls im zurückgegebenen Datensatz die Quiz-ID fehlt, setzen wir sie
+                result.quiz = result.quiz || quizId
+                // Erzeuge eine neue Array-Referenz, um Angulars Change Detection zu triggern
+                this.questionSets = [...this.questionSets, result]
+            }
+        })
+    }
+
+    openAddQuizDialog(): void {
+        const dialogRef = this.dialog.open(AddQuizDialogComponent, {
+            width: '600px',
+        })
+
+        dialogRef.afterClosed().subscribe((newQuiz: Quiz) => {
+            if (newQuiz) {
+                // Füge das neu erstellte Quiz in dein lokales Array ein
+                this.quizzes = [...this.quizzes, newQuiz]
             }
         })
     }
@@ -191,37 +189,58 @@ export class QuizQuestionsComponent implements OnInit {
     }
 
     parseAnswerPossibilities(possibilities: any): any {
-        // Wenn possibilities null oder undefined ist, liefere einfach ein leeres Objekt
-        if (!possibilities) {
-            return {}
-        }
-
-        // Falls es ein String ist, versuchen zu parsen
+        if (!possibilities) return {}
         if (typeof possibilities === 'string') {
             try {
                 return JSON.parse(possibilities)
             } catch (error) {
-                console.error('Konnte answerPossibilities nicht parsen', error)
+                console.error(
+                    'Fehler beim Parsen von answerPossibilities:',
+                    error
+                )
                 return {}
             }
         }
-
-        // Ansonsten direkt zurückgeben
         return possibilities
     }
 
-    /**
-     * Filtert alle geladenen Fragen anhand der quizId
-     */
-    getQuestionsForQuiz(quizId: number): QuestionSet[] {
-        // Weil questionSet.quiz oft ein String ist, quizId aber eine Zahl:
-        return this.questionSets.filter((q) => q.quiz === quizId.toString())
+    objectKeys<T extends object>(obj: T | null | undefined): (keyof T)[] {
+        try {
+            return obj ? (Object.keys(obj) as (keyof T)[]) : []
+        } catch (error) {
+            console.error('Fehler in objectKeys():', error)
+            return []
+        }
     }
 
-    /**
-     * Erlaubt das Iterieren über die Keys eines Objekts (z. B. answerPossibilities)
-     */
-    objectKeys<T extends object>(obj: T): (keyof T)[] {
-        return Object.keys(obj) as (keyof T)[]
+    getQuestionsForQuiz(quizId: string): QuestionSet[] {
+        return this.questionSets.filter((q) => q.quiz === quizId)
+    }
+
+    confirmDeleteQuiz(quiz: Quiz): void {
+        const isSure = confirm('Möchten Sie dieses Quiz wirklich löschen?')
+        if (!isSure) return
+        this.deleteQuiz(quiz)
+    }
+
+    deleteQuiz(quiz: Quiz): void {
+        const quizId = quiz.id
+
+        this.http
+            .delete(`http://localhost/expoplayAPI/quiz/${quizId}`, {
+                withCredentials: true,
+            })
+            .subscribe({
+                next: () => {
+                    this.removeLocalQuiz(quizId)
+                },
+                error: (err) => {
+                    console.error('Fehler beim Löschen des Quiz:', err)
+                },
+            })
+    }
+
+    private removeLocalQuiz(quizId: string): void {
+        this.quizzes = this.quizzes.filter((q) => q.id !== quizId)
     }
 }

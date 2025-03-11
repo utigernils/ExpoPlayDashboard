@@ -5,20 +5,22 @@ import {
     MatDialogRef,
 } from '@angular/material/dialog'
 import { QuestionSet } from './questions-set.interface'
-import { MatFormField } from '@angular/material/form-field'
+import { MatFormFieldModule } from '@angular/material/form-field'
 import { FormsModule } from '@angular/forms'
 import { MatInputModule } from '@angular/material/input'
-import { MatButton } from '@angular/material/button'
+import { MatButtonModule } from '@angular/material/button'
+import { HttpClientModule } from '@angular/common/http'
 
 @Component({
     selector: 'app-edit-question-dialog',
     standalone: true,
     imports: [
-        MatFormField,
+        MatFormFieldModule,
         FormsModule,
         MatInputModule,
         MatDialogModule,
-        MatButton,
+        MatButtonModule,
+        HttpClientModule,
     ],
     template: `
         <h1 mat-dialog-title>Frage bearbeiten</h1>
@@ -26,7 +28,7 @@ import { MatButton } from '@angular/material/button'
             <!-- Eingabefeld für den Fragetext -->
             <mat-form-field appearance="fill" style="width: 100%;">
                 <mat-label>Frage</mat-label>
-                <input matInput [(ngModel)]="data.question.Question" />
+                <input matInput [(ngModel)]="data.question.question" />
             </mat-form-field>
 
             <!-- Eingabefeld für Antwortmöglichkeiten als JSON-String -->
@@ -39,7 +41,7 @@ import { MatButton } from '@angular/material/button'
                 ></textarea>
             </mat-form-field>
 
-            <!-- Optional: Typ und Punktefaktor bearbeiten -->
+            <!-- Fragentyp und Punktefaktor bearbeiten -->
             <mat-form-field appearance="fill" style="width: 100%;">
                 <mat-label>Fragentyp</mat-label>
                 <input
@@ -68,13 +70,14 @@ import { MatButton } from '@angular/material/button'
     `,
 })
 export class EditQuestionDialogComponent {
-    // Hier speichern wir temporär den JSON-String
+    // JSON-String für die Antwortmöglichkeiten
     answerPossibilitiesString: string
 
     constructor(
         public dialogRef: MatDialogRef<EditQuestionDialogComponent>,
         @Inject(MAT_DIALOG_DATA) public data: { question: QuestionSet }
     ) {
+        // Konvertiere die Antwortmöglichkeiten in einen JSON-String
         this.answerPossibilitiesString = JSON.stringify(
             this.data.question.answerPossibilities,
             null,
@@ -87,8 +90,8 @@ export class EditQuestionDialogComponent {
     }
 
     save(): void {
+        // Parse the JSON string into the question object
         try {
-            // JSON-String in Objekt parsen
             this.data.question.answerPossibilities = JSON.parse(
                 this.answerPossibilitiesString
             )
@@ -98,7 +101,8 @@ export class EditQuestionDialogComponent {
             )
             return
         }
-        // Dialog schließen und die aktualisierte Frage zurückgeben
+
+        // Close the dialog and return the updated question data to the parent
         this.dialogRef.close(this.data.question)
     }
 }
