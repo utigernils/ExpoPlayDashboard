@@ -1,4 +1,3 @@
-// filepath: /src/app/features/login/login.component.ts
 import { Component } from '@angular/core'
 import {
     FormBuilder,
@@ -10,8 +9,9 @@ import { CommonModule } from '@angular/common'
 import { MatButtonModule } from '@angular/material/button'
 import { MatInputModule } from '@angular/material/input'
 import { MatFormFieldModule } from '@angular/material/form-field'
-import { HeaderComponent } from '../../shared/header/header.component'
 import { MatIconModule } from '@angular/material/icon'
+import { HeaderComponent } from '../../shared/header/header.component'
+import { HttpClient, HttpClientModule } from '@angular/common/http'
 import { GlobalService } from '../../services/global.service'
 
 @Component({
@@ -27,6 +27,7 @@ import { GlobalService } from '../../services/global.service'
         MatInputModule,
         MatFormFieldModule,
         MatIconModule,
+        HttpClientModule,
     ],
 })
 export class LoginComponent {
@@ -35,7 +36,8 @@ export class LoginComponent {
 
     constructor(
         private fb: FormBuilder,
-        private globalService: GlobalService
+        private globalService: GlobalService,
+        private http: HttpClient
     ) {
         this.loginForm = this.fb.group({
             email: ['', [Validators.required, Validators.email]],
@@ -46,20 +48,18 @@ export class LoginComponent {
     onSubmit() {
         if (this.loginForm.valid) {
             const formData = this.loginForm.value
-            fetch(`${this.globalService.apiUrl}/login`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(formData),
-            })
-                .then((response) => response.json())
-                .then((data) => {
-                    console.log('Success:', data)
+            this.http
+                .post(`${this.globalService.apiUrl}/login`, formData, {
+                    withCredentials: true,
                 })
-                .catch((error) => {
-                    console.error('Error:', error)
-                })
+                .subscribe(
+                    (response) => {
+                        window.location.href = '/dashboard'
+                    },
+                    (error) => {
+                        console.error('Error:', error)
+                    }
+                )
         }
     }
 }
