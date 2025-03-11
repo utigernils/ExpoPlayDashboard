@@ -4,22 +4,17 @@
     </aside>
 
     <main>
-        <h1 class="Site-title">Spieler Daten</h1>
         <mat-card class="Card">
             <div class="card-header">
                 <mat-card-title class="mat-card-title">Spieler</mat-card-title>
 
                 <div class="card-actions">
-                    <button mat-icon-button class="icon-button-orange">
-                        <mat-icon>person_add</mat-icon>
-                    </button>
-
-                    <button mat-icon-button class="icon-button-orange">
+                    <button
+                        mat-icon-button
+                        class="orangebutton"
+                        (click)="deleteSelected()"
+                    >
                         <mat-icon>delete</mat-icon>
-                    </button>
-
-                    <button mat-icon-button class="icon-button-orange">
-                        <mat-icon>more_horiz</mat-icon>
                     </button>
                 </div>
             </div>
@@ -28,41 +23,56 @@
                 <table
                     mat-table
                     [dataSource]="dataSource"
-                    class="tableInMat"
                     matSort
+                    class="tableInMat"
                 >
-                    <!-- ID Column -->
-                    <ng-container matColumnDef="id">
-                        <!-- Hier 'mat-sort-header' hinzufügen -->
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header>
-                            ID
+                    <!-- Checkbox-Spalte -->
+                    <ng-container matColumnDef="select">
+                        <th mat-header-cell *matHeaderCellDef>
+                            <mat-checkbox
+                                (change)="masterToggle()"
+                                [checked]="
+                                    selection.hasValue() && isAllSelected()
+                                "
+                                [indeterminate]="
+                                    selection.hasValue() && !isAllSelected()
+                                "
+                                aria-label="Select all rows"
+                            >
+                            </mat-checkbox>
                         </th>
-                        <td mat-cell *matCellDef="let element">
-                            {{ element.id }}
+                        <td mat-cell *matCellDef="let row">
+                            <mat-checkbox
+                                (click)="$event.stopPropagation()"
+                                (change)="$event ? selection.toggle(row) : null"
+                                [checked]="selection.isSelected(row)"
+                                aria-label="Select row"
+                            >
+                            </mat-checkbox>
                         </td>
                     </ng-container>
 
-                    <!-- Vorname Column -->
+                    <!-- Vorname -->
                     <ng-container matColumnDef="vorname">
                         <th mat-header-cell *matHeaderCellDef mat-sort-header>
                             Vorname
                         </th>
                         <td mat-cell *matCellDef="let element">
-                            {{ element.vorname }}
+                            {{ element.firstName }}
                         </td>
                     </ng-container>
 
-                    <!-- Nachname Column -->
+                    <!-- Nachname -->
                     <ng-container matColumnDef="nachname">
                         <th mat-header-cell *matHeaderCellDef mat-sort-header>
                             Nachname
                         </th>
                         <td mat-cell *matCellDef="let element">
-                            {{ element.nachname }}
+                            {{ element.lastName }}
                         </td>
                     </ng-container>
 
-                    <!-- Email Column -->
+                    <!-- Email -->
                     <ng-container matColumnDef="email">
                         <th mat-header-cell *matHeaderCellDef mat-sort-header>
                             Email
@@ -72,7 +82,7 @@
                         </td>
                     </ng-container>
 
-                    <!-- Aktiv Column -->
+                    <!-- Aktiv -->
                     <ng-container matColumnDef="acitve">
                         <th mat-header-cell *matHeaderCellDef mat-sort-header>
                             Aktiv
@@ -82,19 +92,9 @@
                         </td>
                     </ng-container>
 
-                    <!-- Score Column -->
-                    <ng-container matColumnDef="score">
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header>
-                            Score
-                        </th>
-                        <td mat-cell *matCellDef="let element">
-                            {{ element.score }}
-                        </td>
-                    </ng-container>
-
-                    <!-- Header Row -->
+                    <!-- Tabellenkopf / Header -->
                     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                    <!-- Data Row -->
+                    <!-- Tabellendaten / Rows -->
                     <tr
                         mat-row
                         *matRowDef="let row; columns: displayedColumns"
