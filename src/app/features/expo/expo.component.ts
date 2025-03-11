@@ -1,3 +1,4 @@
+
 import { Component, ViewChild, AfterViewInit, OnInit } from '@angular/core'
 import { MatCardModule } from '@angular/material/card'
 import { MatIconModule } from '@angular/material/icon'
@@ -33,6 +34,7 @@ import { EditExpoDialogComponent } from './edit-expo-dialog.component'
     templateUrl: './expo.component.html',
     styleUrls: ['./expo.component.scss'],
 })
+
 export class ExpoComponent implements OnInit, AfterViewInit {
     displayedColumns: string[] = [
         'select',
@@ -211,3 +213,4 @@ export interface Expo {
     endsOn: string // Prüfe, ob du ein anderes Format brauchst
     isActive: any // Falls dein Backend 0/1 erwartet, kannst du hier 'number' oder 'boolean' nutzen
 }
+

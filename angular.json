@@ -31,7 +31,7 @@
                         ],
                         "styles": [
                             "src/styles.scss",
-                            "src/app/shared/shared-layout.scss"
+                            "src/app/styles/shared-layout.scss"
                         ],
                         "scripts": []
                     },
@@ -45,8 +45,8 @@
                                 },
                                 {
                                     "type": "anyComponentStyle",
-                                    "maximumWarning": "2kB",
-                                    "maximumError": "4kB"
+                                    "maximumWarning": "5kB",
+                                    "maximumError": "25kB"
                                 }
                             ],
                             "outputHashing": "all"
@@ -101,6 +101,6 @@
     },
     "cli": {
         "schematicCollections": ["angular-eslint"],
-        "analytics": false
+        "analytics": "80b9a5aa-10a9-4cee-b407-298f729f3cd1"
     }
 }

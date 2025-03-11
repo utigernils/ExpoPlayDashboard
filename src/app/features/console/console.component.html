@@ -22,9 +22,9 @@
 
             <mat-card-content>
                 <table
-                    mat-table
                     [dataSource]="dataSource"
                     class="tableInMat"
+                    mat-table
                     matSort
                 >
                     <!-- Konsolen Name -->
@@ -37,7 +37,6 @@
                             {{ element.name }}
                         </td>
                     </ng-container>
-
                     <!-- currentExpo -->
                     <ng-container matColumnDef="currentExpo">
                         <th mat-header-cell *matHeaderCellDef mat-sort-header>
@@ -92,8 +91,8 @@
                     <!-- Tabellenzeilen -->
                     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                     <tr
-                        mat-row
                         *matRowDef="let row; columns: displayedColumns"
+                        mat-row
                     ></tr>
                 </table>
             </mat-card-content>

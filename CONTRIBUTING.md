@@ -51,10 +51,10 @@ Every commit message should follow the format below:
 
 #### Examples
 
-- `feat: allow provided config object to extend other configs`
-- `fix: stop memory leak in EventManager`
-- `docs: correct spelling of CHANGELOG`
-- `style(components): remove empty line at the end of index.js`
+- `feat: Allow provided config object to extend other configs`
+- `fix: Stop memory leak in EventManager`
+- `docs: Correct spelling of CHANGELOG`
+- `style(components): Remove empty line at the end of index.js`
 
 ## Commit Message Convention
 

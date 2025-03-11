@@ -3,7 +3,7 @@ import { SidebarComponent } from '../../shared/sidebar/sidebar.component'
 import { MatCardModule } from '@angular/material/card'
 import { MatIconModule } from '@angular/material/icon'
 import { MatIconButton } from '@angular/material/button'
-import { MatTableModule, MatTableDataSource } from '@angular/material/table'
+import { MatTableDataSource, MatTableModule } from '@angular/material/table'
 import { MatSort, MatSortModule } from '@angular/material/sort'
 import { HttpClientModule, HttpClient } from '@angular/common/http'
 import { MatDialog, MatDialogModule } from '@angular/material/dialog'
@@ -12,6 +12,7 @@ import {
     EditConsoleDialogComponent,
     ConsoleData,
 } from './edit-console-dialog.component'
+
 
 @Component({
     selector: 'app-console',
@@ -29,6 +30,7 @@ import {
     templateUrl: './console.component.html',
     styleUrls: ['./console.component.scss'],
 })
+
 export class ConsoleComponent implements OnInit, AfterViewInit {
     // Diese Spalten beziehen sich auf das Interface 'Consoles'
     displayedColumns: string[] = [
@@ -40,6 +42,7 @@ export class ConsoleComponent implements OnInit, AfterViewInit {
     ]
 
     dataSource = new MatTableDataSource<Consoles>([])
+
 
     @ViewChild(MatSort) sort!: MatSort
 

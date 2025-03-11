@@ -6,6 +6,7 @@ import { MatIconModule } from '@angular/material/icon'
 import { HttpClientModule } from '@angular/common/http'
 import { HttpClient } from '@angular/common/http'
 import { MatIconButton } from '@angular/material/button'
+
 import { MatDialog, MatDialogModule } from '@angular/material/dialog'
 
 // Importiere deinen Dialog
@@ -21,6 +22,7 @@ export interface User {
     email: string
     isAdmin: boolean
 }
+
 
 @Component({
     selector: 'app-user',
