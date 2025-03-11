@@ -11,18 +11,17 @@
             </mat-card-title>
 
             <mat-card-content>
-                <div
-                    *ngFor="let user of users; trackBy: trackByUser"
-                    class="user-row"
-                >
-                    <mat-card-content class="adminUserCard">
-                        <p>{{ user.name }}</p>
+                @for (user of users; track user.id) {
+                    <div class="user-row">
+                        <mat-card-content class="adminUserCard">
+                            <p>{{ user.name }}</p>
 
-                        <button mat-icon-button class="more-vert">
-                            <mat-icon>more_vert</mat-icon>
-                        </button>
-                    </mat-card-content>
-                </div>
+                            <button mat-icon-button class="more-vert">
+                                <mat-icon>more_vert</mat-icon>
+                            </button>
+                        </mat-card-content>
+                    </div>
+                }
             </mat-card-content>
         </mat-card>
     </main>

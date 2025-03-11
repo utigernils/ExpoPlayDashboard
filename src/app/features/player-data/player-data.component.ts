@@ -1,11 +1,11 @@
-import { Component, ViewChild, AfterViewInit } from '@angular/core'
+import { AfterViewInit, Component, ViewChild } from '@angular/core'
 import { MatSort, MatSortModule } from '@angular/material/sort'
-import { MatTableDataSource } from '@angular/material/table'
+import { MatTableDataSource, MatTableModule } from '@angular/material/table'
 import { SidebarComponent } from '../../shared/sidebar/sidebar.component'
 import { MatCardModule } from '@angular/material/card'
 import { MatIconModule } from '@angular/material/icon'
 import { MatIconButton } from '@angular/material/button'
-import { MatTableModule } from '@angular/material/table'
+import { ExpoPlayer } from '../../types/expo.types'
 
 @Component({
     selector: 'app-player-data',
@@ -34,26 +34,26 @@ export class PlayerDataComponent implements AfterViewInit {
     dataSource = new MatTableDataSource<ExpoPlayer>([
         {
             id: 1,
-            vorname: 'Lenny',
-            nachname: 'Test',
+            firstname: 'Lenny',
+            lastname: 'Test',
             email: 'lenny.ami@gmail.com',
-            acitve: true,
+            active: true,
             score: 1,
         },
         {
             id: 2,
-            vorname: 'Tobias',
-            nachname: 'Tester',
+            firstname: 'Tobias',
+            lastname: 'Tester',
             email: 'Tobi.flix@gmail.com',
-            acitve: true,
+            active: true,
             score: 2,
         },
         {
             id: 4,
-            vorname: 'Manuel',
-            nachname: 'Tester',
+            firstname: 'Manuel',
+            lastname: 'Tester',
             email: 'maun.testmail@gmail.com',
-            acitve: false,
+            active: false,
             score: 3,
         },
     ])
@@ -63,13 +63,4 @@ export class PlayerDataComponent implements AfterViewInit {
     ngAfterViewInit(): void {
         this.dataSource.sort = this.sort
     }
-}
-
-export interface ExpoPlayer {
-    id: number
-    vorname: string
-    nachname: string
-    email: string
-    acitve: boolean
-    score: number
 }

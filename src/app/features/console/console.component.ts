@@ -1,10 +1,11 @@
-import { Component, ViewChild, AfterViewInit } from '@angular/core'
+import { AfterViewInit, Component, ViewChild } from '@angular/core'
 import { SidebarComponent } from '../../shared/sidebar/sidebar.component'
 import { MatCardModule } from '@angular/material/card'
 import { MatIconModule } from '@angular/material/icon'
 import { MatIconButton } from '@angular/material/button'
-import { MatTableModule, MatTableDataSource } from '@angular/material/table'
+import { MatTableDataSource, MatTableModule } from '@angular/material/table'
 import { MatSort, MatSortModule } from '@angular/material/sort'
+import { Console } from '../../types/console.types'
 
 @Component({
     selector: 'app-console',
@@ -23,16 +24,16 @@ import { MatSort, MatSortModule } from '@angular/material/sort'
 export class ConsoleComponent implements AfterViewInit {
     displayedColumns: string[] = ['consoleName', 'austellung', 'quiz', 'active']
 
-    dataSource = new MatTableDataSource<Consoles>([
+    dataSource = new MatTableDataSource<Console>([
         {
-            consoleName: 'Konsole 1',
-            austellung: 'Luzern Zebi',
+            name: 'Konsole 1',
+            exhibition: 'Luzern Zebi',
             quiz: '1',
             active: false,
         },
         {
-            consoleName: 'Konsole 2',
-            austellung: 'Luzern Zebi',
+            name: 'Konsole 2',
+            exhibition: 'Luzern Zebi',
             quiz: '1',
             active: true,
         },
@@ -43,11 +44,4 @@ export class ConsoleComponent implements AfterViewInit {
     ngAfterViewInit(): void {
         this.dataSource.sort = this.sort
     }
-}
-
-interface Consoles {
-    consoleName: string
-    austellung: string
-    quiz: string
-    active: boolean
 }

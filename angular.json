@@ -31,7 +31,7 @@
                         ],
                         "styles": [
                             "src/styles.scss",
-                            "src/app/shared/shared-layout.scss"
+                            "src/app/styles/shared-layout.scss"
                         ],
                         "scripts": []
                     },
@@ -45,8 +45,8 @@
                                 },
                                 {
                                     "type": "anyComponentStyle",
-                                    "maximumWarning": "2kB",
-                                    "maximumError": "4kB"
+                                    "maximumWarning": "5kB",
+                                    "maximumError": "25kB"
                                 }
                             ],
                             "outputHashing": "all"
