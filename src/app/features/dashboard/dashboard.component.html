@@ -10,16 +10,30 @@
                     >Highscore</mat-card-title
                 >
                 <mat-card-content>
-                    <canvas id="highscoreChart"></canvas>
+                    <ng-container *ngIf="chartReady; else loading">
+                        <app-highscore-diagramm
+                            [quizStats]="quizStats"
+                        ></app-highscore-diagramm>
+                    </ng-container>
+                    <ng-template #loading>
+                        <p>Diagramm wird geladen...</p>
+                    </ng-template>
                 </mat-card-content>
             </mat-card>
 
-            <mat-card class="card-small">
+            <mat-card class="card-large">
                 <mat-card-title class="mat-card-title"
                     >Quizzes gespielt</mat-card-title
                 >
                 <mat-card-content>
-                    <canvas id="quizzesChart"></canvas>
+                    <ng-container *ngIf="chartReady; else loading">
+                        <app-quizzes-played
+                            [quizStats]="quizStats"
+                        ></app-quizzes-played>
+                    </ng-container>
+                    <ng-template #loading>
+                        <p>Diagramm wird geladen...</p>
+                    </ng-template>
                 </mat-card-content>
             </mat-card>
 

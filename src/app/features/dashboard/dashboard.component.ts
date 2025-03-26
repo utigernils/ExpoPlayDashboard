@@ -2,10 +2,12 @@ import { Component, OnInit } from '@angular/core'
 import { HttpClient, HttpHeaders } from '@angular/common/http'
 import { CommonModule } from '@angular/common'
 import { HttpClientModule } from '@angular/common/http'
-import { Chart, registerables } from 'chart.js'
 import { SidebarComponent } from '../../shared/sidebar/sidebar.component'
 import { MatCard, MatCardContent, MatCardTitle } from '@angular/material/card'
 import { MatIcon } from '@angular/material/icon'
+import { HighscoreDiagrammComponent } from './highscore-diagramm/highscore-diagramm.component'
+import { Chart, registerables } from 'chart.js'
+import { QuizzesPlayedComponent } from './quizzes-played/quizzes-played.component'
 
 Chart.register(...registerables)
 
@@ -62,6 +64,8 @@ interface Player {
         MatCardContent,
         MatCard,
         MatIcon,
+        HighscoreDiagrammComponent,
+        QuizzesPlayedComponent,
     ],
     templateUrl: './dashboard.component.html',
     styleUrls: ['./dashboard.component.scss'],
@@ -73,6 +77,7 @@ export class DashboardComponent implements OnInit {
     players: Player[] = []
     consoles: ConsoleData[] = []
     totalQuizzesPlayed = 0
+    chartReady = false
 
     private apiBaseUrl = 'http://localhost/expoplay'
     private authHeaders = new HttpHeaders({
@@ -100,29 +105,31 @@ export class DashboardComponent implements OnInit {
             )
             .subscribe({
                 next: () => {
-                    this.http
-                        .get<
-                            User[]
-                        >(`${this.apiBaseUrl}/user/`, { withCredentials: true })
-                        .subscribe({
-                            next: (response) => {
-                                this.users = response
-                                this.loadExpos()
-                                this.loadQuizStats()
-                                this.loadPlayers()
-                                this.loadConsoles()
-                            },
-                            error: (error) => {
-                                console.error(
-                                    'Fehler beim Laden der User:',
-                                    error
-                                )
-                            },
-                        })
+                    this.loadAllData()
                 },
                 error: (error) => {
                     console.error('Fehler beim POST-Request:', error)
                 },
+            })
+    }
+
+    loadAllData(): void {
+        this.loadUsers()
+        this.loadExpos()
+        this.loadQuizStats()
+        this.loadPlayers()
+        this.loadConsoles()
+    }
+
+    loadUsers(): void {
+        this.http
+            .get<User[]>(`${this.apiBaseUrl}/user/`, { withCredentials: true })
+            .subscribe({
+                next: (response) => {
+                    this.users = response
+                },
+                error: (error) =>
+                    console.error('Fehler beim Laden der User:', error),
             })
     }
 
@@ -140,13 +147,14 @@ export class DashboardComponent implements OnInit {
 
     loadQuizStats(): void {
         this.http
-            .get<
-                QuizStats[]
-            >(`${this.apiBaseUrl}/played-quiz`, { withCredentials: true })
+            .get<QuizStats[]>(`${this.apiBaseUrl}/played-quiz`, {
+                withCredentials: true,
+            })
             .subscribe({
                 next: (data) => {
                     this.quizStats = data
                     this.totalQuizzesPlayed = data.length
+                    this.chartReady = true
                 },
                 error: (err) =>
                     console.error(
@@ -172,9 +180,9 @@ export class DashboardComponent implements OnInit {
 
     loadConsoles(): void {
         this.http
-            .get<
-                ConsoleData[]
-            >(`${this.apiBaseUrl}/console`, { withCredentials: true })
+            .get<ConsoleData[]>(`${this.apiBaseUrl}/console`, {
+                withCredentials: true,
+            })
             .subscribe({
                 next: (data) => {
                     this.consoles = data
@@ -184,7 +192,7 @@ export class DashboardComponent implements OnInit {
             })
     }
 
-    trackByUser(index: number, user: any): string {
-        return user.id // Falls die User-Daten eine ID haben, sonst eine andere eindeutige Eigenschaft nehmen
+    trackByUser(index: number, user: User): string {
+        return user.id
     }
 }
