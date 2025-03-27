@@ -80,7 +80,16 @@ export class AddConsoleDialogComponent {
 
     onSubmit(): void {
         if (this.addConsoleForm.valid) {
-            this.dialogRef.close(this.addConsoleForm.value)
+            // Hier würdest du normalerweise einen Service aufrufen,
+            // der die Konsole erstellt und eine ID zurückgibt.
+            // Für das Beispiel nehmen wir eine Dummy-ID:
+            const newId = '123456'
+
+            // Wir schließen den Dialog und geben das Ergebnis (inkl. ID) zurück:
+            this.dialogRef.close({
+                ...this.addConsoleForm.value,
+                id: newId,
+            })
         }
     }
 }
