@@ -12,6 +12,7 @@ import {
     EditConsoleDialogComponent,
     ConsoleData,
 } from './edit-console-dialog.component'
+import { ShowConsoleIdDialogComponent } from './ShowConsoleIdDialogComponent'
 
 
 @Component({
@@ -32,7 +33,7 @@ import {
 })
 
 export class ConsoleComponent implements OnInit, AfterViewInit {
-    // Diese Spalten beziehen sich auf das Interface 'Consoles'
+    // Definiert die Spalten deiner Tabelle
     displayedColumns: string[] = [
         'name',
         'currentExpo',
@@ -62,9 +63,9 @@ export class ConsoleComponent implements OnInit, AfterViewInit {
     // Lädt alle Konsolen von der API
     getAllConsoles(): void {
         this.http
-            .get<
-                Consoles[]
-            >('http://localhost/expoplayAPI/console/', { withCredentials: true })
+            .get<Consoles[]>('http://localhost/expoplayAPI/console/', {
+                withCredentials: true,
+            })
             .subscribe({
                 next: (response) => {
                     this.dataSource.data = response
@@ -84,23 +85,45 @@ export class ConsoleComponent implements OnInit, AfterViewInit {
 
         dialogRef.afterClosed().subscribe((result) => {
             if (result) {
-                // result ist ein Objekt vom Typ 'Consoles' oder kompatibel
+                // Übergibt die eingegebenen Daten an addConsole()
                 this.addConsole(result)
             }
         })
     }
 
-    // Fügt eine neue Konsole hinzu
+    // Fügt eine neue Konsole hinzu und öffnet danach den Dialog mit der ID
     addConsole(consoleData: Consoles): void {
         this.http
-            .post('http://localhost/expoplayAPI/console', consoleData, {
-                headers: { 'Content-Type': 'application/json' },
-                withCredentials: true,
-            })
+            .post<Consoles>(
+                'http://localhost/expoplayAPI/console',
+                consoleData,
+                {
+                    headers: { 'Content-Type': 'application/json' },
+                    withCredentials: true,
+                }
+            )
             .subscribe({
                 next: (response) => {
                     console.log('Konsole hinzugefügt:', response)
+                    // Aktualisiere die Liste
                     this.getAllConsoles()
+
+                    // Debug-Ausgabe, um zu prüfen, ob response.id existiert
+                    if (response && response.id) {
+                        this.dialog.open(ShowConsoleIdDialogComponent, {
+                            width: '400px',
+                            data: { id: response.id },
+                        })
+                    } else {
+                        console.error(
+                            'ID nicht in der Antwort gefunden! Öffne Dialog mit Test-ID.'
+                        )
+                        // Testweise öffnen wir den Dialog auch ohne echte ID
+                        this.dialog.open(ShowConsoleIdDialogComponent, {
+                            width: '400px',
+                            data: { id: 'Test-ID' },
+                        })
+                    }
                 },
                 error: (error) => {
                     console.error('Fehler beim Hinzufügen der Konsole:', error)
@@ -115,14 +138,13 @@ export class ConsoleComponent implements OnInit, AfterViewInit {
             data: {
                 id: consoleItem.id,
                 name: consoleItem.name,
-                // Falls dein Backend 'isActive' als boolean oder number erwartet:
                 isActive: consoleItem.isActive,
             } as ConsoleData,
         })
 
         dialogRef.afterClosed().subscribe((result) => {
             if (result) {
-                // result enthält die aktualisierten Daten
+                // Übergibt die aktualisierten Daten an updateConsole()
                 this.updateConsole(result)
             }
         })
@@ -192,6 +214,6 @@ export class ConsoleComponent implements OnInit, AfterViewInit {
 
 interface Consoles {
     id?: string // oder number, falls deine DB eine Zahl verwendet
-    name: string // z. B. "Console Alpha"
-    isActive: boolean | number // je nach DB (0/1 oder true/false)
+    name: string
+    isActive: boolean | number
 }
