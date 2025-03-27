@@ -38,8 +38,43 @@ export class HighscoreDiagrammComponent implements AfterViewInit {
             return
         }
 
-        const values = this.quizStats.map((stat) => stat.correctAnswers)
-        const labels = values.map(() => '')
+        const now = new Date()
+        const today = now.toISOString().split('T')[0]
+
+        const hourlyStats: { [hour: string]: number[] } = {}
+
+        for (let hour = 8; hour <= 18; hour++) {
+            hourlyStats[hour.toString().padStart(2, '0')] = []
+        }
+
+        this.quizStats.forEach((stat) => {
+            const startDate = new Date(stat.startedOn)
+            const dateStr = startDate.toISOString().split('T')[0]
+
+            if (dateStr === today) {
+                const hour = startDate.getHours()
+                if (hour >= 8 && hour <= 18) {
+                    const hourKey = hour.toString().padStart(2, '0')
+                    hourlyStats[hourKey].push(stat.correctAnswers)
+                }
+            }
+        })
+
+        const labels: string[] = []
+        const values: number[] = []
+
+        for (let hour = 8; hour <= 18; hour++) {
+            const hourKey = hour.toString().padStart(2, '0')
+            labels.push(`${hourKey}:00`)
+            const answers = hourlyStats[hourKey]
+            if (answers.length > 0) {
+                const avg =
+                    answers.reduce((sum, val) => sum + val, 0) / answers.length
+                values.push(parseFloat(avg.toFixed(2)))
+            } else {
+                values.push(0) // → 0 Punkte, wenn keine Daten
+            }
+        }
 
         if (this.chart) {
             this.chart.destroy()
@@ -51,37 +86,35 @@ export class HighscoreDiagrammComponent implements AfterViewInit {
                 labels,
                 datasets: [
                     {
-                        label: '', // keine Legende
+                        label: '', // Keine Legende anzeigen
                         data: values,
-                        tension: 0.4,
+                        tension: 0.3,
                         fill: false,
                         borderColor: 'rgba(75, 192, 192, 1)',
                         backgroundColor: 'rgba(75, 192, 192, 0.4)',
-                        pointRadius: 3,
-                        pointHoverRadius: 5,
+                        pointRadius: 4,
+                        pointHoverRadius: 6,
+                        spanGaps: true,
                     },
                 ],
             },
             options: {
                 responsive: true,
                 plugins: {
-                    title: { display: false },
-                    legend: { display: false },
+                    title: { display: false }, // → Kein Titel
+                    legend: { display: false }, // → Keine Legende
                     tooltip: { enabled: true },
                 },
                 scales: {
                     x: {
-                        ticks: { display: false },
-                        grid: { display: false },
-                        title: { display: false },
+                        title: { display: true, text: 'Stunde' },
                     },
                     y: {
                         beginAtZero: true,
-                        title: { display: false },
+                        title: { display: true, text: 'Ø Punkte' },
                         ticks: {
                             stepSize: 1,
                             precision: 0,
-                            color: '#666',
                         },
                     },
                 },

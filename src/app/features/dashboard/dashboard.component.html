@@ -4,7 +4,7 @@
     </aside>
 
     <div class="dashboard">
-        <div class="row">
+        <div class="row row1">
             <mat-card class="card-large">
                 <mat-card-title class="mat-card-title"
                     >Highscore</mat-card-title
@@ -37,7 +37,7 @@
                 </mat-card-content>
             </mat-card>
 
-            <mat-card class="card-small">
+            <mat-card class="card-small" style="color: #666666">
                 <mat-card-title class="mat-card-title"
                     >Total gespielte Quizzes</mat-card-title
                 >
@@ -46,63 +46,65 @@
                 </mat-card-content>
             </mat-card>
         </div>
+        <div style="color: #666666">
+            <div class="row">
+                <!-- Konsolen -->
+                <mat-card class="card-large">
+                    <mat-card-title class="mat-card-title"
+                        >Konsolen</mat-card-title
+                    >
+                    <mat-card-content>
+                        <div class="scroll-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Aktuelle Ausstellung</th>
+                                        <th>Letzte Aktivität</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let console of consoles">
+                                        <td>{{ console.name }}</td>
+                                        <td>{{ console.currentExpo }}</td>
+                                        <td>{{ console.lastActive }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </mat-card-content>
+                </mat-card>
 
-        <div class="row">
-            <!-- Konsolen -->
-            <mat-card class="card-large">
-                <mat-card-title class="mat-card-title">Konsolen</mat-card-title>
-                <mat-card-content>
-                    <div class="scroll-container">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Name</th>
-                                    <th>Aktuelle Ausstellung</th>
-                                    <th>Letzte Aktivität</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr *ngFor="let console of consoles">
-                                    <td>{{ console.name }}</td>
-                                    <td>{{ console.currentExpo }}</td>
-                                    <td>{{ console.lastActive }}</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </mat-card-content>
-            </mat-card>
-
-            <!-- Ausstellungen -->
-            <mat-card class="super-large">
-                <mat-card-title class="mat-card-title"
-                    >Ausstellungen</mat-card-title
-                >
-                <mat-card-content>
-                    <div class="scroll-container">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Name</th>
-                                    <th>Ort</th>
-                                    <th>Startdatum</th>
-                                    <th>Enddatum</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr *ngFor="let expo of expos">
-                                    <td>{{ expo.name }}</td>
-                                    <td>{{ expo.location }}</td>
-                                    <td>{{ expo.startsOn }}</td>
-                                    <td>{{ expo.endsOn }}</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </mat-card-content>
-            </mat-card>
+                <!-- Ausstellungen -->
+                <mat-card class="super-large">
+                    <mat-card-title class="mat-card-title"
+                        >Ausstellungen</mat-card-title
+                    >
+                    <mat-card-content>
+                        <div class="scroll-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Ort</th>
+                                        <th>Startdatum</th>
+                                        <th>Enddatum</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let expo of expos">
+                                        <td>{{ expo.name }}</td>
+                                        <td>{{ expo.location }}</td>
+                                        <td>{{ expo.startsOn }}</td>
+                                        <td>{{ expo.endsOn }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </mat-card-content>
+                </mat-card>
+            </div>
         </div>
-
         <div class="row">
             <!-- Spielerdaten -->
             <mat-card class="card-small">

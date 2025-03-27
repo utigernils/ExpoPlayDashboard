@@ -28,8 +28,12 @@ body {
 
 .row {
     display: flex;
-    gap: 20px;
+    gap: 15px;
     flex-wrap: wrap;
+}
+
+.row1 {
+    height: 35vh;
 }
 
 .card {
