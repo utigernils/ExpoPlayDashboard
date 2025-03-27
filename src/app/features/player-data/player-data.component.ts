@@ -1,3 +1,4 @@
+
 import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core'
 import { HttpClientModule, HttpClient } from '@angular/common/http'
 import { MatSort, MatSortModule } from '@angular/material/sort'
@@ -17,6 +18,7 @@ export interface Player {
     email: string
     acitve: boolean
 }
+
 
 @Component({
     selector: 'app-player-data',
@@ -42,6 +44,7 @@ export class PlayerDataComponent implements OnInit, AfterViewInit {
         'email',
         'acitve',
     ]
+
 
     dataSource = new MatTableDataSource<Player>([])
     selection = new SelectionModel<Player>(true, [])
