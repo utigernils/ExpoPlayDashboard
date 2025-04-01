@@ -1,65 +1,46 @@
-<div class="login-container">
-    <mat-card class="login-card">
-        <mat-card-title class="title">Sign In</mat-card-title>
-        <p class="subtitle">Geben Sie Ihre Email ein zum Anmelden</p>
-
-        <mat-card-content>
-            <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-                <mat-form-field appearance="outline" class="full-width">
+<app-header title="Anmelden"></app-header>
+<div class="mainContainer">
+    <div class="loginFormHeader">
+        <h1>Anmelden auf ExpoPlay</h1>
+    </div>
+    <div class="loginForm">
+        <div class="loginFormBody">
+            <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" novalidate>
+                <div class="formGroup">
+                    <label class="suvaInputLabel" for="email">E-Mail*</label>
                     <input
-                        matInput
-                        formControlName="email"
                         type="email"
-                        placeholder="Email"
-                        required
-                        class="full-width mat-form-input"
+                        formControlName="email"
+                        class="suvaInput"
+                        id="email"
+                        placeholder="email@muster.ch"
                     />
-                </mat-form-field>
-
-                <mat-form-field appearance="outline" class="full-width">
-                    <input
-                        matInput
-                        formControlName="password"
-                        type="password"
-                        placeholder="Passwort"
-                        required
-                        class="full-width mat-form-input"
-                    />
-                    <button
-                        mat-icon-button
-                        matSuffix
-                        (click)="togglePasswordVisibility()"
-                    >
-                        <mat-icon>{{
-                            hidePassword ? 'visibility_off' : 'visibility'
-                        }}</mat-icon>
-                    </button>
-                </mat-form-field>
-
-                <div class="options">
-                    <mat-checkbox formControlName="rememberMe"
-                        >Angemeldet bleiben</mat-checkbox
-                    >
-                    <a href="#" class="forgot-password">Passwort vergessen?</a>
                 </div>
-
+                <div class="formGroup">
+                    <label class="suvaInputLabel" for="password"
+                        >Passwort*</label
+                    >
+                    <input
+                        type="password"
+                        formControlName="password"
+                        class="suvaInput"
+                        id="password"
+                        placeholder="Passwort eingeben"
+                    />
+                </div>
                 <button
-                    mat-raised-button
-                    color="primary"
-                    class="full-width login-btn"
                     type="submit"
+                    class="suvaButton"
+                    [disabled]="loginForm.invalid"
                 >
-                    Anmelden
+                    Einloggen
                 </button>
             </form>
-        </mat-card-content>
-
-        <p class="register-link">
-            Noch nicht registriert? <a href="#">Jetzt registrieren</a>
-        </p>
-    </mat-card>
-
-    <div class="logo-container">
-        <img src="./logo/ExpoPlay_Logo.png" alt="Logo" />
+        </div>
+        <div class="split"></div>
+        <div class="passwordReset">
+            <h1 class="passwordHeader">Passwort vergessen?</h1>
+            <h2>Jetzt zurücksetzen</h2>
+        </div>
     </div>
 </div>
