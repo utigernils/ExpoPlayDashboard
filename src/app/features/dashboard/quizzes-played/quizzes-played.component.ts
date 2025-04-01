@@ -38,7 +38,7 @@ export class QuizzesPlayedComponent implements AfterViewInit {
         }
 
         // 🗓️ Anzahl Spiele pro Tag berechnen
-        const countByDate: { [date: string]: number } = {}
+        const countByDate: Record<string, number> = {}
         this.quizStats.forEach((stat) => {
             const date = new Date(stat.startedOn).toISOString().split('T')[0] // z.B. "2025-03-26"
             countByDate[date] = (countByDate[date] || 0) + 1

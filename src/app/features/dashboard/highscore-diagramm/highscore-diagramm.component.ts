@@ -41,7 +41,7 @@ export class HighscoreDiagrammComponent implements AfterViewInit {
         const now = new Date()
         const today = now.toISOString().split('T')[0]
 
-        const hourlyStats: { [hour: string]: number[] } = {}
+        const hourlyStats: Record<string, number[]> = {}
 
         for (let hour = 8; hour <= 18; hour++) {
             hourlyStats[hour.toString().padStart(2, '0')] = []
