@@ -3,18 +3,14 @@ import { CommonModule } from '@angular/common'
 import { SidebarComponent } from '../../shared/sidebar/sidebar.component'
 import { MatCardModule } from '@angular/material/card'
 import { MatIconModule } from '@angular/material/icon'
-import { HttpClientModule } from '@angular/common/http'
-import { HttpClient } from '@angular/common/http'
+import { HttpClientModule, HttpClient } from '@angular/common/http'
 import { MatIconButton } from '@angular/material/button'
-
 import { MatDialog, MatDialogModule } from '@angular/material/dialog'
-
-// Importiere deinen Dialog
 import { AddUserDialogComponent } from './add-user-dialog.component'
-import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu'
 import { EditUserDialogComponent } from './edit-user-dialog.component'
+import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu'
+import { GlobalService } from '../../services/global.service' // <-- GlobalService importiert
 
-// Beispiel-Interface, an dein tatsächliches User-Modell anpassen
 export interface User {
     id: number
     firstName: string
@@ -22,7 +18,6 @@ export interface User {
     email: string
     isAdmin: boolean
 }
-
 
 @Component({
     selector: 'app-user',
@@ -48,7 +43,8 @@ export class UserComponent implements OnInit {
 
     constructor(
         private http: HttpClient,
-        private dialog: MatDialog
+        private dialog: MatDialog,
+        public globalService: GlobalService // <-- GlobalService injiziert
     ) {}
 
     ngOnInit(): void {
@@ -57,7 +53,7 @@ export class UserComponent implements OnInit {
 
     getAllUsers(): void {
         this.http
-            .get<User[]>('http://localhost/expoplayAPI/user/', {
+            .get<User[]>(`${this.globalService.apiUrl}/user/`, {
                 withCredentials: true,
             })
             .subscribe({
@@ -73,13 +69,11 @@ export class UserComponent implements OnInit {
 
     openAddUserDialog(): void {
         const dialogRef = this.dialog.open(AddUserDialogComponent, {
-            width: '400px', // Optional: Dialogbreite festlegen
+            width: '400px',
         })
 
-        // Ergebnis abfangen, nachdem der Dialog geschlossen wurde
         dialogRef.afterClosed().subscribe((result) => {
             if (result) {
-                // result enthält das newUser-Objekt aus dem Dialog
                 this.registerUser(result)
             }
         })
@@ -101,16 +95,13 @@ export class UserComponent implements OnInit {
         }
 
         this.http
-            .post('http://localhost/expoplayAPI/user', body, {
-                headers: {
-                    'Content-Type': 'application/json',
-                },
+            .post(`${this.globalService.apiUrl}/user`, body, {
+                headers: { 'Content-Type': 'application/json' },
                 withCredentials: true,
             })
             .subscribe({
                 next: (response) => {
                     console.log('Neuer User erfolgreich erstellt:', response)
-                    // Optional: Liste aller User neu laden
                     this.getAllUsers()
                 },
                 error: (error) => {
@@ -124,18 +115,15 @@ export class UserComponent implements OnInit {
     }
 
     deleteUser(user: User): void {
-        if (!confirm('Wollen Sie diesen Benutzer wirklich löschen?')) {
-            return
-        }
+        if (!confirm('Wollen Sie diesen Benutzer wirklich löschen?')) return
 
         this.http
-            .delete(`http://localhost/expoplayAPI/user/${user.id}`, {
+            .delete(`${this.globalService.apiUrl}/user/${user.id}`, {
                 withCredentials: true,
             })
             .subscribe({
                 next: (response) => {
                     console.log('Benutzer gelöscht:', response)
-                    // Aktualisiere die Benutzerliste, z.B. durch erneutes Laden
                     this.getAllUsers()
                 },
                 error: (error) => {
@@ -143,6 +131,7 @@ export class UserComponent implements OnInit {
                 },
             })
     }
+
     updateUser(user: User): void {
         const body = {
             firstName: user.firstName,
@@ -152,7 +141,7 @@ export class UserComponent implements OnInit {
         }
 
         this.http
-            .put(`http://localhost/expoplayAPI/user/${user.id}`, body, {
+            .put(`${this.globalService.apiUrl}/user/${user.id}`, body, {
                 headers: { 'Content-Type': 'application/json' },
                 withCredentials: true,
             })
@@ -173,12 +162,11 @@ export class UserComponent implements OnInit {
     openEditUserDialog(user: User): void {
         const dialogRef = this.dialog.open(EditUserDialogComponent, {
             width: '400px',
-            data: user, // Übergibt die bestehenden Nutzerdaten
+            data: user,
         })
 
         dialogRef.afterClosed().subscribe((result) => {
             if (result) {
-                // Ruft updateUser mit den aktualisierten Daten auf
                 this.updateUser(result)
             }
         })
