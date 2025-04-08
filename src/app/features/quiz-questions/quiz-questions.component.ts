@@ -12,6 +12,7 @@ import { EditQuestionDialogComponent } from './edit-question-dialog.component'
 import { MatDialog } from '@angular/material/dialog'
 import { AddQuestionDialogComponent } from './add-questions-dialog.component'
 import { AddQuizDialogComponent } from './add-quiz-dialog.component'
+import { GlobalService } from '../../services/global.service'
 
 @Component({
     selector: 'app-quiz-with-questions',
@@ -34,7 +35,8 @@ export class QuizQuestionsComponent implements OnInit {
 
     constructor(
         private http: HttpClient,
-        private dialog: MatDialog
+        private dialog: MatDialog,
+        public globalService: GlobalService
     ) {}
 
     ngOnInit(): void {
@@ -45,7 +47,7 @@ export class QuizQuestionsComponent implements OnInit {
         this.http
             .get<
                 Quiz[]
-            >('http://localhost/expoplayAPI/quiz', { withCredentials: true })
+            >(`${this.globalService.apiUrl}/quiz`, { withCredentials: true })
             .subscribe({
                 next: (data) => {
                     this.quizzes = data
@@ -53,9 +55,8 @@ export class QuizQuestionsComponent implements OnInit {
                         this.loadQuestionSetsForQuiz(quiz.id)
                     }
                 },
-                error: (err) => {
-                    console.error('Fehler beim Laden der Quiz:', err)
-                },
+                error: (err) =>
+                    console.error('Fehler beim Laden der Quiz:', err),
             })
     }
 
@@ -63,14 +64,13 @@ export class QuizQuestionsComponent implements OnInit {
         this.http
             .get<
                 QuestionSet[]
-            >(`http://localhost/expoplayAPI/question/${quizId}`, { withCredentials: true })
+            >(`${this.globalService.apiUrl}/question/${quizId}`, { withCredentials: true })
             .subscribe({
                 next: (data) => {
                     this.questionSets.push(...data)
                 },
-                error: (err) => {
-                    console.error('Fehler beim Laden der Fragen:', err)
-                },
+                error: (err) =>
+                    console.error('Fehler beim Laden der Fragen:', err),
             })
     }
 
@@ -82,7 +82,6 @@ export class QuizQuestionsComponent implements OnInit {
 
         dialogRef.afterClosed().subscribe((updatedQuestion: QuestionSet) => {
             if (updatedQuestion) {
-                // Update erfolgt via PUT und anschließend im lokalen Array aktualisieren
                 this.updateQuestion(
                     updatedQuestion.quiz,
                     updatedQuestion.id,
@@ -103,23 +102,18 @@ export class QuizQuestionsComponent implements OnInit {
 
         this.http
             .put(
-                `http://localhost/expoplayAPI/question/${quizId}/${questionId}`,
+                `${this.globalService.apiUrl}/question/${quizId}/${questionId}`,
                 dataToSend,
                 { withCredentials: true }
             )
             .subscribe({
-                next: () => {
-                    this.updateLocalQuestion(updatedData)
-                },
-                error: (err) => {
-                    console.error('Fehler beim Updaten:', err)
-                },
+                next: () => this.updateLocalQuestion(updatedData),
+                error: (err) => console.error('Fehler beim Updaten:', err),
             })
     }
 
     private updateLocalQuestion(updatedData: Partial<QuestionSet>): void {
         if (!updatedData.id) return
-
         const index = this.questionSets.findIndex(
             (q) => q.id === updatedData.id
         )
@@ -143,16 +137,12 @@ export class QuizQuestionsComponent implements OnInit {
 
         this.http
             .delete(
-                `http://localhost/expoplayAPI/question/${quizId}/${questionId}`,
+                `${this.globalService.apiUrl}/question/${quizId}/${questionId}`,
                 { withCredentials: true }
             )
             .subscribe({
-                next: () => {
-                    this.removeLocalQuestion(questionId)
-                },
-                error: (err) => {
-                    console.error('Fehler beim Löschen:', err)
-                },
+                next: () => this.removeLocalQuestion(questionId),
+                error: (err) => console.error('Fehler beim Löschen:', err),
             })
     }
 
@@ -163,9 +153,7 @@ export class QuizQuestionsComponent implements OnInit {
 
         dialogRef.afterClosed().subscribe((result) => {
             if (result) {
-                // Falls im zurückgegebenen Datensatz die Quiz-ID fehlt, setzen wir sie
                 result.quiz = result.quiz || quizId
-                // Erzeuge eine neue Array-Referenz, um Angulars Change Detection zu triggern
                 this.questionSets = [...this.questionSets, result]
             }
         })
@@ -178,43 +166,9 @@ export class QuizQuestionsComponent implements OnInit {
 
         dialogRef.afterClosed().subscribe((newQuiz: Quiz) => {
             if (newQuiz) {
-                // Füge das neu erstellte Quiz in dein lokales Array ein
                 this.quizzes = [...this.quizzes, newQuiz]
             }
         })
-    }
-
-    private removeLocalQuestion(questionId: string | number): void {
-        this.questionSets = this.questionSets.filter((q) => q.id !== questionId)
-    }
-
-    parseAnswerPossibilities(possibilities: any): any {
-        if (!possibilities) return {}
-        if (typeof possibilities === 'string') {
-            try {
-                return JSON.parse(possibilities)
-            } catch (error) {
-                console.error(
-                    'Fehler beim Parsen von answerPossibilities:',
-                    error
-                )
-                return {}
-            }
-        }
-        return possibilities
-    }
-
-    objectKeys<T extends object>(obj: T | null | undefined): (keyof T)[] {
-        try {
-            return obj ? (Object.keys(obj) as (keyof T)[]) : []
-        } catch (error) {
-            console.error('Fehler in objectKeys():', error)
-            return []
-        }
-    }
-
-    getQuestionsForQuiz(quizId: string): QuestionSet[] {
-        return this.questionSets.filter((q) => q.quiz === quizId)
     }
 
     confirmDeleteQuiz(quiz: Quiz): void {
@@ -227,20 +181,51 @@ export class QuizQuestionsComponent implements OnInit {
         const quizId = quiz.id
 
         this.http
-            .delete(`http://localhost/expoplayAPI/quiz/${quizId}`, {
+            .delete(`${this.globalService.apiUrl}/quiz/${quizId}`, {
                 withCredentials: true,
             })
             .subscribe({
-                next: () => {
-                    this.removeLocalQuiz(quizId)
-                },
-                error: (err) => {
-                    console.error('Fehler beim Löschen des Quiz:', err)
-                },
+                next: () => this.removeLocalQuiz(quizId),
+                error: (err) =>
+                    console.error('Fehler beim Löschen des Quiz:', err),
             })
+    }
+
+    private removeLocalQuestion(questionId: string | number): void {
+        this.questionSets = this.questionSets.filter((q) => q.id !== questionId)
     }
 
     private removeLocalQuiz(quizId: string): void {
         this.quizzes = this.quizzes.filter((q) => q.id !== quizId)
+    }
+
+    parseAnswerPossibilities(possibilities: unknown): Record<string, string> {
+        if (!possibilities) return {}
+
+        if (typeof possibilities === 'string') {
+            try {
+                return JSON.parse(possibilities) as Record<string, string>
+            } catch (error) {
+                console.error(
+                    'Fehler beim Parsen von answerPossibilities:',
+                    error
+                )
+                return {}
+            }
+        }
+
+        if (typeof possibilities === 'object') {
+            return possibilities as Record<string, string>
+        }
+
+        return {}
+    }
+
+    objectKeys<T extends object>(obj: T | null | undefined): (keyof T)[] {
+        return obj ? (Object.keys(obj) as (keyof T)[]) : []
+    }
+
+    getQuestionsForQuiz(quizId: string): QuestionSet[] {
+        return this.questionSets.filter((q) => q.quiz === quizId)
     }
 }
