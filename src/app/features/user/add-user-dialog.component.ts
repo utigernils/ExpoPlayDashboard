@@ -25,7 +25,6 @@ import { MatCheckboxModule } from '@angular/material/checkbox'
         MatDialogTitle,
     ],
     template: `
-        <!-- Dialog-Titel mit Hintergrundfarbe #ff8200 -->
         <h2
             mat-dialog-title
             style="background-color: white; color: #ff8200; margin: 0; padding: 16px;"
@@ -33,7 +32,6 @@ import { MatCheckboxModule } from '@angular/material/checkbox'
             Neuen Benutzer hinzufügen
         </h2>
 
-        <!-- Eingabefelder -->
         <mat-dialog-content style="padding: 16px;">
             <mat-form-field appearance="fill" style="width: 100%;">
                 <mat-label>Vorname</mat-label>
@@ -56,7 +54,6 @@ import { MatCheckboxModule } from '@angular/material/checkbox'
             </mat-form-field>
         </mat-dialog-content>
 
-        <!-- Aktionen -->
         <mat-dialog-actions align="end" style="padding: 16px;">
             <button mat-button (click)="cancel()">Abbrechen</button>
             <button mat-button color="primary" (click)="save()">

@@ -9,12 +9,10 @@ import { MatIconButton } from '@angular/material/button'
 
 import { MatDialog, MatDialogModule } from '@angular/material/dialog'
 
-// Importiere deinen Dialog
 import { AddUserDialogComponent } from './add-user-dialog.component'
 import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu'
 import { EditUserDialogComponent } from './edit-user-dialog.component'
 
-// Beispiel-Interface, an dein tatsächliches User-Modell anpassen
 export interface User {
     id: number
     firstName: string
@@ -22,7 +20,6 @@ export interface User {
     email: string
     isAdmin: boolean
 }
-
 
 @Component({
     selector: 'app-user',
@@ -94,13 +91,11 @@ export class UserComponent implements OnInit {
 
     openAddUserDialog(): void {
         const dialogRef = this.dialog.open(AddUserDialogComponent, {
-            width: '400px', // Optional: Dialogbreite festlegen
+            width: '400px',
         })
 
-        // Ergebnis abfangen, nachdem der Dialog geschlossen wurde
         dialogRef.afterClosed().subscribe((result) => {
             if (result) {
-                // result enthält das newUser-Objekt aus dem Dialog
                 this.registerUser(result)
             }
         })
@@ -131,7 +126,6 @@ export class UserComponent implements OnInit {
             .subscribe({
                 next: (response) => {
                     console.log('Neuer User erfolgreich erstellt:', response)
-                    // Optional: Liste aller User neu laden
                     this.getAllUsers()
                 },
                 error: (error) => {
@@ -156,7 +150,6 @@ export class UserComponent implements OnInit {
             .subscribe({
                 next: (response) => {
                     console.log('Benutzer gelöscht:', response)
-                    // Aktualisiere die Benutzerliste, z.B. durch erneutes Laden
                     this.getAllUsers()
                 },
                 error: (error) => {
@@ -194,12 +187,11 @@ export class UserComponent implements OnInit {
     openEditUserDialog(user: User): void {
         const dialogRef = this.dialog.open(EditUserDialogComponent, {
             width: '400px',
-            data: user, // Übergibt die bestehenden Nutzerdaten
+            data: user,
         })
 
         dialogRef.afterClosed().subscribe((result) => {
             if (result) {
-                // Ruft updateUser mit den aktualisierten Daten auf
                 this.updateUser(result)
             }
         })

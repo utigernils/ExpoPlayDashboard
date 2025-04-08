@@ -27,7 +27,6 @@ import { User } from './user.component'
         MatDialogTitle,
     ],
     template: `
-        <!-- Dialog-Titel -->
         <h2
             mat-dialog-title
             style="background-color: white; color: #ff8200; margin: 0; padding: 16px;"
@@ -35,7 +34,6 @@ import { User } from './user.component'
             Benutzer bearbeiten
         </h2>
 
-        <!-- Eingabefelder -->
         <mat-dialog-content style="padding: 16px;">
             <mat-form-field appearance="fill" style="width: 100%;">
                 <mat-label>Vorname</mat-label>
@@ -52,13 +50,11 @@ import { User } from './user.component'
                 <input matInput [(ngModel)]="user.email" />
             </mat-form-field>
 
-            <!-- Admin Checkbox, nur beim Bearbeiten -->
             <mat-checkbox [(ngModel)]="user.isAdmin" style="margin-top: 8px;"
                 >Admin</mat-checkbox
             >
         </mat-dialog-content>
 
-        <!-- Aktionen -->
         <mat-dialog-actions align="end" style="padding: 16px;">
             <button mat-button (click)="cancel()">Abbrechen</button>
             <button mat-button color="primary" (click)="save()">
@@ -68,13 +64,12 @@ import { User } from './user.component'
     `,
 })
 export class EditUserDialogComponent {
-    user: User // noch nicht initialisiert
+    user: User
 
     constructor(
         public dialogRef: MatDialogRef<EditUserDialogComponent>,
         @Inject(MAT_DIALOG_DATA) public data: User
     ) {
-        // Hier kannst du data verwenden, weil es erst im Konstruktor gesetzt wird
         this.user = { ...data }
     }
 

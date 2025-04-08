@@ -1,15 +1,15 @@
 .wrapper {
     display: flex;
-    height: 100vh; /* Volle Höhe */
+    height: 100vh;
 }
 
 aside {
-    width: 250px; /* Sidebar feste Breite */
-    background-color: #f8f9fa; /* Optional */
+    width: 250px;
+    background-color: #f8f9fa;
     height: 100%;
 }
 
 main {
-    flex-grow: 1; /* Füllt den verbleibenden Platz */
+    flex-grow: 1;
     padding: 20px;
 }

@@ -28,8 +28,6 @@ import { Quiz } from './quiz.interface'
 
             <mat-form-field appearance="fill" style="width: 100%;">
                 <mat-label>Aktiv?</mat-label>
-                <!-- Einfacher Text-Eingabefeld. Wenn du lieber einen Checkbox möchtest,
-             kannst du stattdessen <mat-checkbox [(ngModel)]="quiz.isActive">Aktiv</mat-checkbox> verwenden -->
                 <input matInput [(ngModel)]="quiz.isActive" />
             </mat-form-field>
         </div>
@@ -70,14 +68,12 @@ export class AddQuizDialogComponent {
             })
             .subscribe({
                 next: (response) => {
-                    // Falls dein Backend z. B. "Name" statt "name" zurückgibt, kannst du es hier angleichen.
-                    // Fürs Beispiel nehmen wir an, es kommt korrekt als "name" zurück.
                     const fixedResponse: Quiz = {
                         id: response.id,
                         name: response.name ?? createData.name,
                         isActive: response.isActive ?? createData.isActive,
                     }
-                    // Dialog schließen und das neu erstellte Quiz-Objekt zurückgeben
+
                     this.dialogRef.close(fixedResponse)
                 },
                 error: (error) => {

@@ -126,18 +126,16 @@ export class AddQuestionDialogComponent {
                         pointMultiplier:
                             response.pointMultiplier ??
                             createData.pointMultiplier,
-                        // Falls dein Backend "Question" statt "question" zurückgibt:
+
                         question:
                             (response as any).Question ||
                             response.question ||
                             createData.Question,
-                        // Falls "answerPossibilities" nicht drin ist, nimm's aus createData
                         answerPossibilities:
                             response.answerPossibilities ||
                             createData.answerPossibilities,
                     }
 
-                    // Jetzt schließen wir den Dialog mit dem angeglichenen Objekt
                     this.dialogRef.close(fixedResponse)
                 },
                 error: (error) => {

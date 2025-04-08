@@ -1,4 +1,3 @@
-
 import { Component, ViewChild, AfterViewInit, OnInit } from '@angular/core'
 import { MatCardModule } from '@angular/material/card'
 import { MatIconModule } from '@angular/material/icon'
@@ -34,7 +33,6 @@ import { EditExpoDialogComponent } from './edit-expo-dialog.component'
     templateUrl: './expo.component.html',
     styleUrls: ['./expo.component.scss'],
 })
-
 export class ExpoComponent implements OnInit, AfterViewInit {
     displayedColumns: string[] = [
         'select',
@@ -79,7 +77,6 @@ export class ExpoComponent implements OnInit, AfterViewInit {
             })
     }
 
-    // Methode zum Hinzufügen einer neuen Expo
     openAddExpoDialog(): void {
         const dialogRef = this.dialog.open(AddExpoDialogComponent, {
             width: '500px',
@@ -87,13 +84,11 @@ export class ExpoComponent implements OnInit, AfterViewInit {
 
         dialogRef.afterClosed().subscribe((newExpo) => {
             if (newExpo) {
-                // Achtung: Prüfe auch hier, ob isActive ein Boolean oder number sein muss
                 const body = {
                     name: newExpo.name,
                     location: newExpo.location,
                     startsOn: newExpo.startsOn,
                     endsOn: newExpo.endsOn,
-                    // Falls der Server 1/0 braucht:
                     isActive: newExpo.isActive ? 1 : 0,
                 }
 
@@ -114,15 +109,12 @@ export class ExpoComponent implements OnInit, AfterViewInit {
         })
     }
 
-    // updateExpo gibt jetzt das Observable zurück
     updateExpo(expo: Expo) {
-        // Falls der Server dieselben Felder wie beim POST erwartet:
         const body = {
             name: expo.name,
             location: expo.location,
             startsOn: expo.startsOn,
             endsOn: expo.endsOn,
-            // Prüfe hier, ob dein Backend 1/0 statt true/false will
             isActive: expo.isActive ? 1 : 0,
         }
 
@@ -132,7 +124,6 @@ export class ExpoComponent implements OnInit, AfterViewInit {
         })
     }
 
-    // Öffnet den Dialog zum Bearbeiten
     openEditExpoDialog(expo: Expo): void {
         const dialogRef = this.dialog.open(EditExpoDialogComponent, {
             width: '500px',
@@ -156,14 +147,12 @@ export class ExpoComponent implements OnInit, AfterViewInit {
         })
     }
 
-    // Löscht alle ausgewählten Expos
     deleteSelected(): void {
         if (
             !confirm('Wollen Sie alle ausgewählten Elemente wirklich löschen?')
         ) {
             return
         }
-
         const selectedItems = this.selection.selected
         console.log('Ausgewählte Elemente:', selectedItems)
 
@@ -209,8 +198,7 @@ export interface Expo {
     id: number
     name: string
     location: string
-    startsOn: string // Prüfe, ob du ein anderes Format brauchst
-    endsOn: string // Prüfe, ob du ein anderes Format brauchst
-    isActive: any // Falls dein Backend 0/1 erwartet, kannst du hier 'number' oder 'boolean' nutzen
+    startsOn: string
+    endsOn: string
+    isActive: any
 }
-

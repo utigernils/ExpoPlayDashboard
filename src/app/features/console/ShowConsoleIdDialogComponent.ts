@@ -16,19 +16,17 @@ import { MatButton } from '@angular/material/button'
             Konsole-ID
         </h2>
 
-        <!-- Inhalt -->
         <mat-dialog-content style="padding: 16px;">
             <p>Deine neu erstellte Konsolen-ID lautet:</p>
             <strong>{{ data.id }}</strong>
             <p style="margin-top: 16px;">
                 Du kannst diese ID nur einmal sehen. Wenn du dieses Fenster
-                schließt, ist die ID nicht mehr verfügbar.
+                schliesst, ist die ID nicht mehr verfügbar.
             </p>
         </mat-dialog-content>
 
-        <!-- Aktionen -->
         <mat-dialog-actions align="end" style="padding: 16px;">
-            <button mat-button (click)="onClose()">Schließen</button>
+            <button mat-button (click)="onClose()">Schliessen</button>
         </mat-dialog-actions>
     `,
     standalone: true,

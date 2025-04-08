@@ -80,7 +80,6 @@ export class EditConsoleDialogComponent {
         private dialogRef: MatDialogRef<EditConsoleDialogComponent>,
         @Inject(MAT_DIALOG_DATA) public data: ConsoleData
     ) {
-        // Hier übernehmen wir die vorhandenen Werte
         this.editConsoleForm = this.fb.group({
             id: [data.id],
             name: [data.name, Validators.required],
@@ -94,7 +93,6 @@ export class EditConsoleDialogComponent {
 
     onSubmit(): void {
         if (this.editConsoleForm.valid) {
-            // Gibt das Formular-Objekt an den Aufrufer zurück
             this.dialogRef.close(this.editConsoleForm.value)
         }
     }

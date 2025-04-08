@@ -1,9 +1,3 @@
-
-/*
-  ================
-  Allgemeines Layout
-  ================
-*/
 .wrapper {
     display: flex;
     min-height: 100vh;
@@ -11,7 +5,6 @@
     font-family: Roboto, Arial, sans-serif;
 }
 
-/* Optional: feste Breite für die Sidebar */
 aside {
     width: 240px;
 }
@@ -26,17 +19,11 @@ main {
     margin-bottom: 20px;
 }
 
-/*
-  ================
-  Card (Umrahmung)
-  ================
-*/
 .Card {
     margin-bottom: 20px;
     border-radius: 8px;
 }
 
-/* Kopfbereich in der Card (Titel + Aktionen) */
 .card-header {
     display: flex;
     align-items: center;
@@ -47,7 +34,7 @@ main {
 .mat-card-title {
     font-size: 20px;
     font-weight: 600;
-    margin-bottom: 0; /* Standard-Spacing verringern */
+    margin-bottom: 0;
 }
 
 .card-actions {
@@ -55,13 +42,6 @@ main {
     gap: 8px;
 }
 
-/*
-  ======================
-  Buttons und Icon-Farben
-  ======================
-*/
-
-/* Orange Buttons (vollflächig) */
 .icon-button-orange {
     background-color: #ff9200;
     color: #fff;
@@ -72,7 +52,6 @@ main {
     }
 }
 
-/* Weißer Hintergrund, orange Icons */
 .icon-button-white-orange {
     background-color: #fff !important;
     color: #ff9200 !important;
@@ -84,25 +63,15 @@ main {
         background-color: #fff7ee !important;
     }
 
-    /* Das Icon selbst auf Orange setzen */
     .mat-icon {
         color: #ff9200 !important;
     }
 }
 
-/*
-  Orange Icons (ohne Button-Hintergrund),
-  z. B. für die Fragen-Karten
-*/
 .icon-orange {
     color: #ff9200 !important;
 }
 
-/*
-  ================
-  Accordion-Styling
-  ================
-*/
 .ExpansionModel {
     margin-bottom: 10px;
 
@@ -120,11 +89,6 @@ main {
     }
 }
 
-/*
-  ================
-  Header-Bereich im Panel
-  ================
-*/
 .quiz-header-description {
     display: flex;
     align-items: center;
@@ -142,20 +106,10 @@ main {
     gap: 12px;
 }
 
-/*
-  ================
-  Inhalt pro Quiz
-  ================
-*/
 .quiz-content {
     margin: 20px;
 }
 
-/*
-  ================
-  Fragen-Karten
-  ================
-*/
 .questionModell {
     position: relative;
     margin-bottom: 20px;
@@ -178,16 +132,13 @@ main {
     gap: 8px;
 }
 
-/* Beschriftung für Antwortmöglichkeiten */
 .answer-possibilities-label {
     font-weight: 600;
     margin-top: 8px;
 }
 
-/* Info-Text (Aktiv, Typ, Punktefaktor) */
 .question-info {
     font-size: 14px;
     color: #555;
     margin-top: 12px;
 }
-

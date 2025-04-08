@@ -1,4 +1,3 @@
-// shared-layout.scss
 .wrapper {
     display: flex;
     min-height: 100vh;
@@ -21,14 +20,14 @@ main {
 
 .card-actions {
     display: flex;
-    gap: 8px; /* Abstand zwischen Buttons */
+    gap: 8px;
 }
 
 .card-header {
     display: flex;
-    align-items: center; /* Vertikal zentriert */
-    justify-content: space-between; /* Titel links, Buttons rechts */
-    margin-bottom: 1rem; /* Etwas Abstand zum Inhalt */
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
 }
 
 .mat-card-title {

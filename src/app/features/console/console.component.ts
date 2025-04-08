@@ -14,7 +14,6 @@ import {
 } from './edit-console-dialog.component'
 import { ShowConsoleIdDialogComponent } from './ShowConsoleIdDialogComponent'
 
-
 @Component({
     selector: 'app-console',
     standalone: true,
@@ -31,9 +30,7 @@ import { ShowConsoleIdDialogComponent } from './ShowConsoleIdDialogComponent'
     templateUrl: './console.component.html',
     styleUrls: ['./console.component.scss'],
 })
-
 export class ConsoleComponent implements OnInit, AfterViewInit {
-    // Definiert die Spalten deiner Tabelle
     displayedColumns: string[] = [
         'name',
         'currentExpo',
@@ -43,7 +40,6 @@ export class ConsoleComponent implements OnInit, AfterViewInit {
     ]
 
     dataSource = new MatTableDataSource<Consoles>([])
-
 
     @ViewChild(MatSort) sort!: MatSort
 
@@ -60,7 +56,6 @@ export class ConsoleComponent implements OnInit, AfterViewInit {
         this.dataSource.sort = this.sort
     }
 
-    // Lädt alle Konsolen von der API
     getAllConsoles(): void {
         this.http
             .get<Consoles[]>('http://localhost/expoplayAPI/console/', {
@@ -77,7 +72,6 @@ export class ConsoleComponent implements OnInit, AfterViewInit {
             })
     }
 
-    // Öffnet den Dialog zum Hinzufügen einer neuen Konsole
     openAddConsoleDialog(): void {
         const dialogRef = this.dialog.open(AddConsoleDialogComponent, {
             width: '400px',
@@ -85,13 +79,11 @@ export class ConsoleComponent implements OnInit, AfterViewInit {
 
         dialogRef.afterClosed().subscribe((result) => {
             if (result) {
-                // Übergibt die eingegebenen Daten an addConsole()
                 this.addConsole(result)
             }
         })
     }
 
-    // Fügt eine neue Konsole hinzu und öffnet danach den Dialog mit der ID
     addConsole(consoleData: Consoles): void {
         this.http
             .post<Consoles>(
@@ -105,10 +97,8 @@ export class ConsoleComponent implements OnInit, AfterViewInit {
             .subscribe({
                 next: (response) => {
                     console.log('Konsole hinzugefügt:', response)
-                    // Aktualisiere die Liste
                     this.getAllConsoles()
 
-                    // Debug-Ausgabe, um zu prüfen, ob response.id existiert
                     if (response && response.id) {
                         this.dialog.open(ShowConsoleIdDialogComponent, {
                             width: '400px',
@@ -118,7 +108,6 @@ export class ConsoleComponent implements OnInit, AfterViewInit {
                         console.error(
                             'ID nicht in der Antwort gefunden! Öffne Dialog mit Test-ID.'
                         )
-                        // Testweise öffnen wir den Dialog auch ohne echte ID
                         this.dialog.open(ShowConsoleIdDialogComponent, {
                             width: '400px',
                             data: { id: 'Test-ID' },
@@ -131,7 +120,6 @@ export class ConsoleComponent implements OnInit, AfterViewInit {
             })
     }
 
-    // Öffnet den Dialog zum Bearbeiten einer bestehenden Konsole
     openEditConsoleDialog(consoleItem: Consoles): void {
         const dialogRef = this.dialog.open(EditConsoleDialogComponent, {
             width: '400px',
@@ -144,13 +132,11 @@ export class ConsoleComponent implements OnInit, AfterViewInit {
 
         dialogRef.afterClosed().subscribe((result) => {
             if (result) {
-                // Übergibt die aktualisierten Daten an updateConsole()
                 this.updateConsole(result)
             }
         })
     }
 
-    // Aktualisiert eine bestehende Konsole
     updateConsole(consoleData: Consoles): void {
         if (!consoleData.id) {
             console.error('Keine ID vorhanden, Update nicht möglich.')
@@ -185,7 +171,6 @@ export class ConsoleComponent implements OnInit, AfterViewInit {
             })
     }
 
-    // Löscht eine Konsole
     deleteConsole(consoleItem: Consoles): void {
         if (!consoleItem.id) {
             console.error('Keine ID vorhanden, Löschvorgang nicht möglich.')
@@ -213,7 +198,7 @@ export class ConsoleComponent implements OnInit, AfterViewInit {
 }
 
 interface Consoles {
-    id?: string // oder number, falls deine DB eine Zahl verwendet
+    id?: string
     name: string
     isActive: boolean | number
 }

@@ -9,7 +9,6 @@
             <div class="card-header">
                 <mat-card-title class="mat-card-title">Benutzer</mat-card-title>
                 <div class="card-actions">
-                    <!-- Button zum Öffnen des Dialogs -->
                     <button
                         mat-icon-button
                         class="icon-button-orange"
@@ -21,7 +20,6 @@
             </div>
 
             <mat-card-content>
-
                 <div
                     *ngFor="let user of users; trackBy: trackByUser"
                     class="user-row"
@@ -30,11 +28,9 @@
                         <p>{{ user.firstName }} {{ user.lastName }}</p>
                         <p>{{ user.email }}</p>
                         <p>Admin: {{ user.isAdmin ? 'Ja' : 'Nein' }}</p>
-                        <!-- Menü-Trigger -->
                         <button mat-icon-button [matMenuTriggerFor]="menu">
                             <mat-icon>more_vert</mat-icon>
                         </button>
-                        <!-- Menü -->
                         <mat-menu #menu="matMenu">
                             <button
                                 mat-menu-item

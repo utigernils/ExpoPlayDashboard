@@ -82,7 +82,6 @@ export class QuizQuestionsComponent implements OnInit {
 
         dialogRef.afterClosed().subscribe((updatedQuestion: QuestionSet) => {
             if (updatedQuestion) {
-                // Update erfolgt via PUT und anschließend im lokalen Array aktualisieren
                 this.updateQuestion(
                     updatedQuestion.quiz,
                     updatedQuestion.id,
@@ -163,9 +162,7 @@ export class QuizQuestionsComponent implements OnInit {
 
         dialogRef.afterClosed().subscribe((result) => {
             if (result) {
-                // Falls im zurückgegebenen Datensatz die Quiz-ID fehlt, setzen wir sie
                 result.quiz = result.quiz || quizId
-                // Erzeuge eine neue Array-Referenz, um Angulars Change Detection zu triggern
                 this.questionSets = [...this.questionSets, result]
             }
         })
@@ -178,7 +175,6 @@ export class QuizQuestionsComponent implements OnInit {
 
         dialogRef.afterClosed().subscribe((newQuiz: Quiz) => {
             if (newQuiz) {
-                // Füge das neu erstellte Quiz in dein lokales Array ein
                 this.quizzes = [...this.quizzes, newQuiz]
             }
         })
