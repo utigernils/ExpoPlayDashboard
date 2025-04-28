@@ -4,5 +4,5 @@ import { Injectable } from '@angular/core'
     providedIn: 'root',
 })
 export class GlobalService {
-    public apiUrl: string = 'https://expoplay.utigernils.ch'
+    public apiUrl = 'http://localhost/expoplay'
 }

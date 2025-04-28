@@ -12,7 +12,7 @@ import {
     EditConsoleDialogComponent,
     ConsoleData,
 } from './edit-console-dialog.component'
-
+import { GlobalService } from '../../services/global.service' // <--- GlobalService importiert
 
 @Component({
     selector: 'app-console',
@@ -30,9 +30,7 @@ import {
     templateUrl: './console.component.html',
     styleUrls: ['./console.component.scss'],
 })
-
 export class ConsoleComponent implements OnInit, AfterViewInit {
-    // Diese Spalten beziehen sich auf das Interface 'Consoles'
     displayedColumns: string[] = [
         'name',
         'currentExpo',
@@ -43,12 +41,12 @@ export class ConsoleComponent implements OnInit, AfterViewInit {
 
     dataSource = new MatTableDataSource<Consoles>([])
 
-
     @ViewChild(MatSort) sort!: MatSort
 
     constructor(
         private http: HttpClient,
-        private dialog: MatDialog
+        private dialog: MatDialog,
+        public globalService: GlobalService // <--- im Konstruktor injiziert
     ) {}
 
     ngOnInit(): void {
@@ -59,12 +57,11 @@ export class ConsoleComponent implements OnInit, AfterViewInit {
         this.dataSource.sort = this.sort
     }
 
-    // Lädt alle Konsolen von der API
     getAllConsoles(): void {
         this.http
-            .get<
-                Consoles[]
-            >('http://localhost/expoplayAPI/console/', { withCredentials: true })
+            .get<Consoles[]>(`${this.globalService.apiUrl}/console/`, {
+                withCredentials: true,
+            })
             .subscribe({
                 next: (response) => {
                     this.dataSource.data = response
@@ -76,7 +73,6 @@ export class ConsoleComponent implements OnInit, AfterViewInit {
             })
     }
 
-    // Öffnet den Dialog zum Hinzufügen einer neuen Konsole
     openAddConsoleDialog(): void {
         const dialogRef = this.dialog.open(AddConsoleDialogComponent, {
             width: '400px',
@@ -84,16 +80,14 @@ export class ConsoleComponent implements OnInit, AfterViewInit {
 
         dialogRef.afterClosed().subscribe((result) => {
             if (result) {
-                // result ist ein Objekt vom Typ 'Consoles' oder kompatibel
                 this.addConsole(result)
             }
         })
     }
 
-    // Fügt eine neue Konsole hinzu
     addConsole(consoleData: Consoles): void {
         this.http
-            .post('http://localhost/expoplayAPI/console', consoleData, {
+            .post(`${this.globalService.apiUrl}/console`, consoleData, {
                 headers: { 'Content-Type': 'application/json' },
                 withCredentials: true,
             })
@@ -108,27 +102,23 @@ export class ConsoleComponent implements OnInit, AfterViewInit {
             })
     }
 
-    // Öffnet den Dialog zum Bearbeiten einer bestehenden Konsole
     openEditConsoleDialog(consoleItem: Consoles): void {
         const dialogRef = this.dialog.open(EditConsoleDialogComponent, {
             width: '400px',
             data: {
                 id: consoleItem.id,
                 name: consoleItem.name,
-                // Falls dein Backend 'isActive' als boolean oder number erwartet:
                 isActive: consoleItem.isActive,
             } as ConsoleData,
         })
 
         dialogRef.afterClosed().subscribe((result) => {
             if (result) {
-                // result enthält die aktualisierten Daten
                 this.updateConsole(result)
             }
         })
     }
 
-    // Aktualisiert eine bestehende Konsole
     updateConsole(consoleData: Consoles): void {
         if (!consoleData.id) {
             console.error('Keine ID vorhanden, Update nicht möglich.')
@@ -142,7 +132,7 @@ export class ConsoleComponent implements OnInit, AfterViewInit {
 
         this.http
             .put(
-                `http://localhost/expoplayAPI/console/${consoleData.id}`,
+                `${this.globalService.apiUrl}/console/${consoleData.id}`,
                 dataWithoutId,
                 {
                     headers: { 'Content-Type': 'application/json' },
@@ -163,7 +153,6 @@ export class ConsoleComponent implements OnInit, AfterViewInit {
             })
     }
 
-    // Löscht eine Konsole
     deleteConsole(consoleItem: Consoles): void {
         if (!consoleItem.id) {
             console.error('Keine ID vorhanden, Löschvorgang nicht möglich.')
@@ -175,7 +164,7 @@ export class ConsoleComponent implements OnInit, AfterViewInit {
         }
 
         this.http
-            .delete(`http://localhost/expoplayAPI/console/${consoleItem.id}`, {
+            .delete(`${this.globalService.apiUrl}/console/${consoleItem.id}`, {
                 withCredentials: true,
             })
             .subscribe({
@@ -191,7 +180,7 @@ export class ConsoleComponent implements OnInit, AfterViewInit {
 }
 
 interface Consoles {
-    id?: string // oder number, falls deine DB eine Zahl verwendet
-    name: string // z. B. "Console Alpha"
-    isActive: boolean | number // je nach DB (0/1 oder true/false)
+    id?: string
+    name: string
+    isActive: boolean | number
 }

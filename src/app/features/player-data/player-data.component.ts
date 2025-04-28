@@ -1,4 +1,3 @@
-
 import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core'
 import { HttpClientModule, HttpClient } from '@angular/common/http'
 import { MatSort, MatSortModule } from '@angular/material/sort'
@@ -10,6 +9,7 @@ import { SelectionModel } from '@angular/cdk/collections'
 import { SidebarComponent } from '../../shared/sidebar/sidebar.component'
 import { MatCheckbox } from '@angular/material/checkbox'
 import { forkJoin } from 'rxjs'
+import { GlobalService } from '../../services/global.service'
 
 export interface Player {
     id: number
@@ -18,7 +18,6 @@ export interface Player {
     email: string
     acitve: boolean
 }
-
 
 @Component({
     selector: 'app-player-data',
@@ -45,13 +44,15 @@ export class PlayerDataComponent implements OnInit, AfterViewInit {
         'acitve',
     ]
 
-
     dataSource = new MatTableDataSource<Player>([])
     selection = new SelectionModel<Player>(true, [])
 
     @ViewChild(MatSort) sort!: MatSort
 
-    constructor(private http: HttpClient) {}
+    constructor(
+        private http: HttpClient,
+        public globalService: GlobalService // <-- globalService richtig eingebunden
+    ) {}
 
     ngOnInit(): void {
         this.loadPlayers()
@@ -63,7 +64,7 @@ export class PlayerDataComponent implements OnInit, AfterViewInit {
 
     loadPlayers(): void {
         this.http
-            .get<Player[]>('http://localhost/expoplayAPI/player/', {
+            .get<Player[]>(`${this.globalService.apiUrl}/player`, {
                 withCredentials: true,
             })
             .subscribe({
@@ -83,6 +84,7 @@ export class PlayerDataComponent implements OnInit, AfterViewInit {
     }
 
     masterToggle(): void {
+        // eslint-disable-next-line @typescript-eslint/no-unused-expressions
         this.isAllSelected()
             ? this.selection.clear()
             : this.dataSource.data.forEach((row) => this.selection.select(row))
@@ -100,7 +102,7 @@ export class PlayerDataComponent implements OnInit, AfterViewInit {
 
         const deleteRequests = selectedItems.map((player) => {
             return this.http.delete(
-                `http://localhost/expoplayAPI/player/${player.id}`,
+                `${this.globalService.apiUrl}/player/${player.id}`,
                 {
                     withCredentials: true,
                     responseType: 'text',
