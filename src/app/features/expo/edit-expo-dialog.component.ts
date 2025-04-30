@@ -27,7 +27,6 @@ import { Expo } from './expo.component'
         MatDialogTitle,
     ],
     template: `
-        <!-- Dialog-Titel -->
         <h2
             mat-dialog-title
             style="background-color: white; color: #ff8200; margin: 0; padding: 16px;"
@@ -35,7 +34,6 @@ import { Expo } from './expo.component'
             Expo bearbeiten
         </h2>
 
-        <!-- Eingabefelder -->
         <mat-dialog-content style="padding: 16px;">
             <mat-form-field appearance="fill" style="width: 100%;">
                 <mat-label>Name</mat-label>
@@ -57,13 +55,11 @@ import { Expo } from './expo.component'
                 <input matInput [(ngModel)]="expo.endsOn" type="date" />
             </mat-form-field>
 
-            <!-- Checkbox für isActive -->
             <mat-checkbox [(ngModel)]="expo.isActive" style="margin-top: 8px;">
                 Aktiv
             </mat-checkbox>
         </mat-dialog-content>
 
-        <!-- Aktionen -->
         <mat-dialog-actions align="end" style="padding: 16px;">
             <button mat-button (click)="cancel()">Abbrechen</button>
             <button mat-button color="primary" (click)="save()">
@@ -79,7 +75,6 @@ export class EditExpoDialogComponent {
         public dialogRef: MatDialogRef<EditExpoDialogComponent>,
         @Inject(MAT_DIALOG_DATA) public data: Expo
     ) {
-        // Daten clonen, damit nicht direkt das Original bearbeitet wird
         this.expo = { ...data }
     }
 

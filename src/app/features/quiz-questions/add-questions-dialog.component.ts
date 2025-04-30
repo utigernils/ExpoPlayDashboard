@@ -129,6 +129,7 @@ export class AddQuestionDialogComponent {
                         pointMultiplier:
                             response.pointMultiplier ??
                             createData.pointMultiplier,
+
                         question:
                             response.question ??
                             response['question'] ??

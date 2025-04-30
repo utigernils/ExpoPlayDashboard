@@ -155,7 +155,6 @@ export class ExpoComponent implements OnInit, AfterViewInit {
         ) {
             return
         }
-
         const selectedItems = this.selection.selected
         console.log('Ausgewählte Elemente:', selectedItems)
 

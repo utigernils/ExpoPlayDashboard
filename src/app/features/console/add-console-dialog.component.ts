@@ -22,7 +22,6 @@ import { CommonModule } from '@angular/common'
         MatButtonModule,
     ],
     template: `
-        <!-- Dialog-Titel mit Hintergrundfarbe #ff8200 -->
         <h2
             mat-dialog-title
             style="background-color: white; color: #ff8200; margin: 0; padding: 16px;"
@@ -30,7 +29,6 @@ import { CommonModule } from '@angular/common'
             Neue Konsole hinzufügen
         </h2>
 
-        <!-- Eingabefelder -->
         <mat-dialog-content style="padding: 16px;">
             <form [formGroup]="addConsoleForm">
                 <mat-form-field appearance="fill" style="width: 100%;">
@@ -38,16 +36,14 @@ import { CommonModule } from '@angular/common'
                     <input matInput formControlName="name" required />
                     <mat-error
                         *ngIf="addConsoleForm.get('name')?.hasError('required')"
+                        >Konsolen Name ist erforderlich</mat-error
                     >
-                        Konsolen Name ist erforderlich
-                    </mat-error>
                 </mat-form-field>
 
                 <mat-checkbox formControlName="active">Aktiv</mat-checkbox>
             </form>
         </mat-dialog-content>
 
-        <!-- Aktionen -->
         <mat-dialog-actions align="end" style="padding: 16px;">
             <button mat-button (click)="onCancel()">Abbrechen</button>
             <button
@@ -80,7 +76,11 @@ export class AddConsoleDialogComponent {
 
     onSubmit(): void {
         if (this.addConsoleForm.valid) {
-            this.dialogRef.close(this.addConsoleForm.value)
+            const newId = '123456'
+            this.dialogRef.close({
+                ...this.addConsoleForm.value,
+                id: newId,
+            })
         }
     }
 }

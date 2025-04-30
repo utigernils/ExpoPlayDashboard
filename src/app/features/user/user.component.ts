@@ -6,6 +6,7 @@ import { MatIconModule } from '@angular/material/icon'
 import { HttpClientModule, HttpClient } from '@angular/common/http'
 import { MatIconButton } from '@angular/material/button'
 import { MatDialog, MatDialogModule } from '@angular/material/dialog'
+
 import { AddUserDialogComponent } from './add-user-dialog.component'
 import { EditUserDialogComponent } from './edit-user-dialog.component'
 import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu'
@@ -57,12 +58,26 @@ export class UserComponent implements OnInit {
                 withCredentials: true,
             })
             .subscribe({
-                next: (response) => {
-                    this.users = response
-                    console.log('Users loaded:', this.users)
+                next: () => {
+                    this.http
+                        .get<User[]>('http://localhost/expoplayAPI/user/', {
+                            withCredentials: true,
+                        })
+                        .subscribe({
+                            next: (response) => {
+                                this.users = response
+                                console.log('Users loaded:', this.users)
+                            },
+                            error: (error) => {
+                                console.error(
+                                    'Fehler beim Laden der User:',
+                                    error
+                                )
+                            },
+                        })
                 },
                 error: (error) => {
-                    console.error('Fehler beim Laden der User:', error)
+                    console.error('Fehler beim Login:', error)
                 },
             })
     }

@@ -36,11 +36,10 @@
                     </ng-template>
                 </mat-card-content>
             </mat-card>
-
-            <mat-card class="card-small" style="color: #666666">
-                <mat-card-title class="mat-card-title"
-                    >Total gespielte Quizzes</mat-card-title
-                >
+            <mat-card class="card-small">
+                <mat-card-title class="mat-card-title">
+                    Total gespielte Quizzes
+                </mat-card-title>
                 <mat-card-content>
                     <h1 class="big-number">{{ totalQuizzesPlayed }}</h1>
                 </mat-card-content>
@@ -112,12 +111,7 @@
                     >Spielerdaten</mat-card-title
                 >
                 <mat-card-content>
-                    <div class="scroll-container">
-                        <div *ngFor="let player of players" class="rounded-box">
-                            <p>{{ player.firstName }} {{ player.lastName }}</p>
-                            <p>{{ player.email }}</p>
-                        </div>
-                    </div>
+                    <div class="player"></div>
                 </mat-card-content>
             </mat-card>
 
@@ -127,12 +121,7 @@
                     >Benutzer | Dashboard</mat-card-title
                 >
                 <mat-card-content>
-                    <div class="scroll-container">
-                        <div *ngFor="let user of users" class="rounded-box">
-                            <p>{{ user.firstName }} {{ user.lastName }}</p>
-                            <p>{{ user.email }}</p>
-                        </div>
-                    </div>
+                    <div class="player"></div>
                 </mat-card-content>
             </mat-card>
         </div>

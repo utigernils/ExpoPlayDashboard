@@ -25,13 +25,11 @@ import { HttpClientModule } from '@angular/common/http'
     template: `
         <h1 mat-dialog-title>Frage bearbeiten</h1>
         <div mat-dialog-content>
-            <!-- Eingabefeld für den Fragetext -->
             <mat-form-field appearance="fill" style="width: 100%;">
                 <mat-label>Frage</mat-label>
                 <input matInput [(ngModel)]="data.question.question" />
             </mat-form-field>
 
-            <!-- Eingabefeld für Antwortmöglichkeiten als JSON-String -->
             <mat-form-field appearance="fill" style="width: 100%;">
                 <mat-label>Antwortmöglichkeiten (JSON)</mat-label>
                 <textarea
@@ -41,7 +39,6 @@ import { HttpClientModule } from '@angular/common/http'
                 ></textarea>
             </mat-form-field>
 
-            <!-- Fragentyp und Punktefaktor bearbeiten -->
             <mat-form-field appearance="fill" style="width: 100%;">
                 <mat-label>Fragentyp</mat-label>
                 <input
@@ -70,14 +67,12 @@ import { HttpClientModule } from '@angular/common/http'
     `,
 })
 export class EditQuestionDialogComponent {
-    // JSON-String für die Antwortmöglichkeiten
     answerPossibilitiesString: string
 
     constructor(
         public dialogRef: MatDialogRef<EditQuestionDialogComponent>,
         @Inject(MAT_DIALOG_DATA) public data: { question: QuestionSet }
     ) {
-        // Konvertiere die Antwortmöglichkeiten in einen JSON-String
         this.answerPossibilitiesString = JSON.stringify(
             this.data.question.answerPossibilities,
             null,
@@ -90,7 +85,6 @@ export class EditQuestionDialogComponent {
     }
 
     save(): void {
-        // Parse the JSON string into the question object
         try {
             this.data.question.answerPossibilities = JSON.parse(
                 this.answerPossibilitiesString
@@ -102,7 +96,6 @@ export class EditQuestionDialogComponent {
             return
         }
 
-        // Close the dialog and return the updated question data to the parent
         this.dialogRef.close(this.data.question)
     }
 }

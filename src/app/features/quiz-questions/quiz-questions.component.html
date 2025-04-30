@@ -7,7 +7,6 @@
         <h1 class="Site-title">Fragen | Dashboard</h1>
 
         <mat-card class="Card">
-            <!-- Header mit Titel und Aktions-Buttons -->
             <div class="card-header">
                 <mat-card-title class="mat-card-title"
                     >Fragen-Sets</mat-card-title
@@ -24,14 +23,11 @@
             </div>
 
             <mat-card-content>
-                <!-- Accordion für alle Quizzes -->
                 <mat-accordion>
-                    <!-- Schleife über alle Quizzes -->
                     <mat-expansion-panel
                         class="ExpansionModel"
                         *ngFor="let quiz of quizzes"
                     >
-                        <!-- Header mit Quiz-Titel, Status und Buttons rechts -->
                         <mat-expansion-panel-header class="quiz-header">
                             <mat-panel-title>
                                 {{ quiz.name }}
@@ -39,12 +35,10 @@
                             <mat-panel-description
                                 class="quiz-header-description"
                             >
-                                <!-- Text (Status) links -->
-                                <span class="quiz-status">
-                                    Aktiv: {{ quiz.isActive ? 'Ja' : 'Nein' }}
-                                </span>
-
-                                <!-- Buttons rechts (weiß hinterlegt, orangenes Icon) -->
+                                <span class="quiz-status"
+                                    >Aktiv:
+                                    {{ quiz.isActive ? 'Ja' : 'Nein' }}</span
+                                >
                                 <div class="quiz-header-actions">
                                     <button
                                         mat-icon-button
@@ -64,16 +58,13 @@
                             </mat-panel-description>
                         </mat-expansion-panel-header>
 
-                        <!-- Inhalt pro Quiz -->
                         <div class="quiz-content">
-                            <!-- Hole alle Questions, die zu diesem Quiz gehören -->
                             <div
                                 *ngFor="
                                     let question of getQuestionsForQuiz(quiz.id)
                                 "
                             >
                                 <mat-card class="questionModell">
-                                    <!-- Container für die Icons oben rechts -->
                                     <div class="card-actions-top-right">
                                         <button
                                             mat-icon-button
@@ -83,7 +74,6 @@
                                         >
                                             <mat-icon>edit</mat-icon>
                                         </button>
-
                                         <button
                                             mat-icon-button
                                             class="icon-orange"
@@ -96,7 +86,6 @@
                                         </button>
                                     </div>
 
-                                    <!-- Restlicher Inhalt der Frage -->
                                     <mat-card-title>
                                         {{ question.question }}
                                     </mat-card-title>
@@ -134,7 +123,6 @@
                                         </li>
                                     </ul>
 
-                                    <!-- Falls keine Antwortmöglichkeiten existieren, zeige eine Meldung -->
                                     <p
                                         *ngIf="
                                             !parseAnswerPossibilities(
@@ -151,13 +139,13 @@
                                     </p>
 
                                     <p class="question-info">
-                                        Aktiv:
-                                        {{
+                                        Aktiv:{{
                                             question.isActive ? 'Ja' : 'Nein'
                                         }}
                                         | Typ: {{ question.questionType }} |
-                                        Punktefaktor:
-                                        {{ question.pointMultiplier }}
+                                        Punktefaktor:{{
+                                            question.pointMultiplier
+                                        }}
                                     </p>
                                 </mat-card>
                             </div>

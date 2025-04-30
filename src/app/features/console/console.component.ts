@@ -12,7 +12,10 @@ import {
     EditConsoleDialogComponent,
     ConsoleData,
 } from './edit-console-dialog.component'
-import { GlobalService } from '../../services/global.service' // <--- GlobalService importiert
+
+import { ShowConsoleIdDialogComponent } from './ShowConsoleIdDialogComponent'
+import { GlobalService } from '../../services/global.service'
+
 
 @Component({
     selector: 'app-console',
@@ -60,6 +63,7 @@ export class ConsoleComponent implements OnInit, AfterViewInit {
     getAllConsoles(): void {
         this.http
             .get<Consoles[]>(`${this.globalService.apiUrl}/console/`, {
+
                 withCredentials: true,
             })
             .subscribe({
@@ -95,6 +99,21 @@ export class ConsoleComponent implements OnInit, AfterViewInit {
                 next: (response) => {
                     console.log('Konsole hinzugefügt:', response)
                     this.getAllConsoles()
+
+                    if (response && response.id) {
+                        this.dialog.open(ShowConsoleIdDialogComponent, {
+                            width: '400px',
+                            data: { id: response.id },
+                        })
+                    } else {
+                        console.error(
+                            'ID nicht in der Antwort gefunden! Öffne Dialog mit Test-ID.'
+                        )
+                        this.dialog.open(ShowConsoleIdDialogComponent, {
+                            width: '400px',
+                            data: { id: 'Test-ID' },
+                        })
+                    }
                 },
                 error: (error) => {
                     console.error('Fehler beim Hinzufügen der Konsole:', error)

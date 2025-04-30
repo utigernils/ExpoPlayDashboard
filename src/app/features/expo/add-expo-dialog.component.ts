@@ -25,7 +25,6 @@ import { MatCheckboxModule } from '@angular/material/checkbox'
         MatDialogTitle,
     ],
     template: `
-        <!-- Dialog-Titel -->
         <h2
             mat-dialog-title
             style="background-color: white; color: #ff8200; margin: 0; padding: 16px;"
@@ -33,7 +32,6 @@ import { MatCheckboxModule } from '@angular/material/checkbox'
             Neue Expo hinzufügen
         </h2>
 
-        <!-- Eingabefelder -->
         <mat-dialog-content style="padding: 16px;">
             <mat-form-field appearance="fill" style="width: 100%;">
                 <mat-label>Name</mat-label>
@@ -74,7 +72,6 @@ import { MatCheckboxModule } from '@angular/material/checkbox'
             </mat-checkbox>
         </mat-dialog-content>
 
-        <!-- Aktionen -->
         <mat-dialog-actions align="end" style="padding: 16px;">
             <button mat-button (click)="cancel()">Abbrechen</button>
             <button mat-button color="primary" (click)="save()">
@@ -84,12 +81,11 @@ import { MatCheckboxModule } from '@angular/material/checkbox'
     `,
 })
 export class AddExpoDialogComponent {
-    // Felder für eine neue Expo – Achte darauf, dass diese Bezeichner genau den Erwartungen deines Backends entsprechen!
     name = ''
     location = ''
     startsOn = ''
     endsOn = ''
-    isActive = false // Falls das Backend eine Zahl erwartet, sendest du hier 1 bzw. 0
+    isActive = false
 
     constructor(public dialogRef: MatDialogRef<AddExpoDialogComponent>) {}
 
