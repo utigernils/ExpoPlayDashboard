@@ -14,6 +14,7 @@ import { forkJoin } from 'rxjs'
 import { SidebarComponent } from '../../shared/sidebar/sidebar.component'
 import { AddExpoDialogComponent } from './add-expo-dialog.component'
 import { EditExpoDialogComponent } from './edit-expo-dialog.component'
+import { GlobalService } from '../../services/global.service' // <-- GlobalService importiert
 
 @Component({
     selector: 'app-expo',
@@ -49,11 +50,10 @@ export class ExpoComponent implements OnInit, AfterViewInit {
 
     @ViewChild(MatSort) sort!: MatSort
 
-    private baseUrl = 'http://localhost/expoplayAPI/expo'
-
     constructor(
         private http: HttpClient,
-        private dialog: MatDialog
+        private dialog: MatDialog,
+        public globalService: GlobalService // <-- GlobalService verwendet
     ) {}
 
     ngOnInit(): void {
@@ -66,7 +66,9 @@ export class ExpoComponent implements OnInit, AfterViewInit {
 
     loadExpo(): void {
         this.http
-            .get<Expo[]>(`${this.baseUrl}/`, { withCredentials: true })
+            .get<
+                Expo[]
+            >(`${this.globalService.apiUrl}/expo`, { withCredentials: true })
             .subscribe({
                 next: (expo) => {
                     this.dataSource.data = expo
@@ -93,17 +95,16 @@ export class ExpoComponent implements OnInit, AfterViewInit {
                 }
 
                 this.http
-                    .post(`${this.baseUrl}/`, body, { withCredentials: true })
+                    .post(`${this.globalService.apiUrl}/expo`, body, {
+                        withCredentials: true,
+                    })
                     .subscribe({
-                        next: () => {
-                            this.loadExpo()
-                        },
-                        error: (err) => {
+                        next: () => this.loadExpo(),
+                        error: (err) =>
                             console.error(
                                 'Fehler beim Erstellen einer Expo:',
                                 err
-                            )
-                        },
+                            ),
                     })
             }
         })
@@ -118,10 +119,14 @@ export class ExpoComponent implements OnInit, AfterViewInit {
             isActive: expo.isActive ? 1 : 0,
         }
 
-        return this.http.put(`${this.baseUrl}/${expo.id}`, body, {
-            headers: { 'Content-Type': 'application/json' },
-            withCredentials: true,
-        })
+        return this.http.put(
+            `${this.globalService.apiUrl}/expo/${expo.id}`,
+            body,
+            {
+                headers: { 'Content-Type': 'application/json' },
+                withCredentials: true,
+            }
+        )
     }
 
     openEditExpoDialog(expo: Expo): void {
@@ -133,15 +138,12 @@ export class ExpoComponent implements OnInit, AfterViewInit {
         dialogRef.afterClosed().subscribe((editedExpo: Expo) => {
             if (editedExpo) {
                 this.updateExpo(editedExpo).subscribe({
-                    next: () => {
-                        this.loadExpo()
-                    },
-                    error: (err) => {
+                    next: () => this.loadExpo(),
+                    error: (err) =>
                         console.error(
                             'Fehler beim Aktualisieren der Expo:',
                             err
-                        )
-                    },
+                        ),
                 })
             }
         })
@@ -157,10 +159,13 @@ export class ExpoComponent implements OnInit, AfterViewInit {
         console.log('Ausgewählte Elemente:', selectedItems)
 
         const deleteRequests = selectedItems.map((expo) => {
-            return this.http.delete(`${this.baseUrl}/${expo.id}`, {
-                withCredentials: true,
-                responseType: 'text',
-            })
+            return this.http.delete(
+                `${this.globalService.apiUrl}/expo/${expo.id}`,
+                {
+                    withCredentials: true,
+                    responseType: 'text',
+                }
+            )
         })
 
         forkJoin(deleteRequests).subscribe({
@@ -180,7 +185,6 @@ export class ExpoComponent implements OnInit, AfterViewInit {
         })
     }
 
-    // Auswahl-Logik für die Checkboxen
     isAllSelected(): boolean {
         const numSelected = this.selection.selected.length
         const numRows = this.dataSource.data.length
@@ -188,6 +192,7 @@ export class ExpoComponent implements OnInit, AfterViewInit {
     }
 
     masterToggle(): void {
+        // eslint-disable-next-line @typescript-eslint/no-unused-expressions
         this.isAllSelected()
             ? this.selection.clear()
             : this.dataSource.data.forEach((row) => this.selection.select(row))
@@ -200,5 +205,5 @@ export interface Expo {
     location: string
     startsOn: string
     endsOn: string
-    isActive: any
+    isActive: boolean
 }

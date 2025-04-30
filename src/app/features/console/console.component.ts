@@ -12,7 +12,10 @@ import {
     EditConsoleDialogComponent,
     ConsoleData,
 } from './edit-console-dialog.component'
+
 import { ShowConsoleIdDialogComponent } from './ShowConsoleIdDialogComponent'
+import { GlobalService } from '../../services/global.service'
+
 
 @Component({
     selector: 'app-console',
@@ -45,7 +48,8 @@ export class ConsoleComponent implements OnInit, AfterViewInit {
 
     constructor(
         private http: HttpClient,
-        private dialog: MatDialog
+        private dialog: MatDialog,
+        public globalService: GlobalService // <--- im Konstruktor injiziert
     ) {}
 
     ngOnInit(): void {
@@ -58,7 +62,8 @@ export class ConsoleComponent implements OnInit, AfterViewInit {
 
     getAllConsoles(): void {
         this.http
-            .get<Consoles[]>('http://localhost/expoplayAPI/console/', {
+            .get<Consoles[]>(`${this.globalService.apiUrl}/console/`, {
+
                 withCredentials: true,
             })
             .subscribe({
@@ -86,14 +91,10 @@ export class ConsoleComponent implements OnInit, AfterViewInit {
 
     addConsole(consoleData: Consoles): void {
         this.http
-            .post<Consoles>(
-                'http://localhost/expoplayAPI/console',
-                consoleData,
-                {
-                    headers: { 'Content-Type': 'application/json' },
-                    withCredentials: true,
-                }
-            )
+            .post(`${this.globalService.apiUrl}/console`, consoleData, {
+                headers: { 'Content-Type': 'application/json' },
+                withCredentials: true,
+            })
             .subscribe({
                 next: (response) => {
                     console.log('Konsole hinzugefügt:', response)
@@ -150,7 +151,7 @@ export class ConsoleComponent implements OnInit, AfterViewInit {
 
         this.http
             .put(
-                `http://localhost/expoplayAPI/console/${consoleData.id}`,
+                `${this.globalService.apiUrl}/console/${consoleData.id}`,
                 dataWithoutId,
                 {
                     headers: { 'Content-Type': 'application/json' },
@@ -182,7 +183,7 @@ export class ConsoleComponent implements OnInit, AfterViewInit {
         }
 
         this.http
-            .delete(`http://localhost/expoplayAPI/console/${consoleItem.id}`, {
+            .delete(`${this.globalService.apiUrl}/console/${consoleItem.id}`, {
                 withCredentials: true,
             })
             .subscribe({

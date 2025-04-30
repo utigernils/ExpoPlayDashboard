@@ -27,9 +27,11 @@
                             {
                                 "glob": "**/*",
                                 "input": "public"
-                            }
+                            },
+                            "src/assets"
                         ],
                         "styles": [
+                            "@angular/material/prebuilt-themes/azure-blue.css",
                             "src/styles.scss",
                             "src/app/styles/shared-layout.scss"
                         ],
@@ -86,7 +88,10 @@
                                 "input": "public"
                             }
                         ],
-                        "styles": ["src/styles.scss"],
+                        "styles": [
+                            "@angular/material/prebuilt-themes/azure-blue.css",
+                            "src/styles.scss"
+                        ],
                         "scripts": []
                     }
                 },

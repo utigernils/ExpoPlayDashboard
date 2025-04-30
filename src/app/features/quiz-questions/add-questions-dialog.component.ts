@@ -10,6 +10,7 @@ import { MatInputModule } from '@angular/material/input'
 import { MatButtonModule } from '@angular/material/button'
 import { HttpClient, HttpClientModule } from '@angular/common/http'
 import { QuestionSet } from './questions-set.interface'
+import { GlobalService } from '../../services/global.service' // ✅ richtig eingebunden
 
 @Component({
     selector: 'app-add-question-dialog',
@@ -73,7 +74,8 @@ export class AddQuestionDialogComponent {
         public dialogRef: MatDialogRef<AddQuestionDialogComponent>,
         @Inject(MAT_DIALOG_DATA)
         public data: { quizId: string },
-        private http: HttpClient
+        private http: HttpClient,
+        public globalService: GlobalService // ✅ jetzt sauber injected
     ) {
         this.question = {
             id: '',
@@ -91,11 +93,12 @@ export class AddQuestionDialogComponent {
     }
 
     save(): void {
+        // ✅ Fehlerbehandlung ohne ESLint Warning
         try {
             this.question.answerPossibilities = JSON.parse(
                 this.answerPossibilitiesString
             )
-        } catch (e) {
+        } catch {
             alert(
                 'Fehler: Das Format der Antwortmöglichkeiten ist kein gültiges JSON!'
             )
@@ -111,7 +114,7 @@ export class AddQuestionDialogComponent {
 
         this.http
             .post<QuestionSet>(
-                `http://localhost/expoplayAPI/question/${this.data.quizId}`,
+                `${this.globalService.apiUrl}/question/${this.data.quizId}`,
                 createData,
                 { withCredentials: true }
             )
@@ -128,11 +131,11 @@ export class AddQuestionDialogComponent {
                             createData.pointMultiplier,
 
                         question:
-                            (response as any).Question ||
-                            response.question ||
+                            response.question ??
+                            response['question'] ??
                             createData.Question,
                         answerPossibilities:
-                            response.answerPossibilities ||
+                            response.answerPossibilities ??
                             createData.answerPossibilities,
                     }
 
