@@ -14,7 +14,8 @@ import { forkJoin } from 'rxjs'
 import { SidebarComponent } from '../../shared/sidebar/sidebar.component'
 import { AddExpoDialogComponent } from './add-expo-dialog.component'
 import { EditExpoDialogComponent } from './edit-expo-dialog.component'
-import { GlobalService } from '../../services/global.service' // <-- GlobalService importiert
+import { GlobalService } from '../../services/global.service'
+import { HeaderComponent } from '../../shared/header/header.component' // <-- GlobalService importiert
 
 @Component({
     selector: 'app-expo',
@@ -30,6 +31,7 @@ import { GlobalService } from '../../services/global.service' // <-- GlobalServi
         MatSortModule,
         MatDialogModule,
         SidebarComponent,
+        HeaderComponent,
     ],
     templateUrl: './expo.component.html',
     styleUrls: ['./expo.component.scss'],

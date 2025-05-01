@@ -10,7 +10,8 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog'
 import { AddUserDialogComponent } from './add-user-dialog.component'
 import { EditUserDialogComponent } from './edit-user-dialog.component'
 import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu'
-import { GlobalService } from '../../services/global.service' // <-- GlobalService importiert
+import { GlobalService } from '../../services/global.service'
+import { HeaderComponent } from '../../shared/header/header.component' // <-- GlobalService importiert
 
 export interface User {
     id: number
@@ -35,6 +36,7 @@ export interface User {
         MatMenu,
         MatMenuTrigger,
         MatMenuItem,
+        HeaderComponent,
     ],
     templateUrl: './user.component.html',
     styleUrls: ['./user.component.scss'],

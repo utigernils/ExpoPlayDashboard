@@ -8,6 +8,7 @@ import { MatIcon } from '@angular/material/icon'
 import { HighscoreDiagrammComponent } from './highscore-diagramm/highscore-diagramm.component'
 import { Chart, registerables } from 'chart.js'
 import { QuizzesPlayedComponent } from './quizzes-played/quizzes-played.component'
+import { HeaderComponent } from '../../shared/header/header.component'
 
 Chart.register(...registerables)
 
@@ -66,6 +67,7 @@ interface Player {
         MatIcon,
         HighscoreDiagrammComponent,
         QuizzesPlayedComponent,
+        HeaderComponent,
     ],
     templateUrl: './dashboard.component.html',
     styleUrls: ['./dashboard.component.scss'],

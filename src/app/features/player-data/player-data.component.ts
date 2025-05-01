@@ -10,6 +10,7 @@ import { SidebarComponent } from '../../shared/sidebar/sidebar.component'
 import { MatCheckbox } from '@angular/material/checkbox'
 import { forkJoin } from 'rxjs'
 import { GlobalService } from '../../services/global.service'
+import { HeaderComponent } from '../../shared/header/header.component'
 
 export interface Player {
     id: number
@@ -31,6 +32,7 @@ export interface Player {
         MatTableModule,
         MatSortModule,
         MatCheckbox,
+        HeaderComponent,
     ],
     templateUrl: './player-data.component.html',
     styleUrls: ['./player-data.component.scss'],

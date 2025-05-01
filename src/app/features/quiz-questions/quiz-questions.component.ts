@@ -13,6 +13,7 @@ import { MatDialog } from '@angular/material/dialog'
 import { AddQuestionDialogComponent } from './add-questions-dialog.component'
 import { AddQuizDialogComponent } from './add-quiz-dialog.component'
 import { GlobalService } from '../../services/global.service'
+import { HeaderComponent } from '../../shared/header/header.component'
 
 @Component({
     selector: 'app-quiz-with-questions',
@@ -25,6 +26,7 @@ import { GlobalService } from '../../services/global.service'
         MatButtonModule,
         SidebarComponent,
         HttpClientModule,
+        HeaderComponent,
     ],
     templateUrl: './quiz-questions.component.html',
     styleUrls: ['./quiz-questions.component.scss'],

@@ -15,6 +15,7 @@ import {
 
 import { ShowConsoleIdDialogComponent } from './ShowConsoleIdDialogComponent'
 import { GlobalService } from '../../services/global.service'
+import { HeaderComponent } from '../../shared/header/header.component'
 
 @Component({
     selector: 'app-console',
@@ -28,6 +29,7 @@ import { GlobalService } from '../../services/global.service'
         MatSortModule,
         HttpClientModule,
         MatDialogModule,
+        HeaderComponent,
     ],
     templateUrl: './console.component.html',
     styleUrls: ['./console.component.scss'],
