@@ -43,18 +43,18 @@ main {
 }
 
 .icon-button-orange {
-    background-color: #ff9200;
+    background-color: #00b8cf;
     color: #fff;
     transition: background-color 0.3s ease;
 
     &:hover {
-        background-color: #ffa833;
+        background-color: #02def6;
     }
 }
 
 .icon-button-white-orange {
     background-color: #fff !important;
-    color: #ff9200 !important;
+    color: #00b8cf !important;
     transition: background-color 0.3s ease;
 
     &:hover {
@@ -62,12 +62,12 @@ main {
     }
 
     .mat-icon {
-        color: #ff9200 !important;
+        color: #00b8cf !important;
     }
 }
 
 .icon-orange {
-    color: #ff9200 !important;
+    color: #00b8cf !important;
 }
 
 .ExpansionModel {
