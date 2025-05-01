@@ -16,7 +16,6 @@ import {
 import { ShowConsoleIdDialogComponent } from './ShowConsoleIdDialogComponent'
 import { GlobalService } from '../../services/global.service'
 
-
 @Component({
     selector: 'app-console',
     standalone: true,
@@ -63,7 +62,6 @@ export class ConsoleComponent implements OnInit, AfterViewInit {
     getAllConsoles(): void {
         this.http
             .get<Consoles[]>(`${this.globalService.apiUrl}/console/`, {
-
                 withCredentials: true,
             })
             .subscribe({
@@ -91,10 +89,14 @@ export class ConsoleComponent implements OnInit, AfterViewInit {
 
     addConsole(consoleData: Consoles): void {
         this.http
-            .post(`${this.globalService.apiUrl}/console`, consoleData, {
-                headers: { 'Content-Type': 'application/json' },
-                withCredentials: true,
-            })
+            .post<Consoles>(
+                `${this.globalService.apiUrl}/console`,
+                consoleData,
+                {
+                    headers: { 'Content-Type': 'application/json' },
+                    withCredentials: true,
+                }
+            )
             .subscribe({
                 next: (response) => {
                     console.log('Konsole hinzugefügt:', response)
