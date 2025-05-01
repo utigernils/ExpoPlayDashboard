@@ -27,34 +27,49 @@ import { MatCheckboxModule } from '@angular/material/checkbox'
     template: `
         <h2
             mat-dialog-title
-            style="background-color: white; color: #ff8200; margin: 0; padding: 16px;"
+            style="background-color: white; color: #ff8200; margin: 0; padding: 16px; border-radius: 0;"
         >
             Neuen Benutzer hinzufügen
         </h2>
 
-        <mat-dialog-content style="padding: 16px;">
-            <mat-form-field appearance="fill" style="width: 100%;">
+        <mat-dialog-content style="padding: 16px; border-radius: 0;">
+            <mat-form-field
+                appearance="fill"
+                style="width: 100%; border-radius: 0;"
+            >
                 <mat-label>Vorname</mat-label>
                 <input matInput [(ngModel)]="firstName" />
             </mat-form-field>
 
-            <mat-form-field appearance="fill" style="width: 100%;">
+            <mat-form-field
+                appearance="fill"
+                style="width: 100%; border-radius: 0;"
+            >
                 <mat-label>Nachname</mat-label>
                 <input matInput [(ngModel)]="lastName" />
             </mat-form-field>
 
-            <mat-form-field appearance="fill" style="width: 100%;">
+            <mat-form-field
+                appearance="fill"
+                style="width: 100%; border-radius: 0;"
+            >
                 <mat-label>Email</mat-label>
                 <input matInput [(ngModel)]="email" />
             </mat-form-field>
 
-            <mat-form-field appearance="fill" style="width: 100%;">
+            <mat-form-field
+                appearance="fill"
+                style="width: 100%; border-radius: 0;"
+            >
                 <mat-label>Passwort</mat-label>
                 <input matInput [(ngModel)]="password" type="password" />
             </mat-form-field>
         </mat-dialog-content>
 
-        <mat-dialog-actions align="end" style="padding: 16px;">
+        <mat-dialog-actions
+            align="end"
+            style="padding: 16px; border-radius: 0;"
+        >
             <button mat-button (click)="cancel()">Abbrechen</button>
             <button mat-button color="primary" (click)="save()">
                 Speichern

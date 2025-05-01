@@ -24,40 +24,66 @@ import { GlobalService } from '../../services/global.service' // ✅ richtig ein
         HttpClientModule,
     ],
     template: `
-        <h1 mat-dialog-title>Neue Frage hinzufügen</h1>
-        <div mat-dialog-content>
-            <mat-form-field appearance="fill" style="width: 100%;">
+        <h1 mat-dialog-title style="border-radius: 0; margin: 0;">
+            Neue Frage hinzufügen
+        </h1>
+
+        <div mat-dialog-content style="border-radius: 0; padding: 16px;">
+            <mat-form-field
+                appearance="fill"
+                style="width: 100%; border-radius: 0;"
+            >
                 <mat-label>Frage</mat-label>
-                <input matInput [(ngModel)]="question.question" />
+                <input
+                    matInput
+                    [(ngModel)]="question.question"
+                    style="border-radius: 0;"
+                />
             </mat-form-field>
 
-            <mat-form-field appearance="fill" style="width: 100%;">
+            <mat-form-field
+                appearance="fill"
+                style="width: 100%; border-radius: 0;"
+            >
                 <mat-label>Antwortmöglichkeiten (als JSON)</mat-label>
                 <textarea
                     matInput
                     [(ngModel)]="answerPossibilitiesString"
+                    style="border-radius: 0;"
                 ></textarea>
             </mat-form-field>
 
-            <mat-form-field appearance="fill" style="width: 100%;">
+            <mat-form-field
+                appearance="fill"
+                style="width: 100%; border-radius: 0;"
+            >
                 <mat-label>Fragentyp</mat-label>
                 <input
                     type="number"
                     matInput
                     [(ngModel)]="question.questionType"
+                    style="border-radius: 0;"
                 />
             </mat-form-field>
 
-            <mat-form-field appearance="fill" style="width: 100%;">
+            <mat-form-field
+                appearance="fill"
+                style="width: 100%; border-radius: 0;"
+            >
                 <mat-label>Punktefaktor</mat-label>
                 <input
                     type="number"
                     matInput
                     [(ngModel)]="question.pointMultiplier"
+                    style="border-radius: 0;"
                 />
             </mat-form-field>
 
-            <div mat-dialog-actions align="end">
+            <div
+                mat-dialog-actions
+                align="end"
+                style="padding: 16px; border-radius: 0;"
+            >
                 <button mat-button (click)="onNoClick()">Abbrechen</button>
                 <button mat-button color="primary" (click)="save()">
                     Speichern

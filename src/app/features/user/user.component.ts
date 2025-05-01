@@ -54,13 +54,13 @@ export class UserComponent implements OnInit {
 
     getAllUsers(): void {
         this.http
-            .get<User[]>(`${this.globalService.apiUrl}/user/`, {
+            .get<User[]>(`${this.globalService.apiUrl}/user`, {
                 withCredentials: true,
             })
             .subscribe({
                 next: () => {
                     this.http
-                        .get<User[]>('http://localhost/expoplayAPI/user/', {
+                        .get<User[]>(`${this.globalService.apiUrl}/user/`, {
                             withCredentials: true,
                         })
                         .subscribe({

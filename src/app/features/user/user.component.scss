@@ -7,7 +7,7 @@
     max-height: 30px;
     margin: 0.5rem auto;
     background: #fff;
-    border-radius: 15px;
+    border-radius: 0 !important;
     padding: 1rem;
     border: 1px solid #ddd;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
@@ -29,7 +29,6 @@
     background-color: #fff !important;
     color: #ff9800 !important;
     font-size: 0.85rem;
-
     padding: 5px 8px !important;
 
     .mat-icon {

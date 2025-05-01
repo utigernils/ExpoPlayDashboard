@@ -48,12 +48,13 @@ main {
     padding: 20px;
     background: #fff;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 0 !important;
 }
 
+/* Buttons dürfen abgerundet bleiben – daher keine Änderung hier */
 .icon-button-orange {
     background-color: #fff7ed;
     color: #ff8200;
-    border-radius: 50%;
     width: 36px;
     height: 36px;
     display: inline-flex;
@@ -82,4 +83,16 @@ main {
 
 .tableInMat {
     background: white;
+}
+
+/* Alle anderen Karten, Dialoge und Material-Komponenten eckig */
+.mat-card,
+.mat-dialog-container,
+.Card,
+.card,
+.card-large,
+.card-small,
+.card-wrapper,
+.card-container {
+    border-radius: 0 !important;
 }
