@@ -1,13 +1,17 @@
+/* === Layout === */
 .wrapper {
     display: flex;
     min-height: 100vh;
     margin: 0;
     padding: 0;
+    background-color: #f9f9f9;
+    font-family: Roboto, Arial, sans-serif;
     box-sizing: border-box;
+    color: #666666; /* Globale Schriftfarbe */
 }
 
 aside {
-    width: 250px;
+    width: 240px;
     background-color: #f5f5f5;
     box-sizing: border-box;
 }
@@ -18,43 +22,50 @@ main {
     box-sizing: border-box;
 }
 
-.card-actions {
-    display: flex;
-    gap: 8px;
+/* === Site and Card Elements === */
+.Site-title {
+    font-size: 24px;
+    margin: 0 0 20px;
+    color: #ff8200; /* Orange beibehalten */
+}
+
+.Card {
+    width: 100%;
+    max-width: 2000px;
+    margin: 0 auto 20px;
+    height: auto;
+    box-sizing: border-box;
+    padding: 20px;
+    color: #666666; /* vorher #555 */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 0 !important;
 }
 
 .card-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    padding: 0 8px;
     margin-bottom: 1rem;
 }
 
+.card-actions {
+    display: flex;
+    gap: 8px;
+}
+
+/* === Card Titles === */
 .mat-card-title {
-    color: #ff8200;
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 0;
+    color: #ff8200; /* Orange beibehalten */
 }
 
-.Site-title {
-    margin: 0 0 20px;
-    color: #ff8200;
-}
-
-.Card {
-    width: 100%;
-    max-width: 2000px;
-    margin: 0 auto;
-    height: auto;
-    box-sizing: border-box;
-    padding: 20px;
-    background: #fff;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    border-radius: 0 !important;
-}
-
-/* Buttons dürfen abgerundet bleiben – daher keine Änderung hier */
+/* === Buttons === */
 .icon-button-orange {
-    background-color: #fff7ed;
-    color: #00b8cf;
+    background-color: #00b8cf;
+    color: #fff;
     width: 36px;
     height: 36px;
     display: inline-flex;
@@ -65,30 +76,129 @@ main {
     cursor: pointer;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     margin-right: 8px;
-
-    &:hover {
-        background-color: #ffe8d8;
-    }
-
-    &:active,
-    &:focus {
-        outline: none;
-        box-shadow: 0 0 0 2px rgba(255, 130, 0, 0.2);
-    }
-
-    mat-icon {
-        font-size: 20px;
-    }
+    transition: background-color 0.3s ease;
 }
 
+.icon-button-orange:hover {
+    background-color: #02def6;
+}
+
+.icon-button-orange:active,
+.icon-button-orange:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(255, 130, 0, 0.2);
+}
+
+.icon-button-orange mat-icon {
+    font-size: 20px;
+}
+
+.icon-button-white-orange {
+    background-color: #fff !important;
+    color: #00b8cf !important;
+    transition: background-color 0.3s ease;
+}
+
+.icon-button-white-orange:hover {
+    background-color: #fff7ee !important;
+}
+
+.icon-button-white-orange .mat-icon {
+    color: #00b8cf !important;
+}
+
+.icon-orange {
+    color: #00b8cf !important;
+}
+
+/* === Expansion Panels === */
+.ExpansionModel {
+    margin-bottom: 10px;
+}
+
+.ExpansionModel .mat-expansion-panel {
+    border: 1px solid #ddd;
+    border-radius: 0 !important;
+    margin-bottom: 8px;
+    overflow: hidden;
+}
+
+.ExpansionModel .mat-expansion-panel-header {
+    background-color: #f5f5f5;
+    border-bottom: 1px solid #ddd;
+    padding: 16px;
+}
+
+/* === Quiz Section === */
+.quiz-header-description {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.quiz-status {
+    font-weight: 500;
+}
+
+.quiz-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.quiz-content {
+    margin: 20px;
+}
+
+/* === Questions === */
+.questionModell {
+    position: relative;
+    margin-bottom: 20px;
+    padding: 16px 16px 8px 16px;
+    border: 1px solid #ddd;
+    border-radius: 0 !important;
+    background-color: #fff;
+    transition: box-shadow 0.3s ease;
+    color: #666666;
+}
+
+.questionModell:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.card-actions-top-right {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    display: flex;
+    gap: 8px;
+}
+
+.answer-possibilities-label {
+    font-weight: 600;
+    margin-top: 8px;
+}
+
+.question-info {
+    font-size: 14px;
+    color: #666666; /* vorher #555 */
+    margin-top: 12px;
+}
+
+/* === Tabellen === */
 .tableInMat {
     background: white;
+    color: #666666;
 }
 
-/* Alle anderen Karten, Dialoge und Material-Komponenten eckig */
+/* === Material Design Komponenten – Eckig === */
 .mat-card,
 .mat-dialog-container,
-.Card,
+.mat-expansion-panel,
+.mat-form-field-wrapper,
+.mat-form-field-outline,
+.mat-form-field-flex,
 .card,
 .card-large,
 .card-small,
