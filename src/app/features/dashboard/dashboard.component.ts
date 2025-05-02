@@ -9,6 +9,8 @@ import { Chart, registerables } from 'chart.js'
 import { QuizzesPlayedComponent } from './quizzes-played/quizzes-played.component'
 import { HeaderComponent } from '../../shared/header/header.component'
 
+import { GlobalService } from '../../services/global.service'
+
 Chart.register(...registerables)
 
 interface User {
@@ -79,7 +81,8 @@ export class DashboardComponent implements OnInit {
     totalQuizzesPlayed = 0
     chartReady = false
 
-    private apiBaseUrl = 'http://localhost/expoplay'
+    globalService = new GlobalService()
+
     private authHeaders = new HttpHeaders({
         'Content-Type': 'application/json',
     })
@@ -92,13 +95,14 @@ export class DashboardComponent implements OnInit {
 
     checkAuthentication(): void {
         this.http
-            .get(`${this.apiBaseUrl}/auth/check`, { withCredentials: true })
+            .get(`${this.globalService.apiUrl}/login`, {
+                withCredentials: true,
+            })
             .subscribe({
                 next: () => {
                     this.loadAllData()
                 },
                 error: () => {
-                    // Weiterleitung zur Login-Seite
                     window.location.href = '/login'
                 },
             })
@@ -114,7 +118,9 @@ export class DashboardComponent implements OnInit {
 
     loadUsers(): void {
         this.http
-            .get<User[]>(`${this.apiBaseUrl}/user/`, { withCredentials: true })
+            .get<
+                User[]
+            >(`${this.globalService.apiUrl}/user/`, { withCredentials: true })
             .subscribe({
                 next: (response) => {
                     this.users = response
@@ -126,7 +132,9 @@ export class DashboardComponent implements OnInit {
 
     loadExpos(): void {
         this.http
-            .get<Expo[]>(`${this.apiBaseUrl}/expo`, { withCredentials: true })
+            .get<
+                Expo[]
+            >(`${this.globalService.apiUrl}/expo`, { withCredentials: true })
             .subscribe({
                 next: (data) => {
                     this.expos = data
@@ -138,7 +146,7 @@ export class DashboardComponent implements OnInit {
 
     loadQuizStats(): void {
         this.http
-            .get<QuizStats[]>(`${this.apiBaseUrl}/played-quiz`, {
+            .get<QuizStats[]>(`${this.globalService.apiUrl}/played-quiz`, {
                 withCredentials: true,
             })
             .subscribe({
@@ -159,7 +167,7 @@ export class DashboardComponent implements OnInit {
         this.http
             .get<
                 Player[]
-            >(`${this.apiBaseUrl}/player`, { withCredentials: true })
+            >(`${this.globalService.apiUrl}/player`, { withCredentials: true })
             .subscribe({
                 next: (data) => {
                     this.players = data
@@ -171,7 +179,7 @@ export class DashboardComponent implements OnInit {
 
     loadConsoles(): void {
         this.http
-            .get<ConsoleData[]>(`${this.apiBaseUrl}/console`, {
+            .get<ConsoleData[]>(`${this.globalService.apiUrl}/console`, {
                 withCredentials: true,
             })
             .subscribe({
