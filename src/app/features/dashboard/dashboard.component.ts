@@ -4,7 +4,6 @@ import { CommonModule } from '@angular/common'
 import { HttpClientModule } from '@angular/common/http'
 import { SidebarComponent } from '../../shared/sidebar/sidebar.component'
 import { MatCard, MatCardContent, MatCardTitle } from '@angular/material/card'
-import { MatIcon } from '@angular/material/icon'
 import { HighscoreDiagrammComponent } from './highscore-diagramm/highscore-diagramm.component'
 import { Chart, registerables } from 'chart.js'
 import { QuizzesPlayedComponent } from './quizzes-played/quizzes-played.component'
@@ -64,7 +63,6 @@ interface Player {
         MatCardTitle,
         MatCardContent,
         MatCard,
-        MatIcon,
         HighscoreDiagrammComponent,
         QuizzesPlayedComponent,
         HeaderComponent,
@@ -89,28 +87,19 @@ export class DashboardComponent implements OnInit {
     constructor(private http: HttpClient) {}
 
     ngOnInit(): void {
-        this.getAllUsers()
+        this.checkAuthentication()
     }
 
-    getAllUsers(): void {
+    checkAuthentication(): void {
         this.http
-            .post(
-                `${this.apiBaseUrl}/login`,
-                {
-                    email: 'utigernils@gmail.com',
-                    password: 'demo',
-                },
-                {
-                    headers: this.authHeaders,
-                    withCredentials: true,
-                }
-            )
+            .get(`${this.apiBaseUrl}/auth/check`, { withCredentials: true })
             .subscribe({
                 next: () => {
                     this.loadAllData()
                 },
-                error: (error) => {
-                    console.error('Fehler beim POST-Request:', error)
+                error: () => {
+                    // Weiterleitung zur Login-Seite
+                    window.location.href = '/login'
                 },
             })
     }
