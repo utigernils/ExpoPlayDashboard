@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core'
+import { Component } from '@angular/core'
 import { HttpClient, HttpHeaders } from '@angular/common/http'
 import { CommonModule } from '@angular/common'
 import { HttpClientModule } from '@angular/common/http'
@@ -72,7 +72,7 @@ interface Player {
     templateUrl: './dashboard.component.html',
     styleUrls: ['./dashboard.component.scss'],
 })
-export class DashboardComponent implements OnInit {
+export class DashboardComponent {
     users: User[] = []
     expos: Expo[] = []
     quizStats: QuizStats[] = []
@@ -87,9 +87,7 @@ export class DashboardComponent implements OnInit {
         'Content-Type': 'application/json',
     })
 
-    constructor(private http: HttpClient) {}
-
-    ngOnInit(): void {
+    constructor(private http: HttpClient) {
         this.checkAuthentication()
     }
 
@@ -99,7 +97,10 @@ export class DashboardComponent implements OnInit {
                 withCredentials: true,
             })
             .subscribe({
-                next: () => {
+                next: (data: any) => {
+                    if (data.state == false) {
+                        window.location.href = '/login'
+                    }
                     this.loadAllData()
                 },
                 error: () => {

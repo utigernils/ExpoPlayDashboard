@@ -113,7 +113,24 @@
                     >Spielerdaten</mat-card-title
                 >
                 <mat-card-content>
-                    <div class="player"></div>
+                    <div class="scroll-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Vorname</th>
+                                    <th>Nachname</th>
+                                    <th>Email</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let player of players">
+                                    <td>{{ player.firstName }}</td>
+                                    <td>{{ player.lastName }}</td>
+                                    <td>{{ player.email }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </mat-card-content>
             </mat-card>
 
@@ -123,7 +140,24 @@
                     >Benutzer | Dashboard</mat-card-title
                 >
                 <mat-card-content>
-                    <div class="player"></div>
+                    <div class="scroll-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Vorname</th>
+                                    <th>Nachname</th>
+                                    <th>Email</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let user of users">
+                                    <td>{{ user.firstName }}</td>
+                                    <td>{{ user.lastName }}</td>
+                                    <td>{{ user.email }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </mat-card-content>
             </mat-card>
         </div>
