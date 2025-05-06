@@ -1,12 +1,13 @@
 import { Component } from '@angular/core'
+
 import {
-    Camera,
     Factory,
     FileQuestion,
     FileUser,
     House,
     LucideAngularModule,
     User,
+    Gamepad,
 } from 'lucide-angular'
 import { RouterLink, RouterLinkActive } from '@angular/router'
 
@@ -19,7 +20,7 @@ import { RouterLink, RouterLinkActive } from '@angular/router'
 })
 export class SidebarComponent {
     icons = {
-        camera: Camera,
+        gamepad: Gamepad,
         house: House,
         FileQuestion: FileQuestion,
         factory: Factory,

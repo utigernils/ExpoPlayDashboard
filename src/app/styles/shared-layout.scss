@@ -37,7 +37,7 @@ main {
     box-sizing: border-box;
     padding: 20px;
     color: #666666; /* vorher #555 */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* <-- ersetzt */
     border-radius: 0 !important;
 }
 
@@ -74,7 +74,7 @@ main {
     border: none;
     outline: none;
     cursor: pointer;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* <-- ersetzt */
     margin-right: 8px;
     transition: background-color 0.3s ease;
 }
@@ -164,7 +164,7 @@ main {
 }
 
 .questionModell:hover {
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* bereits passend */
 }
 
 .card-actions-top-right {

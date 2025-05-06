@@ -9,7 +9,6 @@
         <mat-card class="Card">
             <div class="card-header">
                 <mat-card-title class="mat-card-title">Spieler</mat-card-title>
-
                 <div class="card-actions">
                     <button
                         mat-icon-button
@@ -28,6 +27,7 @@
                     matSort
                     class="tableInMat"
                 >
+                    <!-- Auswahl-Checkbox -->
                     <ng-container matColumnDef="select">
                         <th mat-header-cell *matHeaderCellDef>
                             <mat-checkbox
@@ -48,10 +48,12 @@
                                 (change)="$event ? selection.toggle(row) : null"
                                 [checked]="selection.isSelected(row)"
                                 aria-label="Select row"
-                            ></mat-checkbox>
+                            >
+                            </mat-checkbox>
                         </td>
                     </ng-container>
 
+                    <!-- Vorname -->
                     <ng-container matColumnDef="vorname">
                         <th mat-header-cell *matHeaderCellDef mat-sort-header>
                             Vorname
@@ -61,6 +63,7 @@
                         </td>
                     </ng-container>
 
+                    <!-- Nachname -->
                     <ng-container matColumnDef="nachname">
                         <th mat-header-cell *matHeaderCellDef mat-sort-header>
                             Nachname
@@ -70,6 +73,7 @@
                         </td>
                     </ng-container>
 
+                    <!-- Email -->
                     <ng-container matColumnDef="email">
                         <th mat-header-cell *matHeaderCellDef mat-sort-header>
                             Email
@@ -79,6 +83,7 @@
                         </td>
                     </ng-container>
 
+                    <!-- Aktiv -->
                     <ng-container matColumnDef="acitve">
                         <th mat-header-cell *matHeaderCellDef mat-sort-header>
                             Aktiv
