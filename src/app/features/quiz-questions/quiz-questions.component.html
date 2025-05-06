@@ -29,9 +29,7 @@
                         *ngFor="let quiz of quizzes"
                     >
                         <mat-expansion-panel-header class="quiz-header">
-                            <mat-panel-title>
-                                {{ quiz.name }}
-                            </mat-panel-title>
+                            <mat-panel-title>{{ quiz.name }}</mat-panel-title>
                             <mat-panel-description
                                 class="quiz-header-description"
                             >
@@ -86,9 +84,9 @@
                                         </button>
                                     </div>
 
-                                    <mat-card-title>
-                                        {{ question.question }}
-                                    </mat-card-title>
+                                    <mat-card-title>{{
+                                        question.question
+                                    }}</mat-card-title>
 
                                     <p class="answer-possibilities-label">
                                         Mögliche Antworten:
@@ -139,13 +137,13 @@
                                     </p>
 
                                     <p class="question-info">
-                                        Aktiv:{{
+                                        Aktiv:
+                                        {{
                                             question.isActive ? 'Ja' : 'Nein'
                                         }}
                                         | Typ: {{ question.questionType }} |
-                                        Punktefaktor:{{
-                                            question.pointMultiplier
-                                        }}
+                                        Punktefaktor:
+                                        {{ question.pointMultiplier }}
                                     </p>
                                 </mat-card>
                             </div>
