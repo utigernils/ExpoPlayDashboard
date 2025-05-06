@@ -8,13 +8,13 @@ import {
     LucideAngularModule,
     User,
 } from 'lucide-angular'
-import { RouterLinkActive, RouterOutlet } from '@angular/router'
+import { RouterLink, RouterLinkActive } from '@angular/router'
 
 @Component({
     selector: 'app-sidebar',
     standalone: true,
     templateUrl: './sidebar.component.html',
-    imports: [LucideAngularModule, RouterOutlet, RouterLinkActive],
+    imports: [LucideAngularModule, RouterLink, RouterLinkActive],
     styleUrls: ['./sidebar.component.scss'],
 })
 export class SidebarComponent {

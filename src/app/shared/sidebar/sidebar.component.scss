@@ -41,7 +41,6 @@
     margin: 0;
 }
 
-/* Navigation Items */
 .nav-item {
     display: flex;
     align-items: center;
@@ -66,22 +65,20 @@
     background-color: #fff1e6;
     color: #ff8200;
     font-weight: 600;
+    border-left: 4px solid #ff8200;
 }
 
-/* Icons Styling */
 .icon {
     margin-right: 12px;
     font-size: 20px;
 }
 
-/* Text inside navigation */
 .nav-text {
     font-size: 14px;
     flex-grow: 1;
-    pointer-events: none; /* Verhindert, dass der Text den Klick blockiert */
+    pointer-events: none;
 }
 
-/* Hauptinhalt */
 .main-content {
     padding: 20px;
     display: flex;
