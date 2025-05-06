@@ -1,5 +1,6 @@
 <div class="sidenav">
-    <nav>
+    <!-- Navigationsbereich -->
+    <div class="nav-section">
         <ul>
             <!-- Dashboard -->
             <li>
@@ -94,5 +95,13 @@
                 </a>
             </li>
         </ul>
-    </nav>
+    </div>
+
+    <!-- Logout Button ganz unten -->
+    <div class="logout-wrapper">
+        <a class="nav-item logout" (click)="logout()" [routerLink]="'/login'">
+            <lucide-icon [name]="icons.logout" class="icon"></lucide-icon>
+            <span class="nav-text">Logout</span>
+        </a>
+    </div>
 </div>

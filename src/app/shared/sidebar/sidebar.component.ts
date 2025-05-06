@@ -8,6 +8,7 @@ import {
     LucideAngularModule,
     User,
     Gamepad,
+    LogOut,
 } from 'lucide-angular'
 import { RouterLink, RouterLinkActive } from '@angular/router'
 
@@ -26,5 +27,12 @@ export class SidebarComponent {
         factory: Factory,
         user: User,
         FileUser: FileUser,
+        logout: LogOut,
+    }
+
+    logout() {
+        //TODO Funktion einbauen für Logout
+
+        return console.log('Logout Button wurde geklickt')
     }
 }
