@@ -3,15 +3,15 @@ import { CommonModule } from '@angular/common'
 import { SidebarComponent } from '../../shared/sidebar/sidebar.component'
 import { MatCardModule } from '@angular/material/card'
 import { MatIconModule } from '@angular/material/icon'
-import { HttpClientModule, HttpClient } from '@angular/common/http'
-import { MatIconButton } from '@angular/material/button'
+import { HttpClient, HttpClientModule } from '@angular/common/http'
 import { MatDialog, MatDialogModule } from '@angular/material/dialog'
-
 import { AddUserDialogComponent } from './add-user-dialog.component'
 import { EditUserDialogComponent } from './edit-user-dialog.component'
-import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu'
 import { GlobalService } from '../../services/global.service'
-import { HeaderComponent } from '../../shared/header/header.component' // <-- GlobalService importiert
+import { HeaderComponent } from '../../shared/header/header.component'
+import { MatMenuModule } from '@angular/material/menu'
+import { MatTableModule } from '@angular/material/table'
+import { MatButtonModule } from '@angular/material/button'
 
 export interface User {
     id: number
@@ -25,18 +25,16 @@ export interface User {
     selector: 'app-user',
     standalone: true,
     imports: [
+        CommonModule,
         SidebarComponent,
         MatCardModule,
-        CommonModule,
         MatIconModule,
         HttpClientModule,
-        MatCardModule,
-        MatIconButton,
         MatDialogModule,
-        MatMenu,
-        MatMenuTrigger,
-        MatMenuItem,
         HeaderComponent,
+        MatMenuModule,
+        MatTableModule,
+        MatButtonModule,
     ],
     templateUrl: './user.component.html',
     styleUrls: ['./user.component.scss'],
@@ -44,10 +42,15 @@ export interface User {
 export class UserComponent implements OnInit {
     users: User[] = []
 
+    displayedColumns: string[] = ['name', 'email', 'isAdmin', 'actions']
+    get dataSource() {
+        return this.users
+    }
+
     constructor(
         private http: HttpClient,
         private dialog: MatDialog,
-        public globalService: GlobalService // <-- GlobalService injiziert
+        public globalService: GlobalService
     ) {}
 
     ngOnInit(): void {
@@ -56,30 +59,16 @@ export class UserComponent implements OnInit {
 
     getAllUsers(): void {
         this.http
-            .get<User[]>(`${this.globalService.apiUrl}/user`, {
+            .get<User[]>(`${this.globalService.apiUrl}/user/`, {
                 withCredentials: true,
             })
             .subscribe({
-                next: () => {
-                    this.http
-                        .get<User[]>(`${this.globalService.apiUrl}/user/`, {
-                            withCredentials: true,
-                        })
-                        .subscribe({
-                            next: (response) => {
-                                this.users = response
-                                console.log('Users loaded:', this.users)
-                            },
-                            error: (error) => {
-                                console.error(
-                                    'Fehler beim Laden der User:',
-                                    error
-                                )
-                            },
-                        })
+                next: (response) => {
+                    this.users = response
+                    console.log('Users loaded:', this.users)
                 },
                 error: (error) => {
-                    console.error('Fehler beim Login:', error)
+                    console.error('Fehler beim Laden der User:', error)
                 },
             })
     }
@@ -125,10 +114,6 @@ export class UserComponent implements OnInit {
                     console.error('Fehler beim Erstellen des Users:', error)
                 },
             })
-    }
-
-    trackByUser(index: number, user: User): number {
-        return user.id
     }
 
     deleteUser(user: User): void {
@@ -187,5 +172,9 @@ export class UserComponent implements OnInit {
                 this.updateUser(result)
             }
         })
+    }
+
+    trackByUser(index: number, user: User): number {
+        return user.id
     }
 }
