@@ -1,9 +1,8 @@
 /* === Layout === */
 .wrapper {
     display: flex;
-    min-height: 100vh;
-    margin: 0;
-    padding: 0;
+    height: 100vh; /* WICHTIG: ganze Höhe des Viewports */
+    overflow: hidden; /* verhindert Scrollen der ganzen Seite */
     background-color: #f9f9f9;
     font-family: Roboto, Arial, sans-serif;
     box-sizing: border-box;
@@ -20,6 +19,8 @@ main {
     flex: 1;
     padding: 20px;
     box-sizing: border-box;
+    overflow-y: auto;
+    height: 100vh;
 }
 
 /* === Site and Card Elements === */
