@@ -114,9 +114,11 @@
                                         >
                                             <strong>{{ key }}:</strong>
                                             {{
-                                                parseAnswerPossibilities(
-                                                    question.answerPossibilities
-                                                )[key]
+                                                formatValue(
+                                                    parseAnswerPossibilities(
+                                                        question.answerPossibilities
+                                                    )[key]
+                                                )
                                             }}
                                         </li>
                                     </ul>

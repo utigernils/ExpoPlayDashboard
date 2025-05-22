@@ -230,4 +230,17 @@ export class QuizQuestionsComponent implements OnInit {
     getQuestionsForQuiz(quizId: string): QuestionSet[] {
         return this.questionSets.filter((q) => q.quiz === quizId)
     }
+
+    formatValue(value: any): string {
+        if (typeof value === 'object' && value !== null) {
+            if (Array.isArray(value)) {
+                return value.map((v) => this.formatValue(v)).join(', ')
+            }
+
+            return Object.entries(value)
+                .map(([k, v]) => `${k}: ${v}`)
+                .join(', ')
+        }
+        return String(value)
+    }
 }
