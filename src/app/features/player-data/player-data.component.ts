@@ -1,23 +1,25 @@
 import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core'
-import { HttpClientModule, HttpClient } from '@angular/common/http'
+import { HttpClient, HttpClientModule } from '@angular/common/http'
 import { MatSort, MatSortModule } from '@angular/material/sort'
 import { MatTableDataSource, MatTableModule } from '@angular/material/table'
 import { MatCardModule } from '@angular/material/card'
 import { MatIconModule } from '@angular/material/icon'
 import { MatIconButton } from '@angular/material/button'
-import { SelectionModel } from '@angular/cdk/collections'
-import { SidebarComponent } from '../../shared/sidebar/sidebar.component'
 import { MatCheckbox } from '@angular/material/checkbox'
+import { SelectionModel } from '@angular/cdk/collections'
 import { forkJoin } from 'rxjs'
-import { GlobalService } from '../../services/global.service'
+
+import { SidebarComponent } from '../../shared/sidebar/sidebar.component'
 import { HeaderComponent } from '../../shared/header/header.component'
+import { GlobalService } from '../../services/global.service'
+import { EmailAutoService } from '../../services/email-auto.service'
 
 export interface Player {
     id: number
     vorname: string
     nachname: string
     email: string
-    acitve: boolean
+    active: boolean
 }
 
 @Component({
@@ -43,17 +45,18 @@ export class PlayerDataComponent implements OnInit, AfterViewInit {
         'vorname',
         'nachname',
         'email',
-        'acitve',
+        'active',
     ]
-
     dataSource = new MatTableDataSource<Player>([])
     selection = new SelectionModel<Player>(true, [])
+    private knownEmails = new Set<string>()
 
     @ViewChild(MatSort) sort!: MatSort
 
     constructor(
         private http: HttpClient,
-        public globalService: GlobalService // <-- globalService richtig eingebunden
+        public globalService: GlobalService,
+        private emailAutoService: EmailAutoService
     ) {}
 
     ngOnInit(): void {
@@ -72,6 +75,14 @@ export class PlayerDataComponent implements OnInit, AfterViewInit {
             .subscribe({
                 next: (players) => {
                     this.dataSource.data = players
+
+                    players.forEach((p) => {
+                        const isNew = !this.knownEmails.has(p.email)
+                        if (isNew && p.active) {
+                            this.emailAutoService.sendEmailTo(p)
+                        }
+                        this.knownEmails.add(p.email)
+                    })
                 },
                 error: (err) => {
                     console.error('Fehler beim Laden der Spieler:', err)
@@ -86,10 +97,11 @@ export class PlayerDataComponent implements OnInit, AfterViewInit {
     }
 
     masterToggle(): void {
-        // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-        this.isAllSelected()
-            ? this.selection.clear()
-            : this.dataSource.data.forEach((row) => this.selection.select(row))
+        if (this.isAllSelected()) {
+            this.selection.clear()
+        } else {
+            this.dataSource.data.forEach((row) => this.selection.select(row))
+        }
     }
 
     deleteSelected(): void {
@@ -102,15 +114,15 @@ export class PlayerDataComponent implements OnInit, AfterViewInit {
         const selectedItems = this.selection.selected
         console.log('Ausgewählte Elemente:', selectedItems)
 
-        const deleteRequests = selectedItems.map((player) => {
-            return this.http.delete(
+        const deleteRequests = selectedItems.map((player) =>
+            this.http.delete(
                 `${this.globalService.apiUrl}/player/${player.id}`,
                 {
                     withCredentials: true,
                     responseType: 'text',
                 }
             )
-        })
+        )
 
         forkJoin(deleteRequests).subscribe({
             next: (responses) => {
