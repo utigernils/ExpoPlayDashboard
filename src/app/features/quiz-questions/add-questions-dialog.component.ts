@@ -8,135 +8,245 @@ import { MatFormFieldModule } from '@angular/material/form-field'
 import { FormsModule } from '@angular/forms'
 import { MatInputModule } from '@angular/material/input'
 import { MatButtonModule } from '@angular/material/button'
+import { MatSelectModule } from '@angular/material/select'
+import { MatCheckboxModule } from '@angular/material/checkbox'
+import { MatRadioModule } from '@angular/material/radio'
 import { HttpClient, HttpClientModule } from '@angular/common/http'
 import { QuestionSet } from './questions-set.interface'
-import { GlobalService } from '../../services/global.service' // ✅ richtig eingebunden
+import { GlobalService } from '../../services/global.service'
+import { CommonModule } from '@angular/common'
 
 @Component({
     selector: 'app-add-question-dialog',
     standalone: true,
     imports: [
+        CommonModule,
         MatFormFieldModule,
         FormsModule,
         MatInputModule,
         MatDialogModule,
         MatButtonModule,
+        MatSelectModule,
+        MatCheckboxModule,
+        MatRadioModule,
         HttpClientModule,
     ],
     template: `
-        <h1 mat-dialog-title style="border-radius: 0; margin: 0;">
-            Neue Frage hinzufügen
-        </h1>
-
-        <div mat-dialog-content style="border-radius: 0; padding: 16px;">
-            <mat-form-field
-                appearance="fill"
-                style="width: 100%; border-radius: 0;"
-            >
+        <h1 mat-dialog-title>Frage bearbeiten</h1>
+        <div mat-dialog-content>
+            <mat-form-field appearance="fill" style="width: 100%;">
                 <mat-label>Frage</mat-label>
-                <input
-                    matInput
-                    [(ngModel)]="question.question"
-                    style="border-radius: 0;"
-                />
+                <input matInput [(ngModel)]="question.question" />
             </mat-form-field>
 
-            <mat-form-field
-                appearance="fill"
-                style="width: 100%; border-radius: 0;"
-            >
-                <mat-label>Antwortmöglichkeiten (als JSON)</mat-label>
-                <textarea
-                    matInput
-                    [(ngModel)]="answerPossibilitiesString"
-                    style="border-radius: 0;"
-                ></textarea>
-            </mat-form-field>
-
-            <mat-form-field
-                appearance="fill"
-                style="width: 100%; border-radius: 0;"
-            >
-                <mat-label>Fragentyp</mat-label>
-                <input
-                    type="number"
-                    matInput
+            <mat-form-field appearance="fill" style="width: 100%;">
+                <mat-label>Fragetyp</mat-label>
+                <mat-select
                     [(ngModel)]="question.questionType"
-                    style="border-radius: 0;"
-                />
+                    (selectionChange)="onQuestionTypeChange()"
+                >
+                    <mat-option [value]="0">4 Antwortmöglichkeiten</mat-option>
+                    <mat-option [value]="1">Ja / Nein</mat-option>
+                    <mat-option [value]="2">Slider</mat-option>
+                    <mat-option [value]="3">Bilder</mat-option>
+                </mat-select>
             </mat-form-field>
 
-            <mat-form-field
-                appearance="fill"
-                style="width: 100%; border-radius: 0;"
-            >
+            <!-- Antwortmöglichkeiten -->
+            <div *ngIf="question.questionType === 0">
+                <h3>Antwortmöglichkeiten</h3>
+                <div *ngFor="let option of answerOptions; let i = index">
+                    <mat-form-field appearance="fill" style="width: 70%;">
+                        <mat-label>Antwort {{ i + 1 }}</mat-label>
+                        <input matInput [(ngModel)]="option.Text" />
+                    </mat-form-field>
+                    <mat-checkbox [(ngModel)]="option.isCorrect"
+                        >Richtig?</mat-checkbox
+                    >
+                    <mat-form-field style="width: 100px;">
+                        <mat-label>Punkte</mat-label>
+                        <input
+                            type="number"
+                            matInput
+                            [(ngModel)]="option.points"
+                        />
+                    </mat-form-field>
+                </div>
+                <button mat-button (click)="addAnswerOption()">
+                    Option hinzufügen
+                </button>
+            </div>
+
+            <!-- Ja / Nein -->
+            <div *ngIf="question.questionType === 1">
+                <mat-label>Richtige Antwort:</mat-label>
+                <mat-radio-group [(ngModel)]="trueFalseAnswer">
+                    <mat-radio-button [value]="true">Ja</mat-radio-button>
+                    <mat-radio-button [value]="false">Nein</mat-radio-button>
+                </mat-radio-group>
+            </div>
+
+            <!-- Slider -->
+            <div *ngIf="question.questionType === 2">
+                <h3>Bewertungsbereiche</h3>
+                <div *ngFor="let range of gradingRange; let i = index">
+                    <mat-form-field appearance="fill">
+                        <mat-label>Obergrenze</mat-label>
+                        <input type="number" matInput [(ngModel)]="range.top" />
+                    </mat-form-field>
+                    <mat-form-field appearance="fill">
+                        <mat-label>Untergrenze</mat-label>
+                        <input
+                            type="number"
+                            matInput
+                            [(ngModel)]="range.bottom"
+                        />
+                    </mat-form-field>
+                    <mat-form-field appearance="fill">
+                        <mat-label>Punkte</mat-label>
+                        <input
+                            type="number"
+                            matInput
+                            [(ngModel)]="range.points"
+                        />
+                    </mat-form-field>
+                </div>
+                <button mat-button (click)="addGradingRange()">
+                    Bereich hinzufügen
+                </button>
+            </div>
+
+            <!-- Bilder -->
+            <div *ngIf="question.questionType === 3">
+                <h3>Bildoptionen</h3>
+                <div *ngFor="let img of imageOptions; let i = index">
+                    <mat-form-field style="width: 70%;">
+                        <mat-label>Bild-URL</mat-label>
+                        <input matInput [(ngModel)]="img.img_url" />
+                    </mat-form-field>
+                    <mat-checkbox [(ngModel)]="img.isCorrect"
+                        >Richtig?</mat-checkbox
+                    >
+                    <mat-form-field style="width: 100px;">
+                        <mat-label>Punkte</mat-label>
+                        <input
+                            type="number"
+                            matInput
+                            [(ngModel)]="img.points"
+                        />
+                    </mat-form-field>
+                </div>
+                <button mat-button (click)="addImageOption()">
+                    Bild hinzufügen
+                </button>
+            </div>
+
+            <mat-form-field appearance="fill" style="width: 100%;">
                 <mat-label>Punktefaktor</mat-label>
                 <input
                     type="number"
                     matInput
                     [(ngModel)]="question.pointMultiplier"
-                    style="border-radius: 0;"
                 />
             </mat-form-field>
+        </div>
 
-            <div
-                mat-dialog-actions
-                align="end"
-                style="padding: 16px; border-radius: 0;"
-            >
-                <button mat-button (click)="onNoClick()">Abbrechen</button>
-                <button mat-button color="primary" (click)="save()">
-                    Speichern
-                </button>
-            </div>
+        <div mat-dialog-actions align="end">
+            <button mat-button (click)="onNoClick()">Abbrechen</button>
+            <button mat-button color="primary" (click)="save()">
+                Speichern
+            </button>
         </div>
     `,
 })
 export class AddQuestionDialogComponent {
     question: QuestionSet
-    answerPossibilitiesString = '{"A":" ","B":" ","C":" ","D":" "}'
+
+    answerOptions = [{ Text: '', isCorrect: false, points: 0 }]
+    trueFalseAnswer = true
+    gradingRange: { top: number; bottom: number; points: number }[] = []
+    imageOptions: { img_url: string; isCorrect: boolean; points: number }[] = []
 
     constructor(
         public dialogRef: MatDialogRef<AddQuestionDialogComponent>,
-        @Inject(MAT_DIALOG_DATA)
-        public data: { quizId: string },
+        @Inject(MAT_DIALOG_DATA) public data: { quizId: string },
         private http: HttpClient,
-        public globalService: GlobalService // ✅ jetzt sauber injected
+        public globalService: GlobalService
     ) {
         this.question = {
             id: '',
-            quiz: this.data.quizId,
+            quiz: data.quizId,
             isActive: true,
             questionType: 0,
             pointMultiplier: 1,
             question: '',
-            answerPossibilities: {},
+            answerPossibilities: { AnswerOptions: [] },
         }
+        this.onQuestionTypeChange()
     }
 
     onNoClick(): void {
         this.dialogRef.close()
     }
 
+    onQuestionTypeChange(): void {
+        this.answerOptions = [{ Text: '', isCorrect: false, points: 0 }]
+        this.trueFalseAnswer = true
+        this.gradingRange = []
+        this.imageOptions = []
+    }
+
+    addAnswerOption() {
+        this.answerOptions.push({ Text: '', isCorrect: false, points: 0 })
+    }
+
+    addGradingRange() {
+        this.gradingRange.push({ top: 0, bottom: 0, points: 0 })
+    }
+
+    addImageOption() {
+        this.imageOptions.push({ img_url: '', isCorrect: false, points: 0 })
+    }
+
     save(): void {
-        // ✅ Fehlerbehandlung ohne ESLint Warning
-        try {
-            this.question.answerPossibilities = JSON.parse(
-                this.answerPossibilitiesString
-            )
-        } catch {
-            alert(
-                'Fehler: Das Format der Antwortmöglichkeiten ist kein gültiges JSON!'
-            )
-            return
+        switch (this.question.questionType) {
+            case 0:
+                this.question.answerPossibilities = {
+                    AnswerOptions: this.answerOptions,
+                }
+                break
+            case 1:
+                this.question.answerPossibilities = {
+                    Answer: this.trueFalseAnswer,
+                }
+                break
+            case 2:
+                this.question.answerPossibilities = {
+                    GradingRange: this.gradingRange,
+                }
+                break
+            case 3:
+                this.question.answerPossibilities = {
+                    AnswerOptions: this.imageOptions,
+                }
+                break
         }
 
         const createData = {
             Question: this.question.question,
             questionType: this.question.questionType,
             pointMultiplier: this.question.pointMultiplier,
-            answerPossibilities: this.question.answerPossibilities,
+            answerPossibilities: JSON.stringify(
+                this.question.answerPossibilities,
+                null,
+                2
+            ),
         }
+
+        console.log(
+            'Antwortmöglichkeiten (JSON):',
+            JSON.stringify(createData.answerPossibilities, null, 2)
+        )
 
         this.http
             .post<QuestionSet>(
@@ -145,28 +255,7 @@ export class AddQuestionDialogComponent {
                 { withCredentials: true }
             )
             .subscribe({
-                next: (response) => {
-                    const fixedResponse: QuestionSet = {
-                        id: response.id,
-                        quiz: response.quiz || this.data.quizId,
-                        isActive: response.isActive ?? true,
-                        questionType:
-                            response.questionType ?? createData.questionType,
-                        pointMultiplier:
-                            response.pointMultiplier ??
-                            createData.pointMultiplier,
-
-                        question:
-                            response.question ??
-                            response['question'] ??
-                            createData.Question,
-                        answerPossibilities:
-                            response.answerPossibilities ??
-                            createData.answerPossibilities,
-                    }
-
-                    this.dialogRef.close(fixedResponse)
-                },
+                next: (response) => this.dialogRef.close(response),
                 error: (error) => {
                     console.error('Fehler beim Erstellen der Frage:', error)
                     alert('Fehler beim Erstellen der Frage!')

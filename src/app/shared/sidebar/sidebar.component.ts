@@ -1,4 +1,6 @@
 import { Component } from '@angular/core'
+import { Router } from '@angular/router'
+import { GlobalService } from '../../services/global.service'
 
 import {
     Factory,
@@ -11,6 +13,7 @@ import {
     LogOut,
 } from 'lucide-angular'
 import { RouterLink, RouterLinkActive } from '@angular/router'
+import { HttpClient } from '@angular/common/http'
 
 @Component({
     selector: 'app-sidebar',
@@ -30,9 +33,26 @@ export class SidebarComponent {
         logout: LogOut,
     }
 
-    logout() {
-        //TODO Funktion einbauen für Logout
+    constructor(
+        private http: HttpClient,
+        private router: Router,
+        private globalService: GlobalService
+    ) {}
 
-        return console.log('Logout Button wurde geklickt')
+    logout() {
+        this.http
+            .get(`${this.globalService.apiUrl}/logout`, {
+                withCredentials: true,
+            })
+            .subscribe({
+                next: () => {
+                    localStorage.clear()
+                    sessionStorage.clear()
+                    this.router.navigate(['/login'])
+                },
+                error: (err) => {
+                    console.error('Fehler beim Logout:', err)
+                },
+            })
     }
 }

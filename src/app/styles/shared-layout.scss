@@ -1,13 +1,12 @@
 /* === Layout === */
 .wrapper {
     display: flex;
-    min-height: 100vh;
-    margin: 0;
-    padding: 0;
+    height: 100vh; // WICHTIG: ganze Höhe des Viewports
+    overflow: hidden; // verhindert Scrollen der ganzen Seite
     background-color: #f9f9f9;
     font-family: Roboto, Arial, sans-serif;
     box-sizing: border-box;
-    color: #666666; /* Globale Schriftfarbe */
+    color: #666666; // Globale Schriftfarbe
 }
 
 aside {
@@ -18,15 +17,17 @@ aside {
 
 main {
     flex: 1;
-    padding: 20px;
+    padding: 16px;
     box-sizing: border-box;
+    overflow-y: auto;
+    height: 100vh;
 }
 
 /* === Site and Card Elements === */
 .Site-title {
     font-size: 24px;
     margin: 0 0 20px;
-    color: #ff8200; /* Orange beibehalten */
+    color: #ff8200; // Orange beibehalten
 }
 
 .Card {
@@ -35,9 +36,9 @@ main {
     margin: 0 auto 20px;
     height: auto;
     box-sizing: border-box;
-    padding: 20px;
-    color: #666666; /* vorher #555 */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* <-- ersetzt */
+    padding: 16px;
+    color: #666666;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     border-radius: 0 !important;
 }
 
@@ -45,7 +46,7 @@ main {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 8px;
+    padding: 16px;
     margin-bottom: 1rem;
 }
 
@@ -59,7 +60,7 @@ main {
     font-size: 20px;
     font-weight: 600;
     margin-bottom: 0;
-    color: #ff8200; /* Orange beibehalten */
+    color: #ff8200;
 }
 
 /* === Buttons === */
@@ -74,7 +75,7 @@ main {
     border: none;
     outline: none;
     cursor: pointer;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* <-- ersetzt */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     margin-right: 8px;
     transition: background-color 0.3s ease;
 }
@@ -155,7 +156,7 @@ main {
 .questionModell {
     position: relative;
     margin-bottom: 20px;
-    padding: 16px 16px 8px 16px;
+    padding: 16px;
     border: 1px solid #ddd;
     border-radius: 0 !important;
     background-color: #fff;
@@ -164,7 +165,7 @@ main {
 }
 
 .questionModell:hover {
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* bereits passend */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .card-actions-top-right {
@@ -182,7 +183,7 @@ main {
 
 .question-info {
     font-size: 14px;
-    color: #666666; /* vorher #555 */
+    color: #666666;
     margin-top: 12px;
 }
 

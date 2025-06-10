@@ -24,131 +24,143 @@
 
             <mat-card-content>
                 <mat-accordion>
-                    <mat-expansion-panel
-                        class="ExpansionModel"
-                        *ngFor="let quiz of quizzes"
-                    >
-                        <mat-expansion-panel-header class="quiz-header">
-                            <mat-panel-title>{{ quiz.name }}</mat-panel-title>
-                            <mat-panel-description
-                                class="quiz-header-description"
-                            >
-                                <span class="quiz-status"
-                                    >Aktiv:
-                                    {{ quiz.isActive ? 'Ja' : 'Nein' }}</span
+                    @for (quiz of quizzes; track quiz) {
+                        <mat-expansion-panel class="ExpansionModel">
+                            <mat-expansion-panel-header class="quiz-header">
+                                <mat-panel-title>{{
+                                    quiz.name
+                                }}</mat-panel-title>
+                                <mat-panel-description
+                                    class="quiz-header-description"
                                 >
-                                <div class="quiz-header-actions">
-                                    <button
-                                        mat-icon-button
-                                        class="icon-button-white-orange"
-                                        (click)="openAddQuestionDialog(quiz.id)"
-                                    >
-                                        <mat-icon>add</mat-icon>
-                                    </button>
-                                    <button
-                                        mat-icon-button
-                                        class="icon-button-white-orange"
-                                        (click)="confirmDeleteQuiz(quiz)"
-                                    >
-                                        <mat-icon>delete</mat-icon>
-                                    </button>
-                                </div>
-                            </mat-panel-description>
-                        </mat-expansion-panel-header>
-
-                        <div class="quiz-content">
-                            <div
-                                *ngFor="
-                                    let question of getQuestionsForQuiz(quiz.id)
-                                "
-                            >
-                                <mat-card class="questionModell">
-                                    <div class="card-actions-top-right">
+                                    <span class="quiz-status">
+                                        Aktiv:
+                                        {{ quiz.isActive ? 'Ja' : 'Nein' }}
+                                    </span>
+                                    <div class="quiz-header-actions">
                                         <button
                                             mat-icon-button
-                                            class="icon-orange"
-                                            (click)="openEditDialog(question)"
-                                            aria-label="Frage bearbeiten"
+                                            class="icon-button-white-orange"
+                                            (click)="
+                                                openAddQuestionDialog(quiz.id)
+                                            "
                                         >
-                                            <mat-icon>edit</mat-icon>
+                                            <mat-icon>add</mat-icon>
                                         </button>
                                         <button
                                             mat-icon-button
-                                            class="icon-orange"
-                                            (click)="
-                                                confirmDeleteQuestion(question)
-                                            "
-                                            aria-label="Frage löschen"
+                                            class="icon-button-white-orange"
+                                            (click)="confirmDeleteQuiz(quiz)"
                                         >
                                             <mat-icon>delete</mat-icon>
                                         </button>
                                     </div>
+                                </mat-panel-description>
+                            </mat-expansion-panel-header>
 
-                                    <mat-card-title>{{
-                                        question.question
-                                    }}</mat-card-title>
+                            <div class="quiz-content">
+                                @for (
+                                    question of getQuestionsForQuiz(quiz.id);
+                                    track question
+                                ) {
+                                    <mat-card class="questionModell">
+                                        <div class="card-actions-top-right">
+                                            <button
+                                                mat-icon-button
+                                                class="icon-orange"
+                                                (click)="
+                                                    openEditDialog(question)
+                                                "
+                                                aria-label="Frage bearbeiten"
+                                            >
+                                                <mat-icon>edit</mat-icon>
+                                            </button>
+                                            <button
+                                                mat-icon-button
+                                                class="icon-orange"
+                                                (click)="
+                                                    confirmDeleteQuestion(
+                                                        question
+                                                    )
+                                                "
+                                                aria-label="Frage löschen"
+                                            >
+                                                <mat-icon>delete</mat-icon>
+                                            </button>
+                                        </div>
 
-                                    <p class="answer-possibilities-label">
-                                        Mögliche Antworten:
-                                    </p>
-                                    <ul
-                                        *ngIf="
-                                            parseAnswerPossibilities(
-                                                question.answerPossibilities
-                                            ) &&
-                                            objectKeys(
+                                        <mat-card-title>{{
+                                            question.question
+                                        }}</mat-card-title>
+
+                                        <p class="answer-possibilities-label">
+                                            Mögliche Antworten:
+                                        </p>
+                                        <ul
+                                            *ngIf="
                                                 parseAnswerPossibilities(
                                                     question.answerPossibilities
-                                                )
-                                            ).length > 0
-                                        "
-                                    >
-                                        <li
-                                            *ngFor="
-                                                let key of objectKeys(
+                                                ) &&
+                                                objectKeys(
                                                     parseAnswerPossibilities(
                                                         question.answerPossibilities
                                                     )
-                                                )
+                                                ).length > 0
                                             "
                                         >
-                                            <strong>{{ key }}:</strong>
+                                            @for (
+                                                key of objectKeys(
+                                                    parseAnswerPossibilities(
+                                                        question.answerPossibilities
+                                                    )
+                                                );
+                                                track key
+                                            ) {
+                                                <li>
+                                                    <strong>{{ key }}:</strong>
+                                                    {{
+                                                        formatValue(
+                                                            parseAnswerPossibilities(
+                                                                question.answerPossibilities
+                                                            )[key]
+                                                        )
+                                                    }}
+                                                </li>
+                                            }
+                                        </ul>
+
+                                        <p
+                                            *ngIf="
+                                                !parseAnswerPossibilities(
+                                                    question.answerPossibilities
+                                                ) ||
+                                                objectKeys(
+                                                    parseAnswerPossibilities(
+                                                        question.answerPossibilities
+                                                    )
+                                                ).length === 0
+                                            "
+                                        >
+                                            Keine Antwortmöglichkeiten
+                                            vorhanden.
+                                        </p>
+
+                                        <p class="question-info">
+                                            Aktiv:
                                             {{
-                                                parseAnswerPossibilities(
-                                                    question.answerPossibilities
-                                                )[key]
+                                                question.isActive
+                                                    ? 'Ja'
+                                                    : 'Nein'
                                             }}
-                                        </li>
-                                    </ul>
-
-                                    <p
-                                        *ngIf="
-                                            !parseAnswerPossibilities(
-                                                question.answerPossibilities
-                                            ) ||
-                                            objectKeys(
-                                                parseAnswerPossibilities(
-                                                    question.answerPossibilities
-                                                )
-                                            ).length === 0
-                                        "
-                                    >
-                                        Keine Antwortmöglichkeiten vorhanden.
-                                    </p>
-
-                                    <p class="question-info">
-                                        Aktiv:
-                                        {{
-                                            question.isActive ? 'Ja' : 'Nein'
-                                        }}
-                                        | Typ: {{ question.questionType }} |
-                                        Punktefaktor:
-                                        {{ question.pointMultiplier }}
-                                    </p>
-                                </mat-card>
+                                            | Typ: {{ question.questionType }} |
+                                            Punktefaktor:
+                                            {{ question.pointMultiplier }}
+                                        </p>
+                                    </mat-card>
+                                }
                             </div>
-                        </div>
-                    </mat-expansion-panel>
+                        </mat-expansion-panel>
+                    }
                 </mat-accordion>
             </mat-card-content>
         </mat-card>
