@@ -11,13 +11,14 @@ import { MatCheckbox } from '@angular/material/checkbox'
 import { forkJoin } from 'rxjs'
 import { GlobalService } from '../../services/global.service'
 import { HeaderComponent } from '../../shared/header/header.component'
+import { MatTooltip } from '@angular/material/tooltip'
 
 export interface Player {
     id: number
     vorname: string
     nachname: string
     email: string
-    acitve: boolean
+    active: boolean
 }
 
 @Component({
@@ -33,6 +34,7 @@ export interface Player {
         MatSortModule,
         MatCheckbox,
         HeaderComponent,
+        MatTooltip,
     ],
     templateUrl: './player-data.component.html',
     styleUrls: ['./player-data.component.scss'],
@@ -43,7 +45,7 @@ export class PlayerDataComponent implements OnInit, AfterViewInit {
         'vorname',
         'nachname',
         'email',
-        'acitve',
+        'active',
     ]
 
     dataSource = new MatTableDataSource<Player>([])
@@ -53,7 +55,7 @@ export class PlayerDataComponent implements OnInit, AfterViewInit {
 
     constructor(
         private http: HttpClient,
-        public globalService: GlobalService // <-- globalService richtig eingebunden
+        public globalService: GlobalService
     ) {}
 
     ngOnInit(): void {
@@ -86,7 +88,6 @@ export class PlayerDataComponent implements OnInit, AfterViewInit {
     }
 
     masterToggle(): void {
-        // eslint-disable-next-line @typescript-eslint/no-unused-expressions
         this.isAllSelected()
             ? this.selection.clear()
             : this.dataSource.data.forEach((row) => this.selection.select(row))
@@ -127,5 +128,44 @@ export class PlayerDataComponent implements OnInit, AfterViewInit {
                 console.error('Fehler beim Löschen der Spieler:', error)
             },
         })
+    }
+
+    exportUsersToCSV(): void {
+        const players = this.dataSource.data
+
+        if (!players.length) {
+            alert('Keine Spieler zum Exportieren vorhanden.')
+            return
+        }
+
+        const headers = ['ID', 'Vorname', 'Nachname', 'E-Mail', 'Aktiv']
+        const rows = players.map((player) => [
+            player.id,
+            player.vorname,
+            player.nachname,
+            player.email,
+            player.active ? 'Ja' : 'Nein',
+        ])
+
+        const csvContent = [headers, ...rows]
+            .map((row) =>
+                row
+                    .map(
+                        (field) =>
+                            `"${(field ?? '').toString().replace(/"/g, '""')}"`
+                    )
+                    .join(',')
+            )
+            .join('\n')
+
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' })
+        const link = document.createElement('a')
+        link.href = URL.createObjectURL(blob)
+        link.setAttribute('download', 'spielerdaten_export.csv')
+        document.body.appendChild(link)
+        link.click()
+        document.body.removeChild(link)
+
+        alert('CSV-Export abgeschlossen.')
     }
 }
