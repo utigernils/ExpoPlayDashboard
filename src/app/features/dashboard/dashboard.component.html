@@ -6,6 +6,7 @@
     </aside>
 
     <div class="dashboard">
+        <!-- Erste Zeile: Diagramme & Zähler -->
         <div class="row row1">
             <mat-card class="card-large">
                 <mat-card-title class="mat-card-title"
@@ -38,6 +39,7 @@
                     </ng-template>
                 </mat-card-content>
             </mat-card>
+
             <mat-card class="card-small">
                 <mat-card-content>
                     <div class="quiz-content">
@@ -49,67 +51,64 @@
                 </mat-card-content>
             </mat-card>
         </div>
-        <div style="color: #666666">
-            <div class="row">
-                <!-- Konsolen -->
-                <mat-card class="card-large">
-                    <mat-card-title class="mat-card-title"
-                        >Konsolen</mat-card-title
-                    >
-                    <mat-card-content>
-                        <div class="scroll-container">
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th>Name</th>
-                                        <th>Aktuelle Ausstellung</th>
-                                        <th>Letzte Aktivität</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr *ngFor="let console of consoles">
-                                        <td>{{ console.name }}</td>
-                                        <td>{{ console.currentExpo }}</td>
-                                        <td>{{ console.lastActive }}</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </mat-card-content>
-                </mat-card>
 
-                <!-- Ausstellungen -->
-                <mat-card class="super-large">
-                    <mat-card-title class="mat-card-title"
-                        >Ausstellungen</mat-card-title
-                    >
-                    <mat-card-content>
-                        <div class="scroll-container">
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th>Name</th>
-                                        <th>Ort</th>
-                                        <th>Startdatum</th>
-                                        <th>Enddatum</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr *ngFor="let expo of expos">
-                                        <td>{{ expo.name }}</td>
-                                        <td>{{ expo.location }}</td>
-                                        <td>{{ expo.startsOn }}</td>
-                                        <td>{{ expo.endsOn }}</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </mat-card-content>
-                </mat-card>
-            </div>
+        <!-- Zweite Zeile: Konsolen & Ausstellungen -->
+        <div class="row" style="color: #666666">
+            <mat-card class="card-large">
+                <mat-card-title class="mat-card-title">Konsolen</mat-card-title>
+                <mat-card-content>
+                    <div class="scroll-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Aktuelle Ausstellung</th>
+                                    <th>Letzte Aktivität</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let console of consoles">
+                                    <td>{{ console.name }}</td>
+                                    <td>{{ console.currentExpo }}</td>
+                                    <td>{{ console.lastActive }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </mat-card-content>
+            </mat-card>
+
+            <mat-card class="super-large">
+                <mat-card-title class="mat-card-title"
+                    >Ausstellungen</mat-card-title
+                >
+                <mat-card-content>
+                    <div class="scroll-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Ort</th>
+                                    <th>Startdatum</th>
+                                    <th>Enddatum</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let expo of expos">
+                                    <td>{{ expo.name }}</td>
+                                    <td>{{ expo.location }}</td>
+                                    <td>{{ expo.startsOn }}</td>
+                                    <td>{{ expo.endsOn }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </mat-card-content>
+            </mat-card>
         </div>
+
+        <!-- Dritte Zeile: Spielerdaten & Benutzer -->
         <div class="row">
-            <!-- Spielerdaten -->
             <mat-card class="card-small">
                 <mat-card-title class="mat-card-title"
                     >Spielerdaten</mat-card-title
@@ -136,7 +135,6 @@
                 </mat-card-content>
             </mat-card>
 
-            <!-- Benutzer | Dashboard -->
             <mat-card class="card-small">
                 <mat-card-title class="mat-card-title"
                     >Benutzer | Dashboard</mat-card-title
