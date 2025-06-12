@@ -6,6 +6,7 @@ import { MatInputModule } from '@angular/material/input'
 import { MatButtonModule } from '@angular/material/button'
 import { HttpClient, HttpClientModule } from '@angular/common/http'
 import { Quiz } from './quiz.interface'
+import { GlobalService } from '../../services/global.service'
 
 @Component({
     selector: 'app-add-quiz-dialog',
@@ -49,7 +50,8 @@ export class AddQuizDialogComponent {
 
     constructor(
         public dialogRef: MatDialogRef<AddQuizDialogComponent>,
-        private http: HttpClient
+        private http: HttpClient,
+        public globalService: GlobalService
     ) {}
 
     onNoClick(): void {
@@ -63,7 +65,7 @@ export class AddQuizDialogComponent {
         }
 
         this.http
-            .post<Quiz>('http://localhost/expoplayAPI/quiz', createData, {
+            .post<Quiz>(this.globalService.apiUrl, createData, {
                 withCredentials: true,
             })
             .subscribe({
