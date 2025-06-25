@@ -1,0 +1,32 @@
+<h2
+    mat-dialog-title
+    style="background-color: white; color: #ff8200; margin: 0; padding: 16px"
+>
+    Benutzer bearbeiten
+</h2>
+
+<mat-dialog-content style="padding: 16px">
+    <mat-form-field appearance="fill" style="width: 100%">
+        <mat-label>Vorname</mat-label>
+        <input matInput [(ngModel)]="user.firstName" />
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" style="width: 100%">
+        <mat-label>Nachname</mat-label>
+        <input matInput [(ngModel)]="user.lastName" />
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" style="width: 100%">
+        <mat-label>Email</mat-label>
+        <input matInput [(ngModel)]="user.email" />
+    </mat-form-field>
+
+    <mat-checkbox [(ngModel)]="user.isAdmin" style="margin-top: 8px"
+        >Admin</mat-checkbox
+    >
+</mat-dialog-content>
+
+<mat-dialog-actions align="end" style="padding: 16px">
+    <button mat-button (click)="cancel()">Abbrechen</button>
+    <button mat-button color="primary" (click)="save()">Speichern</button>
+</mat-dialog-actions>
