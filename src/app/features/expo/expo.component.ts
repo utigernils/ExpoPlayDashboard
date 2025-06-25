@@ -12,8 +12,8 @@ import { CommonModule } from '@angular/common'
 import { forkJoin } from 'rxjs'
 
 import { SidebarComponent } from '../../shared/sidebar/sidebar.component'
-import { AddExpoDialogComponent } from './add-expo-dialog.component'
-import { EditExpoDialogComponent } from './edit-expo-dialog.component'
+import { AddExpoDialogComponent } from './add-expo-dialog/add-expo-dialog.component'
+import { EditExpoDialogComponent } from './edit-expo-dialog/edit-expo-dialog.component'
 import { GlobalService } from '../../services/global.service'
 import { HeaderComponent } from '../../shared/header/header.component' // <-- GlobalService importiert
 
