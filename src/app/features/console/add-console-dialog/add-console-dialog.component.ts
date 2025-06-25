@@ -10,6 +10,7 @@ import { MatButtonModule } from '@angular/material/button'
 import { CommonModule } from '@angular/common'
 
 @Component({
+    styleUrls: ['add-console-dialog.component.scss'],
     selector: 'app-add-console-dialog',
     standalone: true,
     imports: [
@@ -21,41 +22,7 @@ import { CommonModule } from '@angular/common'
         MatCheckboxModule,
         MatButtonModule,
     ],
-    template: `
-        <h2
-            mat-dialog-title
-            style="background-color: white; color: #ff8200; margin: 0; padding: 16px;"
-        >
-            Neue Konsole hinzufügen
-        </h2>
-
-        <mat-dialog-content style="padding: 16px;">
-            <form [formGroup]="addConsoleForm">
-                <mat-form-field appearance="fill" style="width: 100%;">
-                    <mat-label>Konsolen Name</mat-label>
-                    <input matInput formControlName="name" required />
-                    <mat-error
-                        *ngIf="addConsoleForm.get('name')?.hasError('required')"
-                        >Konsolen Name ist erforderlich</mat-error
-                    >
-                </mat-form-field>
-
-                <mat-checkbox formControlName="active">Aktiv</mat-checkbox>
-            </form>
-        </mat-dialog-content>
-
-        <mat-dialog-actions align="end" style="padding: 16px;">
-            <button mat-button (click)="onCancel()">Abbrechen</button>
-            <button
-                mat-button
-                color="primary"
-                (click)="onSubmit()"
-                [disabled]="addConsoleForm.invalid"
-            >
-                Speichern
-            </button>
-        </mat-dialog-actions>
-    `,
+    templateUrl: 'add-console-dialog.component.html',
 })
 export class AddConsoleDialogComponent {
     addConsoleForm: FormGroup

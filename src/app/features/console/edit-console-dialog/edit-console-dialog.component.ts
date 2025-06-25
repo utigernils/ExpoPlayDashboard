@@ -21,6 +21,7 @@ export interface ConsoleData {
 }
 
 @Component({
+    styleUrls: ['edit-console-dialog.component.scss'],
     selector: 'app-edit-console-dialog',
     standalone: true,
     imports: [
@@ -32,45 +33,7 @@ export interface ConsoleData {
         MatCheckboxModule,
         MatButtonModule,
     ],
-    template: `
-        <!-- Titel mit demselben Styling wie bei "AddUserDialogComponent" -->
-        <h2
-            mat-dialog-title
-            style="background-color: white; color: #ff8200; margin: 0; padding: 16px;"
-        >
-            Konsole bearbeiten
-        </h2>
-
-        <mat-dialog-content style="padding: 16px;">
-            <form [formGroup]="editConsoleForm">
-                <mat-form-field appearance="fill" style="width: 100%;">
-                    <mat-label>Konsolen Name</mat-label>
-                    <input matInput formControlName="name" />
-                    <mat-error
-                        *ngIf="
-                            editConsoleForm.get('name')?.hasError('required')
-                        "
-                    >
-                        Konsolen Name ist erforderlich
-                    </mat-error>
-                </mat-form-field>
-
-                <mat-checkbox formControlName="isActive">Aktiv</mat-checkbox>
-            </form>
-        </mat-dialog-content>
-
-        <mat-dialog-actions align="end" style="padding: 16px;">
-            <button mat-button (click)="onCancel()">Abbrechen</button>
-            <button
-                mat-button
-                color="primary"
-                (click)="onSubmit()"
-                [disabled]="editConsoleForm.invalid"
-            >
-                Speichern
-            </button>
-        </mat-dialog-actions>
-    `,
+    templateUrl: 'edit-console-dialog.component.html',
 })
 export class EditConsoleDialogComponent {
     editConsoleForm: FormGroup

@@ -7,13 +7,13 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table'
 import { MatSort, MatSortModule } from '@angular/material/sort'
 import { HttpClientModule, HttpClient } from '@angular/common/http'
 import { MatDialog, MatDialogModule } from '@angular/material/dialog'
-import { AddConsoleDialogComponent } from './add-console-dialog.component'
+import { AddConsoleDialogComponent } from './add-console-dialog/add-console-dialog.component'
 import {
     EditConsoleDialogComponent,
     ConsoleData,
-} from './edit-console-dialog.component'
+} from './edit-console-dialog/edit-console-dialog.component'
 
-import { ShowConsoleIdDialogComponent } from './ShowConsoleIdDialogComponent'
+import { ShowConsoleIdDialogComponent } from './show-console-id-dialog/ShowConsoleIdDialogComponent'
 import { GlobalService } from '../../services/global.service'
 import { HeaderComponent } from '../../shared/header/header.component'
 
