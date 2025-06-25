@@ -1,0 +1,97 @@
+<h1 mat-dialog-title>Frage bearbeiten</h1>
+<div mat-dialog-content>
+    <mat-form-field appearance="fill" style="width: 100%">
+        <mat-label>Frage</mat-label>
+        <input matInput [(ngModel)]="question.question" />
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" style="width: 100%">
+        <mat-label>Fragetyp</mat-label>
+        <mat-select
+            [(ngModel)]="question.questionType"
+            (selectionChange)="onQuestionTypeChange()"
+        >
+            <mat-option [value]="0">4 Antwortmöglichkeiten</mat-option>
+            <mat-option [value]="1">Ja / Nein</mat-option>
+            <mat-option [value]="2">Slider</mat-option>
+            <mat-option [value]="3">Bilder</mat-option>
+        </mat-select>
+    </mat-form-field>
+
+    <!-- Antwortmöglichkeiten -->
+    <div *ngIf="question.questionType === 0">
+        <h3>Antwortmöglichkeiten</h3>
+        <div *ngFor="let option of answerOptions; let i = index">
+            <mat-form-field appearance="fill" style="width: 70%">
+                <mat-label>Antwort {{ i + 1 }}</mat-label>
+                <input matInput [(ngModel)]="option.Text" />
+            </mat-form-field>
+            <mat-checkbox [(ngModel)]="option.isCorrect">Richtig?</mat-checkbox>
+            <mat-form-field style="width: 100px">
+                <mat-label>Punkte</mat-label>
+                <input type="number" matInput [(ngModel)]="option.points" />
+            </mat-form-field>
+        </div>
+        <button mat-button (click)="addAnswerOption()">
+            Option hinzufügen
+        </button>
+    </div>
+
+    <!-- Ja / Nein -->
+    <div *ngIf="question.questionType === 1">
+        <mat-label>Richtige Antwort:</mat-label>
+        <mat-radio-group [(ngModel)]="trueFalseAnswer">
+            <mat-radio-button [value]="true">Ja</mat-radio-button>
+            <mat-radio-button [value]="false">Nein</mat-radio-button>
+        </mat-radio-group>
+    </div>
+
+    <!-- Slider -->
+    <div *ngIf="question.questionType === 2">
+        <h3>Bewertungsbereiche</h3>
+        <div *ngFor="let range of gradingRange; let i = index">
+            <mat-form-field appearance="fill">
+                <mat-label>Obergrenze</mat-label>
+                <input type="number" matInput [(ngModel)]="range.top" />
+            </mat-form-field>
+            <mat-form-field appearance="fill">
+                <mat-label>Untergrenze</mat-label>
+                <input type="number" matInput [(ngModel)]="range.bottom" />
+            </mat-form-field>
+            <mat-form-field appearance="fill">
+                <mat-label>Punkte</mat-label>
+                <input type="number" matInput [(ngModel)]="range.points" />
+            </mat-form-field>
+        </div>
+        <button mat-button (click)="addGradingRange()">
+            Bereich hinzufügen
+        </button>
+    </div>
+
+    <!-- Bilder -->
+    <div *ngIf="question.questionType === 3">
+        <h3>Bildoptionen</h3>
+        <div *ngFor="let img of imageOptions; let i = index">
+            <mat-form-field style="width: 70%">
+                <mat-label>Bild-URL</mat-label>
+                <input matInput [(ngModel)]="img.img_url" />
+            </mat-form-field>
+            <mat-checkbox [(ngModel)]="img.isCorrect">Richtig?</mat-checkbox>
+            <mat-form-field style="width: 100px">
+                <mat-label>Punkte</mat-label>
+                <input type="number" matInput [(ngModel)]="img.points" />
+            </mat-form-field>
+        </div>
+        <button mat-button (click)="addImageOption()">Bild hinzufügen</button>
+    </div>
+
+    <mat-form-field appearance="fill" style="width: 100%">
+        <mat-label>Punktefaktor</mat-label>
+        <input type="number" matInput [(ngModel)]="question.pointMultiplier" />
+    </mat-form-field>
+</div>
+
+<div mat-dialog-actions align="end">
+    <button mat-button (click)="onNoClick()">Abbrechen</button>
+    <button mat-button color="primary" (click)="save()">Speichern</button>
+</div>

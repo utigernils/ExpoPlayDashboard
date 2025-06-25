@@ -86,7 +86,7 @@ export class HighscoreDiagrammComponent implements AfterViewInit {
                 labels,
                 datasets: [
                     {
-                        label: '', // Keine Legende anzeigen
+                        label: '',
                         data: values,
                         tension: 0.3,
                         fill: false,

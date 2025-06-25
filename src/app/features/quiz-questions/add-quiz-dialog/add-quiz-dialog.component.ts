@@ -5,10 +5,11 @@ import { FormsModule } from '@angular/forms'
 import { MatInputModule } from '@angular/material/input'
 import { MatButtonModule } from '@angular/material/button'
 import { HttpClient, HttpClientModule } from '@angular/common/http'
-import { Quiz } from './quiz.interface'
-import { GlobalService } from '../../services/global.service'
+import { Quiz } from '../interfaces/quiz.interface'
+import { GlobalService } from '../../../services/global.service'
 
 @Component({
+    styleUrls: ['add-quiz-dialog.component.scss'],
     selector: 'app-add-quiz-dialog',
     standalone: true,
     imports: [
@@ -19,27 +20,7 @@ import { GlobalService } from '../../services/global.service'
         MatButtonModule,
         HttpClientModule,
     ],
-    template: `
-        <h1 mat-dialog-title>Neues Quiz erstellen</h1>
-        <div mat-dialog-content>
-            <mat-form-field appearance="fill" style="width: 100%;">
-                <mat-label>Quiz-Name</mat-label>
-                <input matInput [(ngModel)]="quiz.name" />
-            </mat-form-field>
-
-            <mat-form-field appearance="fill" style="width: 100%;">
-                <mat-label>Aktiv?</mat-label>
-                <input matInput [(ngModel)]="quiz.isActive" />
-            </mat-form-field>
-        </div>
-
-        <div mat-dialog-actions align="end">
-            <button mat-button (click)="onNoClick()">Abbrechen</button>
-            <button mat-button color="primary" (click)="save()">
-                Speichern
-            </button>
-        </div>
-    `,
+    templateUrl: 'add-quiz-dialog.component.html',
 })
 export class AddQuizDialogComponent {
     quiz: Quiz = {
