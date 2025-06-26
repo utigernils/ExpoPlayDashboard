@@ -36,14 +36,8 @@ import { GlobalService } from '../../../services/global.service'
 export class EditQuestionDialogComponent {
     selectedQuestionType = 0
 
-    answerOptions: { Text: string; isCorrect: boolean; points: number }[] = [
-        { Text: '', isCorrect: false, points: 0 },
-    ]
-
+    answerOptions: { Text: string; isCorrect: boolean; points: number }[] = []
     trueFalseAnswer = true
-
-    gradingRange: { top: number; bottom: number; points: number }[] = []
-
     imageOptions: { img_url: string; isCorrect: boolean; points: number }[] = []
 
     constructor(
@@ -54,7 +48,7 @@ export class EditQuestionDialogComponent {
         public data: { question: QuestionSet; quizId: string }
     ) {
         this.selectedQuestionType = data.question.questionType || 0
-        this.onQuestionTypeChange()
+        this.initializeAnswerPossibilities()
     }
 
     onNoClick(): void {
@@ -69,16 +63,34 @@ export class EditQuestionDialogComponent {
     setDefaultAnswerOptions(): void {
         this.answerOptions = [{ Text: '', isCorrect: false, points: 0 }]
         this.trueFalseAnswer = true
-        this.gradingRange = []
         this.imageOptions = []
+    }
+
+    initializeAnswerPossibilities(): void {
+        const parsed =
+            typeof this.data.question.answerPossibilities === 'string'
+                ? JSON.parse(this.data.question.answerPossibilities)
+                : this.data.question.answerPossibilities || {}
+
+        switch (this.selectedQuestionType) {
+            case 0:
+                this.answerOptions = parsed.AnswerOptions || [
+                    { Text: '', isCorrect: false, points: 0 },
+                ]
+                break
+            case 1:
+                this.trueFalseAnswer = parsed.Answer ?? true
+                break
+            case 3:
+                this.imageOptions = parsed.AnswerOptions || [
+                    { img_url: '', isCorrect: false, points: 0 },
+                ]
+                break
+        }
     }
 
     addAnswerOption() {
         this.answerOptions.push({ Text: '', isCorrect: false, points: 0 })
-    }
-
-    addGradingRange() {
-        this.gradingRange.push({ top: 0, bottom: 0, points: 0 })
     }
 
     addImageOption() {
@@ -88,53 +100,46 @@ export class EditQuestionDialogComponent {
     save(): void {
         switch (this.selectedQuestionType) {
             case 0:
-                this.data.question.answerPossibilities = {
+                this.data.question.answerPossibilities = JSON.stringify({
                     AnswerOptions: this.answerOptions,
-                }
+                })
                 break
             case 1:
-                this.data.question.answerPossibilities = {
+                this.data.question.answerPossibilities = JSON.stringify({
                     Answer: this.trueFalseAnswer,
-                }
-                break
-            case 2:
-                this.data.question.answerPossibilities = {
-                    GradingRange: this.gradingRange,
-                }
+                })
                 break
             case 3:
-                this.data.question.answerPossibilities = {
+                this.data.question.answerPossibilities = JSON.stringify({
                     AnswerOptions: this.imageOptions,
-                }
+                })
                 break
         }
 
-        // JSON-Ausgabe zur Kontrolle
-        console.log(
-            'Antwortmöglichkeiten (JSON):',
-            JSON.stringify(this.data.question.answerPossibilities, null, 2)
-        )
-
-        this.dialogRef.close(this.data.question)
-
-        this.data.question.answerPossibilities = JSON.stringify(
-            this.data.question.answerPossibilities,
-            null,
-            2
-        )
+        const { id, quiz, ...payload } = this.data.question
 
         this.http
             .put(
-                `${this.globalService.apiUrl}/question/${this.data.quizId}/${this.data.question.id}`,
-                this.data.question,
+                `${this.globalService.apiUrl}/question/${quiz}/${id}`,
+                payload,
                 {
                     headers: { 'Content-Type': 'application/json' },
                     withCredentials: true,
+                    responseType: 'text',
                 }
             )
             .subscribe({
                 next: (response) => {
-                    console.log('Frage aktualisiert:', response)
+                    try {
+                        const parsed = JSON.parse(response)
+                        console.log('Antwort (parsed):', parsed)
+                    } catch (e) {
+                        console.warn(
+                            'Antwort war kein gültiges JSON:',
+                            response
+                        )
+                    }
+                    this.dialogRef.close(true)
                 },
                 error: (error) => {
                     console.error('Fehler beim Aktualisieren der Frage:', error)

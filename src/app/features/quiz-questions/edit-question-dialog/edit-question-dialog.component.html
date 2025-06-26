@@ -13,12 +13,11 @@
         >
             <mat-option [value]="0">Mehrere Antwortmöglichkeiten</mat-option>
             <mat-option [value]="1">Ja / Nein</mat-option>
-            <mat-option [value]="2">Slider</mat-option>
             <mat-option [value]="3">Bilder</mat-option>
         </mat-select>
     </mat-form-field>
 
-    <!-- Antwortmöglichkeiten -->
+    <!-- Mehrere Antwortmöglichkeiten -->
     <div *ngIf="selectedQuestionType === 0">
         <h3>Antwortmöglichkeiten</h3>
         <div *ngFor="let option of answerOptions; let i = index">
@@ -44,28 +43,6 @@
             <mat-radio-button [value]="true">Ja</mat-radio-button>
             <mat-radio-button [value]="false">Nein</mat-radio-button>
         </mat-radio-group>
-    </div>
-
-    <!-- Slider -->
-    <div *ngIf="selectedQuestionType === 2">
-        <h3>Bewertungsbereiche</h3>
-        <div *ngFor="let range of gradingRange; let i = index">
-            <mat-form-field appearance="fill">
-                <mat-label>Obergrenze</mat-label>
-                <input type="number" matInput [(ngModel)]="range.top" />
-            </mat-form-field>
-            <mat-form-field appearance="fill">
-                <mat-label>Untergrenze</mat-label>
-                <input type="number" matInput [(ngModel)]="range.bottom" />
-            </mat-form-field>
-            <mat-form-field appearance="fill">
-                <mat-label>Punkte</mat-label>
-                <input type="number" matInput [(ngModel)]="range.points" />
-            </mat-form-field>
-        </div>
-        <button mat-button (click)="addGradingRange()">
-            Bereich hinzufügen
-        </button>
     </div>
 
     <!-- Bilder -->

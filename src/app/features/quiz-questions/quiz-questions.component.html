@@ -24,7 +24,7 @@
 
             <mat-card-content>
                 <mat-accordion>
-                    @for (quiz of quizzes; track quiz) {
+                    @for (quiz of quizzes; track quiz.id) {
                         <mat-expansion-panel class="ExpansionModel">
                             <mat-expansion-panel-header class="quiz-header">
                                 <mat-panel-title>{{
@@ -33,10 +33,12 @@
                                 <mat-panel-description
                                     class="quiz-header-description"
                                 >
-                                    <span class="quiz-status">
-                                        Aktiv:
-                                        {{ quiz.isActive ? 'Ja' : 'Nein' }}
-                                    </span>
+                                    <span class="quiz-status"
+                                        >Aktiv:
+                                        {{
+                                            quiz.isActive ? 'Ja' : 'Nein'
+                                        }}</span
+                                    >
                                     <div class="quiz-header-actions">
                                         <button
                                             mat-icon-button
@@ -61,7 +63,7 @@
                             <div class="quiz-content">
                                 @for (
                                     question of getQuestionsForQuiz(quiz.id);
-                                    track question
+                                    track question.id
                                 ) {
                                     <mat-card class="questionModell">
                                         <div class="card-actions-top-right">
@@ -96,49 +98,76 @@
                                         <p class="answer-possibilities-label">
                                             Mögliche Antworten:
                                         </p>
+
+                                        <!-- Typ 0 oder 3: AnswerOptions (Text oder Bild) -->
                                         <ul
                                             *ngIf="
-                                                parseAnswerPossibilities(
-                                                    question.answerPossibilities
-                                                ) &&
-                                                objectKeys(
-                                                    parseAnswerPossibilities(
-                                                        question.answerPossibilities
-                                                    )
-                                                ).length > 0
+                                                question.answerPossibilities?.[
+                                                    'AnswerOptions'
+                                                ]?.length > 0
                                             "
                                         >
                                             @for (
-                                                key of objectKeys(
-                                                    parseAnswerPossibilities(
-                                                        question.answerPossibilities
-                                                    )
-                                                );
-                                                track key
+                                                option of question
+                                                    .answerPossibilities[
+                                                    'AnswerOptions'
+                                                ];
+                                                track $index
                                             ) {
                                                 <li>
-                                                    <strong>{{ key }}:</strong>
-                                                    {{
-                                                        formatValue(
-                                                            parseAnswerPossibilities(
-                                                                question.answerPossibilities
-                                                            )[key]
-                                                        )
-                                                    }}
+                                                    <div *ngIf="option.img_url">
+                                                        <img
+                                                            [src]="
+                                                                option.img_url
+                                                            "
+                                                            style="
+                                                                max-width: 150px;
+                                                            "
+                                                        />
+                                                    </div>
+                                                    <div *ngIf="option.Text">
+                                                        <strong>{{
+                                                            option.Text
+                                                        }}</strong>
+                                                    </div>
+                                                    <div>
+                                                        Korrekt:
+                                                        {{
+                                                            option.isCorrect
+                                                                ? 'Ja'
+                                                                : 'Nein'
+                                                        }}
+                                                        | Punkte:
+                                                        {{ option.points }}
+                                                    </div>
                                                 </li>
                                             }
                                         </ul>
 
+                                        <!-- Typ 1: Ja / Nein -->
                                         <p
                                             *ngIf="
-                                                !parseAnswerPossibilities(
-                                                    question.answerPossibilities
-                                                ) ||
-                                                objectKeys(
-                                                    parseAnswerPossibilities(
-                                                        question.answerPossibilities
-                                                    )
-                                                ).length === 0
+                                                question.questionType === 1 &&
+                                                question.answerPossibilities
+                                                    ?.Answer !== undefined
+                                            "
+                                        >
+                                            Richtige Antwort:
+                                            <strong>{{
+                                                question.answerPossibilities
+                                                    .Answer
+                                                    ? 'Ja'
+                                                    : 'Nein'
+                                            }}</strong>
+                                        </p>
+
+                                        <!-- Fallback -->
+                                        <p
+                                            *ngIf="
+                                                !question.answerPossibilities?.[
+                                                    'AnswerOptions'
+                                                ]?.length &&
+                                                question.questionType !== 1
                                             "
                                         >
                                             Keine Antwortmöglichkeiten

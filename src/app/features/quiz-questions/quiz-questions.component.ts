@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core'
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core'
 import { HttpClient, HttpClientModule } from '@angular/common/http'
 import { CommonModule } from '@angular/common'
 import { MatExpansionModule } from '@angular/material/expansion'
@@ -38,7 +38,8 @@ export class QuizQuestionsComponent implements OnInit {
     constructor(
         private http: HttpClient,
         private dialog: MatDialog,
-        public globalService: GlobalService
+        public globalService: GlobalService,
+        private cdr: ChangeDetectorRef
     ) {}
 
     ngOnInit(): void {
@@ -47,12 +48,14 @@ export class QuizQuestionsComponent implements OnInit {
 
     loadQuizzes(): void {
         this.http
-            .get<
-                Quiz[]
-            >(`${this.globalService.apiUrl}/quiz`, { withCredentials: true })
+            .get<Quiz[]>(`${this.globalService.apiUrl}/quiz`, {
+                withCredentials: true,
+            })
             .subscribe({
                 next: (data) => {
                     this.quizzes = data
+                    this.questionSets = []
+                    this.cdr.detectChanges()
                     for (const quiz of data) {
                         this.loadQuestionSetsForQuiz(quiz.id)
                     }
@@ -64,11 +67,25 @@ export class QuizQuestionsComponent implements OnInit {
 
     loadQuestionSetsForQuiz(quizId: string): void {
         this.http
-            .get<
-                QuestionSet[]
-            >(`${this.globalService.apiUrl}/question/${quizId}`, { withCredentials: true })
+            .get<QuestionSet[]>(
+                `${this.globalService.apiUrl}/question/${quizId}`,
+                {
+                    withCredentials: true,
+                }
+            )
             .subscribe({
                 next: (data) => {
+                    data.forEach((q) => {
+                        if (typeof q.answerPossibilities === 'string') {
+                            try {
+                                q.answerPossibilities = JSON.parse(
+                                    q.answerPossibilities
+                                )
+                            } catch {
+                                q.answerPossibilities = {}
+                            }
+                        }
+                    })
                     this.questionSets.push(...data)
                 },
                 error: (err) =>
@@ -79,7 +96,10 @@ export class QuizQuestionsComponent implements OnInit {
     openEditDialog(question: QuestionSet): void {
         const dialogRef = this.dialog.open(EditQuestionDialogComponent, {
             width: '600px',
-            data: { question },
+            data: {
+                question,
+                quizId: question.quiz,
+            },
         })
 
         dialogRef.afterClosed().subscribe((updatedQuestion: QuestionSet) => {
@@ -106,25 +126,30 @@ export class QuizQuestionsComponent implements OnInit {
             .put(
                 `${this.globalService.apiUrl}/question/${quizId}/${questionId}`,
                 dataToSend,
-                { withCredentials: true }
+                {
+                    withCredentials: true,
+                    responseType: 'text', // Wichtig: um HTML mit JSON im String abzufangen
+                }
             )
             .subscribe({
-                next: () => this.updateLocalQuestion(updatedData),
+                next: (response: string) => {
+                    try {
+                        const jsonStart = response.indexOf('{')
+                        const jsonString = response.substring(jsonStart)
+                        const parsed = JSON.parse(jsonString)
+                        console.log('Antwort (parsed):', parsed)
+
+                        // Lokale Aktualisierung und neu laden
+                        this.loadQuizzes()
+                    } catch (e) {
+                        console.error(
+                            'Antwort ist kein valides JSON:',
+                            response
+                        )
+                    }
+                },
                 error: (err) => console.error('Fehler beim Updaten:', err),
             })
-    }
-
-    private updateLocalQuestion(updatedData: Partial<QuestionSet>): void {
-        if (!updatedData.id) return
-        const index = this.questionSets.findIndex(
-            (q) => q.id === updatedData.id
-        )
-        if (index !== -1) {
-            this.questionSets[index] = {
-                ...this.questionSets[index],
-                ...updatedData,
-            }
-        }
     }
 
     confirmDeleteQuestion(question: QuestionSet): void {
@@ -140,10 +165,15 @@ export class QuizQuestionsComponent implements OnInit {
         this.http
             .delete(
                 `${this.globalService.apiUrl}/question/${quizId}/${questionId}`,
-                { withCredentials: true }
+                {
+                    withCredentials: true,
+                }
             )
             .subscribe({
-                next: () => this.removeLocalQuestion(questionId),
+                next: () => {
+                    this.removeLocalQuestion(questionId)
+                    this.loadQuizzes()
+                },
                 error: (err) => console.error('Fehler beim Löschen:', err),
             })
     }
@@ -154,9 +184,8 @@ export class QuizQuestionsComponent implements OnInit {
         })
 
         dialogRef.afterClosed().subscribe((result) => {
-            if (result) {
-                result.quiz = result.quiz || quizId
-                this.questionSets = [...this.questionSets, result]
+            if (result === 'refresh') {
+                this.loadQuizzes()
             }
         })
     }
@@ -166,9 +195,9 @@ export class QuizQuestionsComponent implements OnInit {
             width: '600px',
         })
 
-        dialogRef.afterClosed().subscribe((newQuiz: Quiz) => {
-            if (newQuiz) {
-                this.quizzes = [...this.quizzes, newQuiz]
+        dialogRef.afterClosed().subscribe((result: Quiz | 'refresh') => {
+            if (result === 'refresh') {
+                this.loadQuizzes()
             }
         })
     }
@@ -187,7 +216,10 @@ export class QuizQuestionsComponent implements OnInit {
                 withCredentials: true,
             })
             .subscribe({
-                next: () => this.removeLocalQuiz(quizId),
+                next: () => {
+                    this.removeLocalQuiz(quizId)
+                    this.loadQuizzes()
+                },
                 error: (err) =>
                     console.error('Fehler beim Löschen des Quiz:', err),
             })
@@ -199,48 +231,10 @@ export class QuizQuestionsComponent implements OnInit {
 
     private removeLocalQuiz(quizId: string): void {
         this.quizzes = this.quizzes.filter((q) => q.id !== quizId)
-    }
-
-    parseAnswerPossibilities(possibilities: unknown): Record<string, string> {
-        if (!possibilities) return {}
-
-        if (typeof possibilities === 'string') {
-            try {
-                return JSON.parse(possibilities) as Record<string, string>
-            } catch (error) {
-                console.error(
-                    'Fehler beim Parsen von answerPossibilities:',
-                    error
-                )
-                return {}
-            }
-        }
-
-        if (typeof possibilities === 'object') {
-            return possibilities as Record<string, string>
-        }
-
-        return {}
-    }
-
-    objectKeys<T extends object>(obj: T | null | undefined): (keyof T)[] {
-        return obj ? (Object.keys(obj) as (keyof T)[]) : []
+        this.questionSets = this.questionSets.filter((q) => q.quiz !== quizId)
     }
 
     getQuestionsForQuiz(quizId: string): QuestionSet[] {
         return this.questionSets.filter((q) => q.quiz === quizId)
-    }
-
-    formatValue(value: any): string {
-        if (typeof value === 'object' && value !== null) {
-            if (Array.isArray(value)) {
-                return value.map((v) => this.formatValue(v)).join(', ')
-            }
-
-            return Object.entries(value)
-                .map(([k, v]) => `${k}: ${v}`)
-                .join(', ')
-        }
-        return String(value)
     }
 }
