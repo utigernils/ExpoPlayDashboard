@@ -12,14 +12,7 @@ import { HeaderComponent } from '../../shared/header/header.component'
 import { MatMenuModule } from '@angular/material/menu'
 import { MatTableModule } from '@angular/material/table'
 import { MatButtonModule } from '@angular/material/button'
-
-export interface User {
-    id: number
-    firstName: string
-    lastName: string
-    email: string
-    isAdmin: boolean
-}
+import { User } from '../../interfaces/user.interface'
 
 @Component({
     selector: 'app-user',
@@ -172,9 +165,5 @@ export class UserComponent implements OnInit {
                 this.updateUser(result)
             }
         })
-    }
-
-    trackByUser(index: number, user: User): number {
-        return user.id
     }
 }

@@ -11,7 +11,7 @@ import { MatInputModule } from '@angular/material/input'
 import { MatButtonModule } from '@angular/material/button'
 import { MatCheckboxModule } from '@angular/material/checkbox'
 import { MAT_DIALOG_DATA } from '@angular/material/dialog'
-import { User } from '../user.component'
+import { User } from '../../../interfaces/user.interface'
 
 @Component({
     styleUrls: ['edit-user-dialog.component.scss'],

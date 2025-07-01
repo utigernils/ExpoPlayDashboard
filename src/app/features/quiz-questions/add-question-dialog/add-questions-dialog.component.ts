@@ -12,7 +12,7 @@ import { MatSelectModule } from '@angular/material/select'
 import { MatCheckboxModule } from '@angular/material/checkbox'
 import { MatRadioModule } from '@angular/material/radio'
 import { HttpClient, HttpClientModule } from '@angular/common/http'
-import { QuestionSet } from '../interfaces/questions-set.interface'
+import { QuestionSet } from '../../../interfaces/questions-set.interface'
 import { GlobalService } from '../../../services/global.service'
 import { CommonModule } from '@angular/common'
 

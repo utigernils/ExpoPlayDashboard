@@ -5,7 +5,7 @@ import { FormsModule } from '@angular/forms'
 import { MatInputModule } from '@angular/material/input'
 import { MatButtonModule } from '@angular/material/button'
 import { HttpClient, HttpClientModule } from '@angular/common/http'
-import { Quiz } from '../interfaces/quiz.interface'
+import { Quiz } from '../../../interfaces/quiz.interface'
 import { GlobalService } from '../../../services/global.service'
 
 @Component({

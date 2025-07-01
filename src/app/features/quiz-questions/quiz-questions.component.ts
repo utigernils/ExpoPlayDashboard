@@ -6,8 +6,8 @@ import { MatCardModule } from '@angular/material/card'
 import { MatIconModule } from '@angular/material/icon'
 import { MatButtonModule } from '@angular/material/button'
 import { SidebarComponent } from '../../shared/sidebar/sidebar.component'
-import { Quiz } from './interfaces/quiz.interface'
-import { QuestionSet } from './interfaces/questions-set.interface'
+import { Quiz } from '../../interfaces/quiz.interface'
+import { QuestionSet } from '../../interfaces/questions-set.interface'
 import { EditQuestionDialogComponent } from './edit-question-dialog/edit-question-dialog.component'
 import { MatDialog } from '@angular/material/dialog'
 import { AddQuestionDialogComponent } from './add-question-dialog/add-questions-dialog.component'
@@ -128,7 +128,7 @@ export class QuizQuestionsComponent implements OnInit {
                 dataToSend,
                 {
                     withCredentials: true,
-                    responseType: 'text', // Wichtig: um HTML mit JSON im String abzufangen
+                    responseType: 'text',
                 }
             )
             .subscribe({
@@ -139,7 +139,6 @@ export class QuizQuestionsComponent implements OnInit {
                         const parsed = JSON.parse(jsonString)
                         console.log('Antwort (parsed):', parsed)
 
-                        // Lokale Aktualisierung und neu laden
                         this.loadQuizzes()
                     } catch (e) {
                         console.error(
