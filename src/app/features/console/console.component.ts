@@ -8,14 +8,12 @@ import { MatSort, MatSortModule } from '@angular/material/sort'
 import { HttpClientModule, HttpClient } from '@angular/common/http'
 import { MatDialog, MatDialogModule } from '@angular/material/dialog'
 import { AddConsoleDialogComponent } from './add-console-dialog/add-console-dialog.component'
-import {
-    EditConsoleDialogComponent,
-    ConsoleData,
-} from './edit-console-dialog/edit-console-dialog.component'
+import { EditConsoleDialogComponent } from './edit-console-dialog/edit-console-dialog.component'
 
 import { ShowConsoleIdDialogComponent } from './show-console-id-dialog/ShowConsoleIdDialogComponent'
 import { GlobalService } from '../../services/global.service'
 import { HeaderComponent } from '../../shared/header/header.component'
+import { Consoles } from '../../interfaces/console.interface'
 
 @Component({
     selector: 'app-console',
@@ -132,7 +130,7 @@ export class ConsoleComponent implements OnInit, AfterViewInit {
                 id: consoleItem.id,
                 name: consoleItem.name,
                 isActive: consoleItem.isActive,
-            } as ConsoleData,
+            } as Consoles,
         })
 
         dialogRef.afterClosed().subscribe((result) => {
@@ -200,10 +198,4 @@ export class ConsoleComponent implements OnInit, AfterViewInit {
                 },
             })
     }
-}
-
-interface Consoles {
-    id?: string
-    name: string
-    isActive: boolean | number
 }

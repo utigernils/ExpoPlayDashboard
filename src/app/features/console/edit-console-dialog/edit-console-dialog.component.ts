@@ -8,17 +8,7 @@ import { MatFormFieldModule } from '@angular/material/form-field'
 import { MatInputModule } from '@angular/material/input'
 import { MatCheckboxModule } from '@angular/material/checkbox'
 import { MatButtonModule } from '@angular/material/button'
-
-/**
- * Passe dieses Interface an das an, was dein Backend wirklich liefert.
- * Z.B. wenn dein Backend Felder wie 'name' und 'isActive' nutzt,
- * nutze das auch hier im Interface.
- */
-export interface ConsoleData {
-    id?: string
-    name: string
-    isActive: boolean
-}
+import { Consoles } from '../../../interfaces/console.interface'
 
 @Component({
     styleUrls: ['edit-console-dialog.component.scss'],
@@ -41,7 +31,7 @@ export class EditConsoleDialogComponent {
     constructor(
         private fb: FormBuilder,
         private dialogRef: MatDialogRef<EditConsoleDialogComponent>,
-        @Inject(MAT_DIALOG_DATA) public data: ConsoleData
+        @Inject(MAT_DIALOG_DATA) public data: Consoles
     ) {
         this.editConsoleForm = this.fb.group({
             id: [data.id],
