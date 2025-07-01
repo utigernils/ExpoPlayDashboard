@@ -5,4 +5,5 @@ export interface Expo {
     startsOn: string
     endsOn: string
     isActive: boolean
+    currentExpo: string
 }
