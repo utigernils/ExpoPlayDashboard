@@ -6,18 +6,9 @@ import {
     Input,
 } from '@angular/core'
 import { Chart, registerables } from 'chart.js'
+import { QuizStats } from '../../../interfaces/quizstats.interface'
 
 Chart.register(...registerables)
-
-interface QuizStats {
-    id: string
-    quizName: string
-    expoName: string
-    startedOn: string
-    endedOn: string
-    correctAnswers: number
-    wrongAnswers: number
-}
 
 @Component({
     selector: 'app-quizzes-played',
@@ -37,7 +28,6 @@ export class QuizzesPlayedComponent implements AfterViewInit {
             return
         }
 
-        // 🗓️ Anzahl Spiele pro Tag berechnen
         const countByDate: Record<string, number> = {}
         this.quizStats.forEach((stat) => {
             const date = new Date(stat.startedOn).toISOString().split('T')[0] // z.B. "2025-03-26"
@@ -57,7 +47,7 @@ export class QuizzesPlayedComponent implements AfterViewInit {
                 labels: sortedDates,
                 datasets: [
                     {
-                        label: '', // keine Legende
+                        label: '',
                         data: values,
                         tension: 0.4,
                         fill: false,

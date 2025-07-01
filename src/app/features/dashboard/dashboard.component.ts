@@ -10,50 +10,13 @@ import { QuizzesPlayedComponent } from './quizzes-played/quizzes-played.componen
 import { HeaderComponent } from '../../shared/header/header.component'
 
 import { GlobalService } from '../../services/global.service'
+import { User } from '../../interfaces/user.interface'
+import { Expo } from '../../interfaces/expo.interface'
+import { Consoles } from '../../interfaces/console.interface'
+import { QuizStats } from '../../interfaces/quizstats.interface'
+import { Player } from '../../interfaces/player.interface'
 
 Chart.register(...registerables)
-
-interface User {
-    id: string
-    firstName: string
-    lastName: string
-    email: string
-    isAdmin: boolean | number
-}
-
-interface Expo {
-    id: string
-    name: string
-    location: string
-    startsOn: string
-    endsOn: string
-    isActive: boolean
-}
-
-interface ConsoleData {
-    id: string
-    name: string
-    currentExpo: string
-    lastActive: string
-}
-
-interface QuizStats {
-    id: string
-    quizName: string
-    expoName: string
-    startedOn: string
-    endedOn: string
-    correctAnswers: number
-    wrongAnswers: number
-}
-
-interface Player {
-    id: string
-    firstName: string
-    lastName: string
-    email: string
-    isActive: boolean
-}
 
 @Component({
     selector: 'app-dashboard',
@@ -77,7 +40,7 @@ export class DashboardComponent {
     expos: Expo[] = []
     quizStats: QuizStats[] = []
     players: Player[] = []
-    consoles: ConsoleData[] = []
+    consoles: Consoles[] = []
     totalQuizzesPlayed = 0
     chartReady = false
 
@@ -180,7 +143,7 @@ export class DashboardComponent {
 
     loadConsoles(): void {
         this.http
-            .get<ConsoleData[]>(`${this.globalService.apiUrl}/console`, {
+            .get<Consoles[]>(`${this.globalService.apiUrl}/console`, {
                 withCredentials: true,
             })
             .subscribe({

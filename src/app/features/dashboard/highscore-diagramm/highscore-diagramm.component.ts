@@ -7,18 +7,9 @@ import {
 } from '@angular/core'
 import { Chart, registerables } from 'chart.js'
 import { CommonModule } from '@angular/common'
+import { QuizStats } from '../../../interfaces/quizstats.interface'
 
 Chart.register(...registerables)
-
-interface QuizStats {
-    id: string
-    quizName: string
-    expoName: string
-    startedOn: string
-    endedOn: string
-    correctAnswers: number
-    wrongAnswers: number
-}
 
 @Component({
     selector: 'app-highscore-diagramm',
@@ -72,7 +63,7 @@ export class HighscoreDiagrammComponent implements AfterViewInit {
                     answers.reduce((sum, val) => sum + val, 0) / answers.length
                 values.push(parseFloat(avg.toFixed(2)))
             } else {
-                values.push(0) // → 0 Punkte, wenn keine Daten
+                values.push(0)
             }
         }
 
@@ -101,8 +92,8 @@ export class HighscoreDiagrammComponent implements AfterViewInit {
             options: {
                 responsive: true,
                 plugins: {
-                    title: { display: false }, // → Kein Titel
-                    legend: { display: false }, // → Keine Legende
+                    title: { display: false },
+                    legend: { display: false },
                     tooltip: { enabled: true },
                 },
                 scales: {
