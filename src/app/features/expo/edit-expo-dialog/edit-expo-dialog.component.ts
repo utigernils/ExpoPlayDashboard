@@ -11,7 +11,7 @@ import { MatInputModule } from '@angular/material/input'
 import { MatButtonModule } from '@angular/material/button'
 import { MatCheckboxModule } from '@angular/material/checkbox'
 import { MAT_DIALOG_DATA } from '@angular/material/dialog'
-import { Expo } from '../expo.component'
+import { Expo } from '../../../interfaces/expo.interface'
 
 @Component({
     styleUrls: ['edit-expo-dialog.component.scss'],
