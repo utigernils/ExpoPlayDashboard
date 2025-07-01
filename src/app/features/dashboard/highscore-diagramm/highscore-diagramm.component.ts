@@ -59,9 +59,8 @@ export class HighscoreDiagrammComponent implements AfterViewInit {
             labels.push(`${hourKey}:00`)
             const answers = hourlyStats[hourKey]
             if (answers.length > 0) {
-                const avg =
-                    answers.reduce((sum, val) => sum + val, 0) / answers.length
-                values.push(parseFloat(avg.toFixed(2)))
+                const max = Math.max(...answers)
+                values.push(max)
             } else {
                 values.push(0)
             }
@@ -102,7 +101,7 @@ export class HighscoreDiagrammComponent implements AfterViewInit {
                     },
                     y: {
                         beginAtZero: true,
-                        title: { display: true, text: 'Ø Punkte' },
+                        title: { display: true, text: 'Höchste Punktzahl' },
                         ticks: {
                             stepSize: 1,
                             precision: 0,
