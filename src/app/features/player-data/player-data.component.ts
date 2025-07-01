@@ -12,14 +12,7 @@ import { forkJoin } from 'rxjs'
 import { GlobalService } from '../../services/global.service'
 import { HeaderComponent } from '../../shared/header/header.component'
 import { MatTooltip } from '@angular/material/tooltip'
-
-export interface Player {
-    id: number
-    vorname: string
-    nachname: string
-    email: string
-    active: boolean
-}
+import { Player } from '../../interfaces/player.interface'
 
 @Component({
     selector: 'app-player-data',
@@ -88,6 +81,7 @@ export class PlayerDataComponent implements OnInit, AfterViewInit {
     }
 
     masterToggle(): void {
+        // eslint-disable-next-line @typescript-eslint/no-unused-expressions
         this.isAllSelected()
             ? this.selection.clear()
             : this.dataSource.data.forEach((row) => this.selection.select(row))
@@ -141,10 +135,10 @@ export class PlayerDataComponent implements OnInit, AfterViewInit {
         const headers = ['ID', 'Vorname', 'Nachname', 'E-Mail', 'Aktiv']
         const rows = players.map((player) => [
             player.id,
-            player.vorname,
-            player.nachname,
+            player.firstName,
+            player.lastName,
             player.email,
-            player.active ? 'Ja' : 'Nein',
+            player.isActive ? 'Ja' : 'Nein',
         ])
 
         const csvContent = [headers, ...rows]
