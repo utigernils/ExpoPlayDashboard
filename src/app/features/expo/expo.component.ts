@@ -15,7 +15,8 @@ import { SidebarComponent } from '../../shared/sidebar/sidebar.component'
 import { AddExpoDialogComponent } from './add-expo-dialog/add-expo-dialog.component'
 import { EditExpoDialogComponent } from './edit-expo-dialog/edit-expo-dialog.component'
 import { GlobalService } from '../../services/global.service'
-import { HeaderComponent } from '../../shared/header/header.component' // <-- GlobalService importiert
+import { HeaderComponent } from '../../shared/header/header.component'
+import { Expo } from '../../interfaces/expo.interface'
 
 @Component({
     selector: 'app-expo',
@@ -199,13 +200,4 @@ export class ExpoComponent implements OnInit, AfterViewInit {
             ? this.selection.clear()
             : this.dataSource.data.forEach((row) => this.selection.select(row))
     }
-}
-
-export interface Expo {
-    id: number
-    name: string
-    location: string
-    startsOn: string
-    endsOn: string
-    isActive: boolean
 }
