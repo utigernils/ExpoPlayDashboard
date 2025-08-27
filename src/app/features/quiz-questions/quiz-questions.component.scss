@@ -3,6 +3,7 @@
     min-height: 100vh;
     background-color: #f9f9f9;
     font-family: Roboto, Arial, sans-serif;
+    overflow: hidden;
 }
 
 aside {
@@ -12,6 +13,16 @@ aside {
 main {
     flex: 1;
     padding: 20px;
+}
+
+mat-card-content {
+    overflow: visible;
+}
+
+.quiz-accordion-scroll {
+    max-height: 70vh;
+    overflow-y: auto;
+    padding-right: 4px;
 }
 
 .Site-title {
@@ -43,6 +54,9 @@ main {
 }
 
 .icon-button-orange {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     background-color: #ff9200;
     color: #fff;
     transition: background-color 0.3s ease;
@@ -141,4 +155,21 @@ main {
     font-size: 14px;
     color: #555;
     margin-top: 12px;
+}
+
+.answer-image {
+    max-width: 20rem;
+    height: auto;
+}
+
+.right-answer {
+    font-weight: bold;
+    color: #4caf50;
+    background: #e8f5e9;
+    border-radius: 6px;
+}
+
+.right-answer img {
+    border: 4px solid #4caf50;
+    background: #e8f5e9;
 }

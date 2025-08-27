@@ -51,6 +51,9 @@ main {
 }
 
 .icon-button-orange {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     background-color: #fff7ed;
     color: #ff8200;
     border-radius: 50%;
