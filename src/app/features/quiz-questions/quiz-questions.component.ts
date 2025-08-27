@@ -39,9 +39,12 @@ export class QuizQuestionsComponent implements OnInit {
         public globalService: GlobalService
     ) {}
 
+    // Fragen werden jetzt pro Quiz gespeichert, um endloses Wachstum zu verhindern
+    questionsByQuiz: { [quizId: string]: QuestionSet[] } = {}
+
     ngOnInit(): void {
         this.quizzes = []
-        this.questionSets = []
+        this.questionsByQuiz = {}
         this.loadQuizzes()
     }
 
@@ -53,8 +56,8 @@ export class QuizQuestionsComponent implements OnInit {
             .subscribe({
                 next: (data) => {
                     this.quizzes = data
+                    this.questionsByQuiz = {}
                     for (const quiz of data) {
-                        console.log('Lade Fragen für Quiz:', quiz)
                         this.loadQuestionSetsForQuiz(quiz.id)
                     }
                 },
@@ -70,8 +73,7 @@ export class QuizQuestionsComponent implements OnInit {
             >(`${this.globalService.apiUrl}/question/${quizId}`, { withCredentials: true })
             .subscribe({
                 next: (data) => {
-                    console.log(data)
-                    this.questionSets.push(...data)
+                    this.questionsByQuiz[quizId] = data
                 },
                 error: (err) =>
                     console.error('Fehler beim Laden der Fragen:', err),
@@ -260,7 +262,7 @@ export class QuizQuestionsComponent implements OnInit {
     }
 
     getQuestionsForQuiz(quizId: string): QuestionSet[] {
-        return this.questionSets.filter((q) => q.quiz === quizId)
+        return this.questionsByQuiz[quizId] || []
     }
 
     isImageUrl(value: string): boolean {
