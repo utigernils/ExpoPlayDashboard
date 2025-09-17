@@ -7,14 +7,15 @@ import {
     House,
     LucideAngularModule,
     User,
+    LogOut,
 } from 'lucide-angular'
-import { RouterLinkActive, RouterOutlet } from '@angular/router'
+import { RouterLinkActive, RouterLink } from '@angular/router'
 
 @Component({
     selector: 'app-sidebar',
     standalone: true,
     templateUrl: './sidebar.component.html',
-    imports: [LucideAngularModule, RouterOutlet, RouterLinkActive],
+    imports: [LucideAngularModule, RouterLinkActive, RouterLink],
     styleUrls: ['./sidebar.component.scss'],
 })
 export class SidebarComponent {
@@ -25,5 +26,6 @@ export class SidebarComponent {
         factory: Factory,
         user: User,
         FileUser: FileUser,
+        LogOut: LogOut,
     }
 }
