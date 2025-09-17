@@ -89,7 +89,7 @@ export class ConsoleComponent implements OnInit, AfterViewInit {
 
     addConsole(consoleData: Consoles): void {
         this.http
-            .post(`${this.globalService.apiUrl}/console`, consoleData, {
+            .post<any>(`${this.globalService.apiUrl}/console`, consoleData, {
                 headers: { 'Content-Type': 'application/json' },
                 withCredentials: true,
             })

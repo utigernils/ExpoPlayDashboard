@@ -39,7 +39,12 @@ export class QuizQuestionsComponent implements OnInit {
         public globalService: GlobalService
     ) {}
 
+    // Fragen werden jetzt pro Quiz gespeichert, um endloses Wachstum zu verhindern
+    questionsByQuiz: { [quizId: string]: QuestionSet[] } = {}
+
     ngOnInit(): void {
+        this.quizzes = []
+        this.questionsByQuiz = {}
         this.loadQuizzes()
     }
 
@@ -51,6 +56,7 @@ export class QuizQuestionsComponent implements OnInit {
             .subscribe({
                 next: (data) => {
                     this.quizzes = data
+                    this.questionsByQuiz = {}
                     for (const quiz of data) {
                         this.loadQuestionSetsForQuiz(quiz.id)
                     }
@@ -67,7 +73,7 @@ export class QuizQuestionsComponent implements OnInit {
             >(`${this.globalService.apiUrl}/question/${quizId}`, { withCredentials: true })
             .subscribe({
                 next: (data) => {
-                    this.questionSets.push(...data)
+                    this.questionsByQuiz[quizId] = data
                 },
                 error: (err) =>
                     console.error('Fehler beim Laden der Fragen:', err),
@@ -199,12 +205,12 @@ export class QuizQuestionsComponent implements OnInit {
         this.quizzes = this.quizzes.filter((q) => q.id !== quizId)
     }
 
-    parseAnswerPossibilities(possibilities: unknown): Record<string, string> {
+    // Gibt das geparste Objekt zurück (kann auch Array enthalten)
+    parseAnswerPossibilities(possibilities: unknown): any {
         if (!possibilities) return {}
-
         if (typeof possibilities === 'string') {
             try {
-                return JSON.parse(possibilities) as Record<string, string>
+                return JSON.parse(possibilities)
             } catch (error) {
                 console.error(
                     'Fehler beim Parsen von answerPossibilities:',
@@ -213,12 +219,42 @@ export class QuizQuestionsComponent implements OnInit {
                 return {}
             }
         }
-
         if (typeof possibilities === 'object') {
-            return possibilities as Record<string, string>
+            return possibilities
         }
-
         return {}
+    }
+
+    // Gibt true zurück, wenn es sich um eine Boolean-Antwort handelt
+    isBooleanAnswer(poss: any): boolean {
+        return poss && typeof poss.Answer === 'boolean'
+    }
+
+    // Gibt true zurück, wenn es sich um Multiple-Choice-Text handelt
+    isTextOptions(poss: any): boolean {
+        return (
+            poss &&
+            Array.isArray(poss.AnswerOptions) &&
+            poss.AnswerOptions.length > 0 &&
+            !!poss.AnswerOptions[0].Text
+        )
+    }
+
+    // Gibt true zurück, wenn es sich um Multiple-Choice-Bild handelt
+    isImageOptions(poss: any): boolean {
+        return (
+            poss &&
+            Array.isArray(poss.AnswerOptions) &&
+            poss.AnswerOptions.length > 0 &&
+            !!poss.AnswerOptions[0].img_url
+        )
+    }
+
+    // Gibt "Ja" oder "Nein" für Boolean zurück
+    getBooleanAnswerText(poss: any): string {
+        if (poss.Answer === true) return 'Ja'
+        if (poss.Answer === false) return 'Nein'
+        return ''
     }
 
     objectKeys<T extends object>(obj: T | null | undefined): (keyof T)[] {
@@ -226,6 +262,11 @@ export class QuizQuestionsComponent implements OnInit {
     }
 
     getQuestionsForQuiz(quizId: string): QuestionSet[] {
-        return this.questionSets.filter((q) => q.quiz === quizId)
+        return this.questionsByQuiz[quizId] || []
+    }
+
+    isImageUrl(value: string): boolean {
+        if (!value) return false
+        return /\.(jpg|jpeg|png|gif|webp)$/i.test(value)
     }
 }

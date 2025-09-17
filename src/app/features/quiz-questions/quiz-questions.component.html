@@ -23,135 +23,199 @@
             </div>
 
             <mat-card-content>
-                <mat-accordion>
-                    <mat-expansion-panel
-                        class="ExpansionModel"
-                        *ngFor="let quiz of quizzes"
-                    >
-                        <mat-expansion-panel-header class="quiz-header">
-                            <mat-panel-title>
-                                {{ quiz.name }}
-                            </mat-panel-title>
-                            <mat-panel-description
-                                class="quiz-header-description"
-                            >
-                                <span class="quiz-status"
-                                    >Aktiv:
-                                    {{ quiz.isActive ? 'Ja' : 'Nein' }}</span
+                <div class="quiz-accordion-scroll">
+                    <mat-accordion>
+                        <mat-expansion-panel
+                            class="ExpansionModel"
+                            *ngFor="let quiz of quizzes"
+                        >
+                            <mat-expansion-panel-header class="quiz-header">
+                                <mat-panel-title>
+                                    {{ quiz.name }}
+                                </mat-panel-title>
+                                <mat-panel-description
+                                    class="quiz-header-description"
                                 >
-                                <div class="quiz-header-actions">
-                                    <button
-                                        mat-icon-button
-                                        class="icon-button-white-orange"
-                                        (click)="openAddQuestionDialog(quiz.id)"
+                                    <span class="quiz-status"
+                                        >Aktiv:
+                                        {{
+                                            quiz.isActive ? 'Ja' : 'Nein'
+                                        }}</span
                                     >
-                                        <mat-icon>add</mat-icon>
-                                    </button>
-                                    <button
-                                        mat-icon-button
-                                        class="icon-button-white-orange"
-                                        (click)="confirmDeleteQuiz(quiz)"
-                                    >
-                                        <mat-icon>delete</mat-icon>
-                                    </button>
-                                </div>
-                            </mat-panel-description>
-                        </mat-expansion-panel-header>
-
-                        <div class="quiz-content">
-                            <div
-                                *ngFor="
-                                    let question of getQuestionsForQuiz(quiz.id)
-                                "
-                            >
-                                <mat-card class="questionModell">
-                                    <div class="card-actions-top-right">
+                                    <div class="quiz-header-actions">
                                         <button
                                             mat-icon-button
-                                            class="icon-orange"
-                                            (click)="openEditDialog(question)"
-                                            aria-label="Frage bearbeiten"
+                                            class="icon-button-white-orange"
+                                            (click)="
+                                                openAddQuestionDialog(quiz.id)
+                                            "
                                         >
-                                            <mat-icon>edit</mat-icon>
+                                            <mat-icon>add</mat-icon>
                                         </button>
                                         <button
                                             mat-icon-button
-                                            class="icon-orange"
-                                            (click)="
-                                                confirmDeleteQuestion(question)
-                                            "
-                                            aria-label="Frage löschen"
+                                            class="icon-button-white-orange"
+                                            (click)="confirmDeleteQuiz(quiz)"
                                         >
                                             <mat-icon>delete</mat-icon>
                                         </button>
                                     </div>
+                                </mat-panel-description>
+                            </mat-expansion-panel-header>
 
-                                    <mat-card-title>
-                                        {{ question.question }}
-                                    </mat-card-title>
-
-                                    <p class="answer-possibilities-label">
-                                        Mögliche Antworten:
-                                    </p>
-                                    <ul
-                                        *ngIf="
-                                            parseAnswerPossibilities(
-                                                question.answerPossibilities
-                                            ) &&
-                                            objectKeys(
-                                                parseAnswerPossibilities(
-                                                    question.answerPossibilities
-                                                )
-                                            ).length > 0
-                                        "
-                                    >
-                                        <li
-                                            *ngFor="
-                                                let key of objectKeys(
-                                                    parseAnswerPossibilities(
-                                                        question.answerPossibilities
+                            <div class="quiz-content">
+                                <div
+                                    *ngFor="
+                                        let question of getQuestionsForQuiz(
+                                            quiz.id
+                                        )
+                                    "
+                                >
+                                    <mat-card class="questionModell">
+                                        <div class="card-actions-top-right">
+                                            <button
+                                                mat-icon-button
+                                                class="icon-orange"
+                                                (click)="
+                                                    openEditDialog(question)
+                                                "
+                                                aria-label="Frage bearbeiten"
+                                            >
+                                                <mat-icon>edit</mat-icon>
+                                            </button>
+                                            <button
+                                                mat-icon-button
+                                                class="icon-orange"
+                                                (click)="
+                                                    confirmDeleteQuestion(
+                                                        question
                                                     )
-                                                )
-                                            "
-                                        >
-                                            <strong>{{ key }}:</strong>
-                                            {{
-                                                parseAnswerPossibilities(
-                                                    question.answerPossibilities
-                                                )[key]
+                                                "
+                                                aria-label="Frage löschen"
+                                            >
+                                                <mat-icon>delete</mat-icon>
+                                            </button>
+                                        </div>
+
+                                        <mat-card-title>
+                                            {{ question.question }}
+                                        </mat-card-title>
+
+                                        <div class="answer-possibilities-label">
+                                            Richtige Antwort:
+                                        </div>
+                                        <div class="answer-list">
+                                            <ng-container [ngSwitch]="true">
+                                                <!-- Boolean (Ja/Nein) -->
+                                                <div
+                                                    *ngSwitchCase="
+                                                        isBooleanAnswer(
+                                                            parseAnswerPossibilities(
+                                                                question.answerPossibilities
+                                                            )
+                                                        )
+                                                    "
+                                                >
+                                                    <span
+                                                        class="answer-text right-answer"
+                                                        >{{
+                                                            getBooleanAnswerText(
+                                                                parseAnswerPossibilities(
+                                                                    question.answerPossibilities
+                                                                )
+                                                            )
+                                                        }}</span
+                                                    >
+                                                </div>
+
+                                                <!-- Multiple-Choice Text -->
+                                                <ul
+                                                    *ngSwitchCase="
+                                                        isTextOptions(
+                                                            parseAnswerPossibilities(
+                                                                question.answerPossibilities
+                                                            )
+                                                        )
+                                                    "
+                                                    class="answer-list-ul"
+                                                >
+                                                    <li
+                                                        *ngFor="
+                                                            let opt of parseAnswerPossibilities(
+                                                                question.answerPossibilities
+                                                            ).AnswerOptions
+                                                        "
+                                                        [class.right-answer]="
+                                                            opt.isCorrect
+                                                        "
+                                                    >
+                                                        <span
+                                                            class="answer-text"
+                                                            >{{
+                                                                opt.Text
+                                                            }}</span
+                                                        >
+                                                    </li>
+                                                </ul>
+
+                                                <!-- Multiple-Choice Bild -->
+                                                <div
+                                                    *ngSwitchCase="
+                                                        isImageOptions(
+                                                            parseAnswerPossibilities(
+                                                                question.answerPossibilities
+                                                            )
+                                                        )
+                                                    "
+                                                    class="image-options"
+                                                >
+                                                    <div
+                                                        *ngFor="
+                                                            let opt of parseAnswerPossibilities(
+                                                                question.answerPossibilities
+                                                            ).AnswerOptions
+                                                        "
+                                                        class="image-option"
+                                                        [class.right-answer]="
+                                                            opt.isCorrect
+                                                        "
+                                                    >
+                                                        <img
+                                                            [src]="opt.img_url"
+                                                            alt="Bildoption"
+                                                            class="answer-image"
+                                                        />
+                                                    </div>
+                                                </div>
+
+                                                <!-- Fallback: Keine Antwortmöglichkeiten -->
+                                                <div
+                                                    *ngSwitchDefault
+                                                    class="no-answers"
+                                                >
+                                                    Keine Antwortmöglichkeiten
+                                                    vorhanden.
+                                                </div>
+                                            </ng-container>
+                                        </div>
+
+                                        <p class="question-info">
+                                            Aktiv:{{
+                                                question.isActive
+                                                    ? 'Ja'
+                                                    : 'Nein'
                                             }}
-                                        </li>
-                                    </ul>
-
-                                    <p
-                                        *ngIf="
-                                            !parseAnswerPossibilities(
-                                                question.answerPossibilities
-                                            ) ||
-                                            objectKeys(
-                                                parseAnswerPossibilities(
-                                                    question.answerPossibilities
-                                                )
-                                            ).length === 0
-                                        "
-                                    >
-                                        Keine Antwortmöglichkeiten vorhanden.
-                                    </p>
-
-                                    <p class="question-info">
-                                        Aktiv:{{
-                                            question.isActive ? 'Ja' : 'Nein'
-                                        }}
-                                        | Typ: {{ question.questionType }} |
-                                        Punktefaktor:{{
-                                            question.pointMultiplier
-                                        }}
-                                    </p>
-                                </mat-card>
+                                            | Typ: {{ question.questionType }} |
+                                            Punktefaktor:{{
+                                                question.pointMultiplier
+                                            }}
+                                        </p>
+                                    </mat-card>
+                                </div>
                             </div>
-                        </div>
-                    </mat-expansion-panel>
-                </mat-accordion>
+                        </mat-expansion-panel>
+                    </mat-accordion>
+                </div>
             </mat-card-content>
         </mat-card>
     </main>

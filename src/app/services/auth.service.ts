@@ -16,8 +16,9 @@ export class AuthService {
         private router: Router
     ) {}
 
-    login(username: string, password: string) {
-        const formData = { username, password }
+
+    login(email: string, password: string) {
+        const formData = { email, password }
         this.http
             .post<any>(`${this.globalService.apiUrl}/login`, formData, {
                 withCredentials: true,
