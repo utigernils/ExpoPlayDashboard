@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router'
+import { AuthGuard } from './guards/auth.guard'
 import { DashboardComponent } from './features/dashboard/dashboard.component'
 import { ConsoleComponent } from './features/console/console.component'
 import { QuizQuestionsComponent } from './features/quiz-questions/quiz-questions.component'
@@ -8,12 +9,43 @@ import { UserComponent } from './features/user/user.component'
 import { LoginComponent } from './features/login/login.component'
 
 export const routes: Routes = [
-    { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
-    { path: 'dashboard', component: DashboardComponent },
-    { path: 'quiz-questions', component: QuizQuestionsComponent },
-    { path: 'console', component: ConsoleComponent },
-    { path: 'expo', component: ExpoComponent },
-    { path: 'user', component: UserComponent },
-    { path: 'player', component: PlayerDataComponent },
-    { path: 'login', component: LoginComponent },
+    {
+        path: '',
+        redirectTo: '/dashboard',
+        pathMatch: 'full',
+    },
+    {
+        path: 'dashboard',
+        component: DashboardComponent,
+        canActivate: [AuthGuard],
+    },
+    {
+        path: 'quiz-questions',
+        component: QuizQuestionsComponent,
+        canActivate: [AuthGuard],
+    },
+    {
+        path: 'console',
+        component: ConsoleComponent,
+        canActivate: [AuthGuard],
+    },
+    {
+        path: 'expo',
+        component: ExpoComponent,
+        canActivate: [AuthGuard],
+    },
+    {
+        path: 'user',
+        component: UserComponent,
+        canActivate: [AuthGuard],
+    },
+    {
+        path: 'player',
+        component: PlayerDataComponent,
+        canActivate: [AuthGuard],
+    },
+    {
+        path: 'login',
+        component: LoginComponent,
+    },
 ]

@@ -11,8 +11,8 @@ import { MatInputModule } from '@angular/material/input'
 import { MatFormFieldModule } from '@angular/material/form-field'
 import { MatIconModule } from '@angular/material/icon'
 import { HeaderComponent } from '../../shared/header/header.component'
+import { AuthService } from '../../services/auth.service'
 import { HttpClient, HttpClientModule } from '@angular/common/http'
-import { GlobalService } from '../../services/global.service'
 
 @Component({
     selector: 'app-login',
@@ -29,6 +29,7 @@ import { GlobalService } from '../../services/global.service'
         MatIconModule,
         HttpClientModule,
     ],
+    providers: [HttpClient],
 })
 export class LoginComponent {
     loginForm: FormGroup
@@ -36,8 +37,7 @@ export class LoginComponent {
 
     constructor(
         private fb: FormBuilder,
-        private globalService: GlobalService,
-        private http: HttpClient
+        private authService: AuthService
     ) {
         this.loginForm = this.fb.group({
             email: ['', [Validators.required, Validators.email]],
@@ -48,18 +48,7 @@ export class LoginComponent {
     onSubmit() {
         if (this.loginForm.valid) {
             const formData = this.loginForm.value
-            this.http
-                .post(`${this.globalService.apiUrl}/login`, formData, {
-                    withCredentials: true,
-                })
-                .subscribe(
-                    (response) => {
-                        window.location.href = '/dashboard'
-                    },
-                    (error) => {
-                        console.error('Error:', error)
-                    }
-                )
+            this.authService.login(formData.email, formData.password)
         }
     }
 }
