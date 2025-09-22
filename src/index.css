@@ -1,0 +1,55 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* SUVA Design System Color Variables */
+:root {
+  /* Primary Colors - Grey */
+  --suva-grey-100: #666666;
+  --suva-grey-75: #8c8c8c;
+  --suva-grey-50: #b2b2b2;
+  --suva-grey-25: #d9d9d9;
+  --suva-bg-grey: #f2f2f2;
+
+  /* Primary Colors - Orange */
+  --suva-orange-100: #ff8200;
+  --suva-orange-75: #ffa140;
+  --suva-orange-50: #ffc07f;
+  --suva-orange-25: #ffe0bf;
+
+  /* Primary Colors - Blue */
+  --suva-blue-100: #00b8cf;
+  --suva-blue-75: #40cadb;
+  --suva-blue-50: #7fdbe7;
+  --suva-blue-25: #bfedf3;
+
+  /* Secondary Colors */
+  --suva-green-accent: #c1e200;
+  --suva-red-accent: #eb0064;
+  --suva-yellow-accent: #fce300;
+  --suva-interaction-blue: #007180;
+
+  /* System Colors */
+  --suva-positive: #66b300;
+  --suva-negative: #cc0000;
+  --suva-neutral: #ffcc00;
+  --suva-information: #0066cc;
+
+  /* Semantic Colors */
+  --color-text-primary: var(--suva-grey-100);
+  --color-text-secondary: var(--suva-grey-75);
+  --color-text-muted: var(--suva-grey-50);
+  --color-text-heading: var(--suva-orange-100);
+
+  --color-bg-primary: #ffffff;
+  --color-bg-secondary: var(--suva-bg-grey);
+  --color-bg-muted: var(--suva-grey-25);
+
+  --color-interactive-primary: var(--suva-blue-100);
+  --color-interactive-primary-hover: var(--suva-interaction-blue);
+  --color-interactive-secondary: var(--suva-orange-100);
+
+  --color-border-light: var(--suva-grey-25);
+  --color-border-medium: var(--suva-grey-50);
+  --color-border-dark: var(--suva-grey-75);
+}
