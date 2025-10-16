@@ -128,17 +128,17 @@ const Players: React.FC = () => {
           searchPlaceholder={t("searchPlayers")}
           addButtonText={t("addPlayer")}
           customActions={(player: Player) => (
-            <>
-              {player.playedQuizzes && player.playedQuizzes > 0 && (
-                <button
-                  onClick={() => handleViewPlayedQuizzes(player)}
-                  className="rounded-full text-suva-blue-100 hover:text-suva-interaction-blue transition-colors duration-200"
-                  title={t("viewPlayedQuizzes")}
-                >
-                  <Eye className="h-4 w-4" />
-                </button>
-              )}
-            </>
+        <>
+          {(player.playedQuizzes ?? 0) > 0 && (
+            <button
+          onClick={() => handleViewPlayedQuizzes(player)}
+          className="rounded-full text-suva-blue-100 hover:text-suva-interaction-blue transition-colors duration-200"
+          title={t("viewPlayedQuizzes")}
+            >
+          <Eye className="h-4 w-4" />
+            </button>
+          )}
+        </>
           )}
         />
       </div>
