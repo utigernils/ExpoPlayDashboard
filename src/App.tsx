@@ -18,6 +18,7 @@ import Players from "./pages/Players";
 import Quizzes from "./pages/Quizzes";
 import Users from "./pages/Users";
 import PlayedQuizzes from "./pages/PlayedQuizzes";
+import Profile from "./pages/Profile";
 import "./i18n";
 
 const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({
@@ -76,6 +77,7 @@ const AppRoutes: React.FC = () => {
       <Route path="/quizzes" element={<Quizzes />} />
       <Route path="/users" element={<Users />} />
       <Route path="/played-quizzes" element={<PlayedQuizzes />} />
+      <Route path="/profile" element={<Profile />} />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );

@@ -28,6 +28,7 @@ interface AuthContextType extends AuthState {
   checkAdmin: () => boolean;
   checkAuth: () => Promise<void>;
   getToken: () => string | null;
+  updateUserData: (user: User) => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -117,6 +118,13 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     return authApi.getToken();
   };
 
+  const updateUserData = (user: User) => {
+    setAuthState((prev) => ({
+      ...prev,
+      user,
+    }));
+  };
+
   useEffect(() => {
     checkAuth();
   }, []);
@@ -128,6 +136,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     checkAdmin,
     checkAuth,
     getToken,
+    updateUserData,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

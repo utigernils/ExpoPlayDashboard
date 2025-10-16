@@ -90,7 +90,16 @@ const Sidebar: React.FC = () => {
           </div>
         ) : user ? (
           <>
-            <div className="flex items-center space-x-3 mb-3">
+            <NavLink
+              to="/profile"
+              className={({ isActive }) =>
+                `flex items-center space-x-3 mb-3 px-3 py-2 rounded-md transition-colors duration-200 ${
+                  isActive
+                    ? "bg-suva-bg-grey"
+                    : "hover:bg-suva-bg-grey"
+                }`
+              }
+            >
               <div className="flex-shrink-0">
                 <div className="h-8 w-8  rounded-full bg-suva-blue-100 flex items-center justify-center">
                   <span className="text-sm font-medium text-white">
@@ -106,7 +115,7 @@ const Sidebar: React.FC = () => {
                   {user.email}
                 </p>
               </div>
-            </div>
+            </NavLink>
             <button
               onClick={logout}
               className="w-full flex items-center space-x-2 px-3 py-2 text-sm text-suva-grey-100 hover:bg-suva-bg-grey hover:text-suva-grey-100    transition-colors duration-200"
