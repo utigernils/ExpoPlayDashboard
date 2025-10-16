@@ -6,7 +6,7 @@ import DataTable from "../components/Common/DataTable";
 import Modal from "../components/Common/Modal";
 import ConfirmDialog from "../components/Common/ConfirmDialog";
 import { User } from "../types";
-import { userApi } from "../services/api";
+import * as UserConnector from "../services/api/modelConnectors/Users";
 import { useNotification } from "../context/NotificationContext";
 
 const Users: React.FC = () => {
@@ -19,23 +19,29 @@ const Users: React.FC = () => {
   const [editingUser, setEditingUser] = useState<User | null>(null);
   const [deletingUser, setDeletingUser] = useState<User | null>(null);
   const [formData, setFormData] = useState<{
-    firstName: string;
-    lastName: string;
+    name: string;
     email: string;
     password?: string;
+    password_confirmation?: string;
   }>({
-    firstName: "",
-    lastName: "",
+    name: "",
     email: "",
     password: "",
+    password_confirmation: "",
   });
   const [formLoading, setFormLoading] = useState(false);
   const [deleteLoading, setDeleteLoading] = useState(false);
 
   const fetchUsers = async () => {
     try {
-      const data = await userApi.getAll();
-      setUsers(data);
+      const data = await UserConnector.index();
+
+      const mappedData = data.map((user) => ({
+        id: user.id.toString(),
+        name: user.name,
+        email: user.email,
+      }));
+      setUsers(mappedData);
     } catch (error) {
       console.error("Error fetching users:", error);
     } finally {
@@ -50,10 +56,10 @@ const Users: React.FC = () => {
   const handleAdd = () => {
     setEditingUser(null);
     setFormData({
-      firstName: "",
-      lastName: "",
+      name: "",
       email: "",
       password: "",
+      password_confirmation: "",
     });
     setIsModalOpen(true);
   };
@@ -61,10 +67,10 @@ const Users: React.FC = () => {
   const handleEdit = (user: User) => {
     setEditingUser(user);
     setFormData({
-      firstName: user.firstName,
-      lastName: user.lastName,
+      name: user.name,
       email: user.email,
       password: "",
+      password_confirmation: "",
     });
     setIsModalOpen(true);
   };
@@ -74,7 +80,7 @@ const Users: React.FC = () => {
     setIsDeleteDialogOpen(true);
   };
 
-  const handleError = (err: any) => {
+  const handleError = (_err: any) => {
     notify({
       title: t("error"),
       description: t("errorOccurred"),
@@ -88,13 +94,22 @@ const Users: React.FC = () => {
 
     try {
       if (editingUser) {
-        const updateData = { ...formData };
-        if (!updateData.password) {
-          delete updateData.password;
+        const updateData: any = {
+          name: formData.name,
+          email: formData.email,
+        };
+        if (formData.password) {
+          updateData.password = formData.password;
+          updateData.password_confirmation = formData.password_confirmation;
         }
-        await userApi.update(editingUser.id, updateData);
+        await UserConnector.update(parseInt(editingUser.id), updateData);
       } else {
-        await userApi.create(formData);
+        await UserConnector.create({
+          name: formData.name,
+          email: formData.email,
+          password: formData.password || "",
+          password_confirmation: formData.password_confirmation || "",
+        });
       }
       setIsModalOpen(false);
       fetchUsers();
@@ -111,7 +126,7 @@ const Users: React.FC = () => {
 
     setDeleteLoading(true);
     try {
-      await userApi.delete(deletingUser.id);
+      await UserConnector.destroy(parseInt(deletingUser.id));
       setIsDeleteDialogOpen(false);
       setDeletingUser(null);
       fetchUsers();
@@ -124,8 +139,7 @@ const Users: React.FC = () => {
   };
 
   const columns = [
-    { key: "firstName" as keyof User, label: t("firstName"), sortable: true },
-    { key: "lastName" as keyof User, label: t("lastName"), sortable: true },
+    { key: "name" as keyof User, label: t("name"), sortable: true },
     { key: "email" as keyof User, label: t("email"), sortable: true },
   ];
 
@@ -156,41 +170,21 @@ const Users: React.FC = () => {
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label
-                htmlFor="firstName"
+                htmlFor="name"
                 className="block text-sm font-medium text-gray-700"
               >
-                {t("firstName")}
+                {t("name")}
               </label>
               <input
                 type="text"
-                id="firstName"
+                id="name"
                 required
-                value={formData.firstName}
+                value={formData.name}
                 onChange={(e) =>
-                  setFormData({ ...formData, firstName: e.target.value })
+                  setFormData({ ...formData, name: e.target.value })
                 }
                 className="mt-1 block w-full  -md border-gray-300 shadow-lg focus:border-blue-500 focus:ring-blue-500 sm:text-sm border px-3 py-2"
-                placeholder={t("enterFirstName")}
-              />
-            </div>
-
-            <div>
-              <label
-                htmlFor="lastName"
-                className="block text-sm font-medium text-gray-700"
-              >
-                {t("lastName")}
-              </label>
-              <input
-                type="text"
-                id="lastName"
-                required
-                value={formData.lastName}
-                onChange={(e) =>
-                  setFormData({ ...formData, lastName: e.target.value })
-                }
-                className="mt-1 block w-full  -md border-gray-300 shadow-lg focus:border-blue-500 focus:ring-blue-500 sm:text-sm border px-3 py-2"
-                placeholder={t("enterLastName")}
+                placeholder={t("enterName")}
               />
             </div>
           </div>
@@ -240,6 +234,29 @@ const Users: React.FC = () => {
             />
           </div>
 
+          <div>
+            <label
+              htmlFor="password_confirmation"
+              className="block text-sm font-medium text-gray-700"
+            >
+              {t("confirmPassword")}
+            </label>
+            <input
+              type="password"
+              id="password_confirmation"
+              required={!editingUser}
+              value={formData.password_confirmation}
+              onChange={(e) =>
+                setFormData({
+                  ...formData,
+                  password_confirmation: e.target.value,
+                })
+              }
+              className="mt-1 block w-full  -md border-gray-300 shadow-lg focus:border-blue-500 focus:ring-blue-500 sm:text-sm border px-3 py-2"
+              placeholder={t("confirmPassword")}
+            />
+          </div>
+
           <div className="flex justify-end space-x-3">
             <button
               type="button"
@@ -269,7 +286,7 @@ const Users: React.FC = () => {
         onClose={() => setIsDeleteDialogOpen(false)}
         onConfirm={confirmDelete}
         title={t("deleteUser")}
-        message={`${t("deleteUserMessage")} "${deletingUser?.firstName} ${deletingUser?.lastName}"? ${t("actionCannotBeUndone")}`}
+        message={`${t("deleteUserMessage")} "${deletingUser?.name}"? ${t("actionCannotBeUndone")}`}
         loading={deleteLoading}
       />
     </Layout>

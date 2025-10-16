@@ -5,15 +5,30 @@ import React, {
   useState,
   ReactNode,
 } from "react";
-import { User, AuthState } from "../types";
-import { authApi, userApi } from "../services/api";
+import { authApi } from "../services/api/auth";
+
+interface User {
+  id: number;
+  name: string;
+  email: string;
+  is_admin: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+interface AuthState {
+  isAuthenticated: boolean;
+  user: User | null;
+  loading: boolean;
+}
 
 interface AuthContextType extends AuthState {
   login: (email: string, password: string) => Promise<boolean>;
   logout: () => Promise<void>;
   checkAdmin: () => boolean;
   checkAuth: () => Promise<void>;
-  authState: AuthState;
+  getToken: () => string | null;
+  updateUserData: (user: User) => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -38,22 +53,26 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   });
 
   const checkAuth = async () => {
+    const token = authApi.getToken();
+
+    if (!token) {
+      setAuthState({
+        isAuthenticated: false,
+        user: null,
+        loading: false,
+      });
+      return;
+    }
+
     try {
-      const response = await authApi.checkAuth();
-      if (response.state) {
-        setAuthState({
-          isAuthenticated: true,
-          user: response.user || null,
-          loading: false,
-        });
-      } else {
-        setAuthState({
-          isAuthenticated: false,
-          user: null,
-          loading: false,
-        });
-      }
+      const user = (await authApi.getUser()).data;
+      setAuthState({
+        isAuthenticated: true,
+        user,
+        loading: false,
+      });
     } catch (error) {
+      authApi.clearToken();
       setAuthState({
         isAuthenticated: false,
         user: null,
@@ -65,38 +84,45 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const login = async (email: string, password: string): Promise<boolean> => {
     try {
       const response = await authApi.login(email, password);
-      if (response.user) {
-        setAuthState({
-          isAuthenticated: true,
-          user: response.user,
-          loading: false,
-        });
-        return true;
-      }
-      return false;
+      setAuthState({
+        isAuthenticated: true,
+        user: response.user,
+        loading: false,
+      });
+      return true;
     } catch (error) {
       console.error("Login error:", error);
       return false;
     }
   };
 
-  const checkAdmin = async (): Promise<boolean> => {
-    const response = await userApi.getById(authState.user || "");
-
-    return response.isAdmin === 1;
+  const checkAdmin = (): boolean => {
+    return authState.user?.is_admin ?? false;
   };
 
   const logout = async (): Promise<void> => {
     try {
       await authApi.logout();
+    } catch (error) {
+      console.error("Logout error:", error);
+    } finally {
       setAuthState({
         isAuthenticated: false,
         user: null,
         loading: false,
       });
-    } catch (error) {
-      console.error("Logout error:", error);
     }
+  };
+
+  const getToken = (): string | null => {
+    return authApi.getToken();
+  };
+
+  const updateUserData = (user: User) => {
+    setAuthState((prev) => ({
+      ...prev,
+      user,
+    }));
   };
 
   useEffect(() => {
@@ -109,6 +135,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     logout,
     checkAdmin,
     checkAuth,
+    getToken,
+    updateUserData,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

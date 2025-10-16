@@ -6,9 +6,9 @@ import DataTable from "../components/Common/DataTable";
 import Modal from "../components/Common/Modal";
 import ConfirmDialog from "../components/Common/ConfirmDialog";
 import { Expo } from "../types";
-import { expoApi } from "../services/api";
-import { CheckCircle, XCircle } from "lucide-react";
+import * as ExpoConnector from "../services/api/modelConnectors/Expos";
 import { useNotification } from "../context/NotificationContext";
+import { formatDateInputForAPI } from "../utils/date";
 
 const Expos: React.FC = () => {
   const { notify } = useNotification();
@@ -24,7 +24,6 @@ const Expos: React.FC = () => {
     startsOn: "",
     endsOn: "",
     location: "",
-    isActive: false,
     welcomeTitle: "",
     welcomeSubtitle: "",
   });
@@ -33,8 +32,18 @@ const Expos: React.FC = () => {
 
   const fetchExpos = async () => {
     try {
-      const data = await expoApi.getAll();
-      setExpos(data);
+      const data = await ExpoConnector.index();
+
+      const mappedData = data.map((expo) => ({
+        id: expo.id.toString(),
+        name: expo.name,
+        startsOn: expo.starts_on.toISOString(),
+        endsOn: expo.ends_on.toISOString(),
+        location: expo.location,
+        welcomeTitle: expo.introduction_title,
+        welcomeSubtitle: expo.introduction_subtitle || "",
+      }));
+      setExpos(mappedData);
     } catch (error) {
       console.error("Error fetching expos:", error);
     } finally {
@@ -53,7 +62,6 @@ const Expos: React.FC = () => {
       startsOn: "",
       endsOn: "",
       location: "",
-      isActive: false,
       welcomeTitle: "",
       welcomeSubtitle: "",
     });
@@ -67,7 +75,6 @@ const Expos: React.FC = () => {
       startsOn: expo.startsOn.split("T")[0],
       endsOn: expo.endsOn.split("T")[0],
       location: expo.location,
-      isActive: expo.isActive,
       welcomeTitle: expo.welcomeTitle,
       welcomeSubtitle: expo.welcomeSubtitle,
     });
@@ -93,15 +100,18 @@ const Expos: React.FC = () => {
 
     try {
       const submitData = {
-        ...formData,
-        startsOn: formData.startsOn + " 00:00:00",
-        endsOn: formData.endsOn + " 23:59:59",
+        name: formData.name,
+        introduction_title: formData.welcomeTitle,
+        introduction_subtitle: formData.welcomeSubtitle || null,
+        location: formData.location,
+        starts_on: formatDateInputForAPI(formData.startsOn),
+        ends_on: formatDateInputForAPI(formData.endsOn),
       };
 
       if (editingExpo) {
-        await expoApi.update(editingExpo.id, submitData);
+        await ExpoConnector.update(parseInt(editingExpo.id), submitData);
       } else {
-        await expoApi.create(submitData);
+        await ExpoConnector.create(submitData);
       }
       setIsModalOpen(false);
       fetchExpos();
@@ -118,7 +128,7 @@ const Expos: React.FC = () => {
 
     setDeleteLoading(true);
     try {
-      await expoApi.delete(deletingExpo.id);
+      await ExpoConnector.destroy(parseInt(deletingExpo.id));
       setIsDeleteDialogOpen(false);
       setDeletingExpo(null);
       fetchExpos();
@@ -145,20 +155,6 @@ const Expos: React.FC = () => {
       render: (value: string) => new Date(value).toLocaleDateString(),
     },
     { key: "location" as keyof Expo, label: t("location"), sortable: true },
-    {
-      key: "isActive" as keyof Expo,
-      label: t("active"),
-      sortable: true,
-      render: (value: boolean) => (
-        <div className="flex items-center">
-          {value ? (
-            <CheckCircle className="h-5 w-5 text-suva-positive" />
-          ) : (
-            <XCircle className="h-5 w-5 text-red-500" />
-          )}
-        </div>
-      ),
-    },
   ];
 
   return (
@@ -301,24 +297,6 @@ const Expos: React.FC = () => {
               className="mt-1 block w-full  -md border-gray-300 shadow-lg focus:border-blue-500 focus:ring-blue-500 sm:text-sm border px-3 py-2"
               placeholder={t("enterWelcomeSubtitle")}
             />
-          </div>
-
-          <div className="flex items-center">
-            <input
-              id="isActive"
-              type="checkbox"
-              checked={formData.isActive}
-              onChange={(e) =>
-                setFormData({ ...formData, isActive: e.target.checked })
-              }
-              className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300  "
-            />
-            <label
-              htmlFor="isActive"
-              className="ml-2 block text-sm text-gray-900"
-            >
-              {t("expoIsActive")}
-            </label>
           </div>
 
           <div className="flex justify-end space-x-3">

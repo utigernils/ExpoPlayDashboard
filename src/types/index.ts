@@ -1,7 +1,6 @@
 export interface User {
   id: string;
-  firstName: string;
-  lastName: string;
+  name: string;
   email: string;
 }
 
@@ -18,7 +17,6 @@ export interface Expo {
   startsOn: string;
   endsOn: string;
   location: string;
-  isActive: boolean;
   welcomeTitle: string;
   welcomeSubtitle: string;
 }
@@ -30,6 +28,7 @@ export interface Player {
   email: string;
   joinLink: string;
   wantsNewsletter: boolean;
+  playedQuizzes?: number;
 }
 
 export interface Quiz {

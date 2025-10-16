@@ -2,22 +2,20 @@ import React, { useEffect, useState } from "react";
 import { useTranslation } from "../hooks/useTranslation";
 import Layout from "../components/Layout/Layout";
 import Header from "../components/Layout/Header";
+import DataTable from "../components/Common/DataTable";
 import {
   Monitor,
   Calendar,
   Users,
   FileText,
   GamepadIcon,
-  User,
+  Percent,
 } from "lucide-react";
-import {
-  consoleApi,
-  expoApi,
-  playerApi,
-  quizApi,
-  userApi,
-  playedQuizApi,
-} from "../services/api";
+import * as ConsoleConnector from "../services/api/modelConnectors/Consoles";
+import * as ExpoConnector from "../services/api/modelConnectors/Expos";
+import * as PlayerConnector from "../services/api/modelConnectors/Players";
+import * as QuizConnector from "../services/api/modelConnectors/Quizzes";
+import * as PlayedQuizConnector from "../services/api/modelConnectors/PlayedQuizzes";
 import { useNotification } from "../context/NotificationContext";
 import {
   Chart as ChartJS,
@@ -32,7 +30,6 @@ import {
 } from "chart.js";
 import { Line } from "react-chartjs-2";
 import { subDays, format, startOfDay, isSameDay } from "date-fns";
-import { PlayedQuiz } from "../types";
 
 ChartJS.register(
   CategoryScale,
@@ -44,6 +41,21 @@ ChartJS.register(
   Tooltip,
   Legend,
 );
+
+type PlayedQuizData = {
+  id: string;
+  player_id: number;
+  quiz_id: number;
+  expo_id: number;
+  points: number;
+  quiz_max_points: number;
+  quiz_name: string;
+  expo_name: string;
+  created_at: Date;
+  updated_at: Date;
+  time: number;
+  points_rate: number;
+};
 
 interface StatsCard {
   name: string;
@@ -87,9 +99,9 @@ const Dashboard: React.FC = () => {
       loading: true,
     },
     {
-      name: t("users"),
+      name: t("avgPointRate"),
       value: 0,
-      icon: User,
+      icon: Percent,
       color: "text-suva-blue-75",
       loading: true,
     },
@@ -103,9 +115,11 @@ const Dashboard: React.FC = () => {
   ]);
 
   const [chartData, setChartData] = useState<any>(null);
-  const [recentQuizzes, setRecentQuizzes] = useState<PlayedQuiz[]>([]);
+  const [pointRateChartData, setPointRateChartData] = useState<any>(null);
+  const [recentQuizzes, setRecentQuizzes] = useState<PlayedQuizData[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const getLastWeekData = (playedQuizzes: PlayedQuiz[]) => {
+  const getLastWeekData = (playedQuizzes: PlayedQuizData[]) => {
     const today = new Date();
     const lastWeek = Array.from({ length: 7 }, (_, i) => {
       return startOfDay(subDays(today, 6 - i));
@@ -113,7 +127,7 @@ const Dashboard: React.FC = () => {
 
     const data = lastWeek.map((date) => {
       const count = playedQuizzes.filter((quiz) => {
-        const quizDate = new Date(quiz.startedOn);
+        const quizDate = new Date(quiz.created_at);
         return isSameDay(quizDate, date);
       }).length;
 
@@ -137,6 +151,46 @@ const Dashboard: React.FC = () => {
     };
   };
 
+  const getAveragePointRateData = (playedQuizzes: PlayedQuizData[]) => {
+    const today = new Date();
+    const lastWeek = Array.from({ length: 7 }, (_, i) => {
+      return startOfDay(subDays(today, 6 - i));
+    });
+
+    const data = lastWeek.map((date) => {
+      const quizzesOnDay = playedQuizzes.filter((quiz) => {
+        const quizDate = new Date(quiz.created_at);
+        return isSameDay(quizDate, date);
+      });
+
+      const avgPointRate =
+        quizzesOnDay.length > 0
+          ? quizzesOnDay.reduce(
+              (acc, quiz) => acc + (quiz.points_rate ?? 0),
+              0,
+            ) / quizzesOnDay.length
+          : 0;
+
+      return {
+        date: format(date, "MMM dd"),
+        avgPointRate: Number(avgPointRate.toFixed(2)),
+      };
+    });
+
+    return {
+      labels: data.map((d) => d.date),
+      datasets: [
+        {
+          label: t("avgPointRate"),
+          data: data.map((d) => d.avgPointRate),
+          borderColor: "rgb(99, 102, 241)",
+          backgroundColor: "rgba(99, 102, 241, 0.1)",
+          tension: 0.3,
+        },
+      ],
+    };
+  };
+
   const handleError = () => {
     notify({
       title: t("error"),
@@ -148,14 +202,13 @@ const Dashboard: React.FC = () => {
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        const [consoles, expos, players, quizzes, users, playedQuizzes] =
+        const [consoles, expos, players, quizzes, playedQuizzes] =
           await Promise.all([
-            consoleApi.getAll().catch(() => []),
-            expoApi.getAll().catch(() => []),
-            playerApi.getAll().catch(() => []),
-            quizApi.getAll().catch(() => []),
-            userApi.getAll().catch(() => []),
-            playedQuizApi.getAll().catch(() => []),
+            ConsoleConnector.index().catch(() => []),
+            ExpoConnector.index().catch(() => []),
+            PlayerConnector.index().catch(() => []),
+            QuizConnector.index().catch(() => []),
+            PlayedQuizConnector.index().catch(() => []),
           ]);
 
         setStats([
@@ -188,9 +241,18 @@ const Dashboard: React.FC = () => {
             loading: false,
           },
           {
-            name: "users",
-            value: users.length,
-            icon: User,
+            name: "avgPointRate",
+            value: playedQuizzes.length
+              ? Number(
+                  (
+                    playedQuizzes.reduce(
+                      (acc, q) => acc + (q.points_rate ?? 0),
+                      0,
+                    ) / playedQuizzes.length
+                  ).toFixed(2),
+                )
+              : 0,
+            icon: Percent,
             color: "text-suva-blue-75",
             loading: false,
           },
@@ -203,23 +265,81 @@ const Dashboard: React.FC = () => {
           },
         ]);
 
-        setChartData(getLastWeekData(playedQuizzes));
+        setChartData(getLastWeekData(playedQuizzes as any));
+        setPointRateChartData(getAveragePointRateData(playedQuizzes as any));
 
         const sortedQuizzes = [...playedQuizzes]
           .sort(
             (a, b) =>
-              new Date(b.startedOn).getTime() - new Date(a.startedOn).getTime(),
+              new Date(b.created_at).getTime() -
+              new Date(a.created_at).getTime(),
           )
-          .slice(0, 4);
+          .slice(0, 4)
+          .map((quiz) => ({
+            ...quiz,
+            id: String(quiz.id),
+          })) as PlayedQuizData[];
         setRecentQuizzes(sortedQuizzes);
       } catch (error) {
         console.error("Error fetching stats:", error);
         handleError();
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchStats();
   }, []);
+
+  const recentQuizzesColumns = [
+    {
+      key: "quiz_name" as keyof PlayedQuizData,
+      label: t("quiz"),
+      sortable: true,
+    },
+    {
+      key: "expo_name" as keyof PlayedQuizData,
+      label: t("expo"),
+      sortable: true,
+    },
+    {
+      key: "player_id" as keyof PlayedQuizData,
+      label: t("player"),
+      sortable: true,
+    },
+    {
+      key: "points" as keyof PlayedQuizData,
+      label: t("points"),
+      sortable: true,
+    },
+    {
+      key: "points_rate" as keyof PlayedQuizData,
+      label: t("grading"),
+      sortable: true,
+      render: (value: any) => {
+        const percentage = Number(value);
+        return (
+          <span
+            className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
+              percentage >= 80
+                ? "bg-suva-positive text-suva-grey-100"
+                : percentage >= 60
+                  ? "bg-suva-neutral text-suva-grey-100"
+                  : "bg-suva-negative text-suva-grey-25"
+            }`}
+          >
+            {percentage}%
+          </span>
+        );
+      },
+    },
+    {
+      key: "created_at" as keyof PlayedQuizData,
+      label: t("date"),
+      sortable: true,
+      render: (value: any) => format(new Date(value), "MMM dd, HH:mm"),
+    },
+  ];
 
   return (
     <Layout>
@@ -260,7 +380,7 @@ const Dashboard: React.FC = () => {
         </div>
 
         <div className="mt-8 grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* Chart Section */}
+          {/* Played Quizzes Chart */}
           <div className="bg-white shadow-lg">
             <div className="px-6 py-4">
               <h3 className="text-lg font-medium text-gray-900">
@@ -311,44 +431,75 @@ const Dashboard: React.FC = () => {
             </div>
           </div>
 
-          {/* Recent Activity Section */}
-          <div className="bg-white shadow-lg   ">
-            <div className="px-6 py-4 ">
+          {/* Average Point Rate Chart */}
+          <div className="bg-white shadow-lg">
+            <div className="px-6 py-4">
               <h3 className="text-lg font-medium text-gray-900">
-                {t("recentPlayedQuizzes")}
+                {t("avgPointRate")} - {t("last7Days")}
               </h3>
             </div>
             <div className="px-6 py-4 border-t border-suva-gray-25">
-              {recentQuizzes.length > 0 ? (
-                <div className="space-y-3">
-                  {recentQuizzes.map((quiz) => (
-                    <div
-                      key={quiz.id}
-                      className="flex items-center justify-between py-2"
-                    >
-                      <div className="flex-1">
-                        <div className="text-sm font-medium text-gray-900">
-                          {quiz.quizName}
-                        </div>
-                        <div className="text-xs text-gray-500">
-                          {quiz.expoName} • {t("player")}: {quiz.player}
-                        </div>
-                      </div>
-                      <div className="text-right">
-                        <div className="text-xs text-gray-500">
-                          {format(new Date(quiz.startedOn), "MMM dd, HH:mm")}
-                        </div>
-                      </div>
-                    </div>
-                  ))}
+              {pointRateChartData ? (
+                <div className="h-64">
+                  <Line
+                    data={{
+                      ...pointRateChartData,
+                      datasets: pointRateChartData.datasets.map(
+                        (dataset: any) => ({
+                          ...dataset,
+                          borderColor: "#00B8CF",
+                          backgroundColor: "rgba(0, 184, 207, 0.1)",
+                        }),
+                      ),
+                    }}
+                    options={{
+                      responsive: true,
+                      maintainAspectRatio: false,
+                      plugins: {
+                        legend: {
+                          display: false,
+                        },
+                        title: {
+                          display: false,
+                        },
+                      },
+                      scales: {
+                        y: {
+                          beginAtZero: true,
+                          max: 100,
+                          ticks: {
+                            callback: function (value) {
+                              return value + "%";
+                            },
+                          },
+                        },
+                      },
+                    }}
+                  />
                 </div>
               ) : (
-                <p className="text-gray-500 text-sm">
-                  {t("noRecentQuizActivity")}
-                </p>
+                <div className="h-64 flex items-center justify-center">
+                  <div className="animate-pulse text-gray-500">
+                    {t("loadingChart")}
+                  </div>
+                </div>
               )}
             </div>
           </div>
+        </div>
+
+        {/* Recent Activity Section - Full Width */}
+        <div className="mt-6">
+          <div className="mb-4">
+            <h3 className="text-lg font-medium text-gray-900">
+              {t("recentPlayedQuizzes")}
+            </h3>
+          </div>
+          <DataTable
+            data={recentQuizzes}
+            columns={recentQuizzesColumns}
+            loading={loading}
+          />
         </div>
       </div>
     </Layout>

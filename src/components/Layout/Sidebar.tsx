@@ -1,7 +1,6 @@
 import React from "react";
 import { useTranslation } from "../../hooks/useTranslation";
 import { NavLink } from "react-router-dom";
-import api from "../../services/api";
 import {
   Home,
   Monitor,
@@ -16,24 +15,10 @@ import { useAuth } from "../../context/AuthContext";
 import ExpoPlayLogo from "../../ExpoPlay_Logo.png";
 
 const Sidebar: React.FC = () => {
-  const { logout, checkAdmin, loading, checkAuth, user } = useAuth();
+  const { logout, checkAdmin, loading, user } = useAuth();
   const { t } = useTranslation();
 
   const [isAdmin, setIsAdmin] = React.useState(false);
-  const [userData, setUserData] = React.useState<any>(null);
-
-  React.useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await api.get("/login");
-        setUserData(response.data);
-      } catch (error) {
-        console.error("Error fetching user data:", error);
-      }
-    };
-
-    fetchData();
-  }, [checkAuth]);
 
   React.useEffect(() => {
     const check = async () => {
@@ -92,6 +77,7 @@ const Sidebar: React.FC = () => {
       </nav>
 
       {/* User section */}
+      <p className="px-4 py-4 text-suva-grey-25">Build 1.5.1</p>
       <div className="border-t border-suva-grey-25 p-2">
         {loading ? (
           <div className="flex items-center space-x-3 mb-3">
@@ -105,23 +91,30 @@ const Sidebar: React.FC = () => {
           </div>
         ) : user ? (
           <>
-            <div className="flex items-center space-x-3 mb-3">
+            <NavLink
+              to="/profile"
+              className={({ isActive }) =>
+                `flex items-center space-x-3 mb-3 px-3 py-2 rounded-md transition-colors duration-200 ${
+                  isActive ? "bg-suva-bg-grey" : "hover:bg-suva-bg-grey"
+                }`
+              }
+            >
               <div className="flex-shrink-0">
                 <div className="h-8 w-8  rounded-full bg-suva-blue-100 flex items-center justify-center">
                   <span className="text-sm font-medium text-white">
-                    {userData?.firstName?.charAt(0) || "X"}
+                    {user.name?.charAt(0) || user.email?.charAt(0) || "X"}
                   </span>
                 </div>
               </div>
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-medium text-suva-grey-100 truncate">
-                  {userData?.firstName} {userData?.lastName}
+                  {user.name}
                 </p>
                 <p className="text-sm text-suva-grey-75 truncate">
-                  {userData?.email}
+                  {user.email}
                 </p>
               </div>
-            </div>
+            </NavLink>
             <button
               onClick={logout}
               className="w-full flex items-center space-x-2 px-3 py-2 text-sm text-suva-grey-100 hover:bg-suva-bg-grey hover:text-suva-grey-100    transition-colors duration-200"

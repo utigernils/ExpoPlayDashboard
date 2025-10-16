@@ -25,9 +25,8 @@ interface DataTableProps<T> {
   loading?: boolean;
   searchPlaceholder?: string;
   addButtonText?: string;
+  customActions?: (item: T) => React.ReactNode;
 }
-
-const { t } = useTranslation();
 
 const DataTable = <T extends { id: string }>({
   data,
@@ -36,8 +35,9 @@ const DataTable = <T extends { id: string }>({
   onEdit,
   onDelete,
   loading = false,
-  searchPlaceholder = t("search"),
-  addButtonText = t("add"),
+  searchPlaceholder,
+  addButtonText,
+  customActions,
 }: DataTableProps<T>) => {
   const { t } = useTranslation();
   const [searchTerm, setSearchTerm] = useState("");
@@ -45,6 +45,9 @@ const DataTable = <T extends { id: string }>({
     key: keyof T;
     direction: "asc" | "desc";
   } | null>(null);
+
+  const finalSearchPlaceholder = searchPlaceholder || t("search");
+  const finalAddButtonText = addButtonText || t("add");
 
   const handleSort = (key: keyof T) => {
     let direction: "asc" | "desc" = "asc";
@@ -89,7 +92,7 @@ const DataTable = <T extends { id: string }>({
 
   if (loading) {
     return (
-      <div className="bg-white    shadow-lg border border-suva-grey-25">
+      <div className="bg-white shadow-lg border border-suva-grey-25">
         <div className="px-6 py-4 border-b border-suva-grey-25">
           <div className="flex justify-between items-center">
             <div className="h-8 bg-suva-grey-50   w-48 animate-pulse"></div>
@@ -121,7 +124,7 @@ const DataTable = <T extends { id: string }>({
             <input
               type="text"
               className="block w-full pl-10 pr-3 py-2 border border-suva-grey-25    leading-5 bg-white placeholder-suva-grey-50 focus:outline-none focus:placeholder-suva-grey-75 focus:ring-1 focus:ring-suva-blue-100 focus:border-suva-blue-100 sm:text-sm"
-              placeholder={searchPlaceholder}
+              placeholder={finalSearchPlaceholder}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
@@ -132,7 +135,7 @@ const DataTable = <T extends { id: string }>({
               className="rounded-full inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium    shadow-lg text-white bg-suva-blue-100 hover:bg-suva-interaction-blue focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-suva-blue-100 transition-colors duration-200"
             >
               <Plus className="h-4 w-4 mr-2" />
-              {addButtonText}
+              {finalAddButtonText}
             </button>
           )}
         </div>
@@ -177,7 +180,7 @@ const DataTable = <T extends { id: string }>({
                   </div>
                 </th>
               ))}
-              {(onEdit || onDelete) && (
+              {(onEdit || onDelete || customActions) && (
                 <th className="px-6 py-3 text-right text-xs font-medium text-suva-grey-75 uppercase tracking-wider">
                   {t("actions")}
                 </th>
@@ -202,9 +205,10 @@ const DataTable = <T extends { id: string }>({
                       : String(item[column.key])}
                   </td>
                 ))}
-                {(onEdit || onDelete) && (
+                {(onEdit || onDelete || customActions) && (
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                     <div className="flex items-center justify-end space-x-2">
+                      {customActions && customActions(item)}
                       {onEdit && (
                         <button
                           onClick={() => onEdit(item)}
@@ -229,7 +233,10 @@ const DataTable = <T extends { id: string }>({
             {filteredData.length === 0 && (
               <tr>
                 <td
-                  colSpan={columns.length + (onEdit || onDelete ? 1 : 0)}
+                  colSpan={
+                    columns.length +
+                    (onEdit || onDelete || customActions ? 1 : 0)
+                  }
                   className="px-6 py-12 text-center text-suva-grey-75"
                 >
                   {searchTerm ? "No results found" : "No data available"}

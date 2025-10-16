@@ -1,12 +1,18 @@
-import React, { Suspense } from "react";
+import React, { Suspense, useEffect } from "react";
 import {
   BrowserRouter as Router,
   Routes,
   Route,
   Navigate,
+  useNavigate,
 } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { AuthProvider, useAuth } from "./context/AuthContext";
-import { NotificationProvider } from "./context/NotificationContext";
+import {
+  NotificationProvider,
+  useNotification,
+} from "./context/NotificationContext";
+import { setUnauthorizedCallback } from "./services/api/api";
 import LoginForm from "./components/Auth/LoginForm";
 import Dashboard from "./pages/Dashboard";
 import Consoles from "./pages/Consoles";
@@ -15,6 +21,8 @@ import Players from "./pages/Players";
 import Quizzes from "./pages/Quizzes";
 import Users from "./pages/Users";
 import PlayedQuizzes from "./pages/PlayedQuizzes";
+import Profile from "./pages/Profile";
+import PlayerJoin from "./pages/PlayerJoin";
 import "./i18n";
 
 const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({
@@ -35,6 +43,20 @@ const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({
 
 const AppRoutes: React.FC = () => {
   const { isAuthenticated, loading } = useAuth();
+  const navigate = useNavigate();
+  const { notify } = useNotification();
+  const { t } = useTranslation();
+
+  useEffect(() => {
+    setUnauthorizedCallback(() => {
+      notify({
+        title: t("sessionExpired"),
+        description: t("sessionExpiredMessage"),
+        state: "error",
+      });
+      navigate("/login", { replace: true });
+    });
+  }, [navigate, notify, t]);
 
   if (loading) {
     return (
@@ -58,6 +80,7 @@ const AppRoutes: React.FC = () => {
       <Route path="/quizzes" element={<Quizzes />} />
       <Route path="/users" element={<Users />} />
       <Route path="/played-quizzes" element={<PlayedQuizzes />} />
+      <Route path="/profile" element={<Profile />} />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );
@@ -77,6 +100,7 @@ const App: React.FC = () => {
           <Router>
             <Routes>
               <Route path="/login" element={<LoginForm />} />
+              <Route path="/player-join" element={<PlayerJoin />} />
               <Route
                 path="/*"
                 element={

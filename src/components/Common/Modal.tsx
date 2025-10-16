@@ -44,7 +44,7 @@ const Modal: React.FC<ModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto">
+    <div className="fixed inset-0 z-50">
       <div className="flex min-h-full items-center justify-center p-4 text-center sm:p-0">
         <div
           className="fixed inset-0 bg-gray-500 bg-opacity-75 backdrop-blur-sm transition-opacity"
@@ -52,7 +52,7 @@ const Modal: React.FC<ModalProps> = ({
         />
 
         <div
-          className={`relative transform overflow-hidden    bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full ${sizeClasses[size]}`}
+          className={`relative transform overflow-hidden bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full ${sizeClasses[size]} max-h-[calc(100vh-2rem)] sm:max-h-[calc(100vh-4rem)] flex flex-col`}
         >
           <div className="bg-white px-6 py-4 border-b border-suva-gray-25">
             <div className="flex items-center justify-between">
@@ -70,7 +70,9 @@ const Modal: React.FC<ModalProps> = ({
             </div>
           </div>
 
-          <div className="bg-white px-6 py-4">{children}</div>
+          <div className="bg-white px-6 py-4 flex-1 overflow-y-auto min-h-0">
+            {children}
+          </div>
         </div>
       </div>
     </div>
