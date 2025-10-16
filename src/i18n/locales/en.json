@@ -180,5 +180,6 @@
   "passwordsDoNotMatch": "Passwords do not match",
   "noChanges": "No changes",
   "noChangesDetected": "No changes detected",
-  "passwordTooShort": "Password must be at least 8 characters long"
+  "passwordTooShort": "Password must be at least 8 characters long",
+  "enterName": "Enter your name"
 }

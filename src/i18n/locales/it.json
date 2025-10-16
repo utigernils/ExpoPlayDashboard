@@ -180,5 +180,6 @@
   "passwordsDoNotMatch": "Le password non corrispondono",
   "noChanges": "Nessuna modifica",
   "noChangesDetected": "Nessuna modifica rilevata",
-  "passwordTooShort": "La password deve contenere almeno 8 caratteri"
+  "passwordTooShort": "La password deve contenere almeno 8 caratteri",
+  "enterName": "Inserisci il tuo nome"
 }
