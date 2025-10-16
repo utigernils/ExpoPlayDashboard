@@ -9,6 +9,7 @@ import { Expo } from "../types";
 import * as ExpoConnector from "../services/api/modelConnectors/Expos";
 import { CheckCircle, XCircle } from "lucide-react";
 import { useNotification } from "../context/NotificationContext";
+import { formatDateInputForAPI } from "../utils/date";
 
 const Expos: React.FC = () => {
   const { notify } = useNotification();
@@ -108,8 +109,8 @@ const Expos: React.FC = () => {
         introduction_title: formData.welcomeTitle,
         introduction_subtitle: formData.welcomeSubtitle || null,
         location: formData.location,
-        starts_on: new Date(formData.startsOn + "T00:00:00"),
-        ends_on: new Date(formData.endsOn + "T23:59:59"),
+        starts_on: formatDateInputForAPI(formData.startsOn),
+        ends_on: formatDateInputForAPI(formData.endsOn),
       };
 
       if (editingExpo) {

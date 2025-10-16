@@ -12,6 +12,12 @@ type Expo = {
   updated_at: Date;
 };
 
+// Type for creating/updating expos - dates are sent as strings in Y-m-d format
+type ExpoInput = Omit<Expo, "id" | "created_at" | "updated_at" | "starts_on" | "ends_on"> & {
+  starts_on: string;
+  ends_on: string;
+};
+
 interface ExpoApiResponse {
   data: any;
 }
@@ -38,7 +44,7 @@ async function show(id: number): Promise<Expo> {
   } as Expo;
 }
 
-async function create(expoData: Omit<Expo, "id" | "created_at" | "updated_at">): Promise<Expo> {
+async function create(expoData: ExpoInput): Promise<Expo> {
   const response = await apiClient.post<ExpoApiResponse>("/expos", expoData);
   return {
     ...response.data,
@@ -49,7 +55,7 @@ async function create(expoData: Omit<Expo, "id" | "created_at" | "updated_at">):
   } as Expo;
 }
 
-async function update(id: number, expoData: Partial<Omit<Expo, "id" | "created_at" | "updated_at">>): Promise<Expo> {
+async function update(id: number, expoData: Partial<ExpoInput>): Promise<Expo> {
   const response = await apiClient.put<ExpoApiResponse>(`/expos/${id}`, expoData);
   return {
     ...response.data,
