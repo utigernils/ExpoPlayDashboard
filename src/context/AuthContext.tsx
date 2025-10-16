@@ -64,7 +64,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
 
     try {
-      const user = await authApi.getUser();
+      const user = (await authApi.getUser()).data;
       setAuthState({
         isAuthenticated: true,
         user,

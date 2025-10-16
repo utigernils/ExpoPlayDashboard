@@ -13,12 +13,14 @@ export interface LoginResponse {
 }
 
 export interface UserResponse {
-  id: number;
-  name: string;
-  email: string;
-  is_admin: boolean;
-  created_at: string;
-  updated_at: string;
+  data: {
+    id: number;
+    name: string;
+    email: string;
+    is_admin: boolean;
+    created_at: string;
+    updated_at: string;
+  };
 }
 
 const TOKEN_KEY = "auth_token";
