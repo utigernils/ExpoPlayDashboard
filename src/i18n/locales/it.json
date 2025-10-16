@@ -160,5 +160,7 @@
   "quiz": "Quiz",
   "expo": "Mostra",
   "time": "Tempo",
-  "date": "Data"
+  "date": "Data",
+  "sessionExpired": "Sessione scaduta",
+  "sessionExpiredMessage": "La tua sessione è scaduta. Si prega di effettuare nuovamente l'accesso."
 }

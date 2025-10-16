@@ -1,12 +1,15 @@
-import React, { Suspense } from "react";
+import React, { Suspense, useEffect } from "react";
 import {
   BrowserRouter as Router,
   Routes,
   Route,
   Navigate,
+  useNavigate,
 } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { AuthProvider, useAuth } from "./context/AuthContext";
-import { NotificationProvider } from "./context/NotificationContext";
+import { NotificationProvider, useNotification } from "./context/NotificationContext";
+import { setUnauthorizedCallback } from "./services/api/api";
 import LoginForm from "./components/Auth/LoginForm";
 import Dashboard from "./pages/Dashboard";
 import Consoles from "./pages/Consoles";
@@ -35,6 +38,21 @@ const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({
 
 const AppRoutes: React.FC = () => {
   const { isAuthenticated, loading } = useAuth();
+  const navigate = useNavigate();
+  const { notify } = useNotification();
+  const { t } = useTranslation();
+
+  // Set up the unauthorized callback
+  useEffect(() => {
+    setUnauthorizedCallback(() => {
+      notify({
+        title: t("sessionExpired"),
+        description: t("sessionExpiredMessage"),
+        state: "error",
+      });
+      navigate("/login", { replace: true });
+    });
+  }, [navigate, notify, t]);
 
   if (loading) {
     return (

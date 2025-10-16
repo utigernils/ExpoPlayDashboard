@@ -160,5 +160,7 @@
   "quiz": "Quiz",
   "expo": "Exhibition",
   "time": "Time",
-  "date": "Date"
+  "date": "Date",
+  "sessionExpired": "Session expired",
+  "sessionExpiredMessage": "Your session has expired. Please log in again."
 }

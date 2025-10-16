@@ -12,6 +12,13 @@ export const apiCredentials: ApiCredentials = {
 
 const TOKEN_KEY = "auth_token";
 
+// Callback for handling 401 errors - to be set by the app
+let onUnauthorized: (() => void) | null = null;
+
+export const setUnauthorizedCallback = (callback: () => void) => {
+    onUnauthorized = callback;
+};
+
 // Create axios instance with base configuration
 const createAxiosInstance = (): AxiosInstance => {
     const instance = axios.create({
@@ -41,6 +48,14 @@ const createAxiosInstance = (): AxiosInstance => {
         (error: AxiosError) => {
             if (axios.isAxiosError(error)) {
                 const status = error.response?.status ?? "No Status";
+                
+                if (status === 401) {
+                    localStorage.removeItem(TOKEN_KEY);
+                    if (onUnauthorized) {
+                        onUnauthorized();
+                    }
+                }
+                
                 const statusText = error.response?.statusText ?? "Network/Unknown Error";
                 const message = (error.response?.data as any)?.message || statusText;
                 throw new Error(`${status}: ${message}`);
