@@ -181,5 +181,13 @@
   "noChanges": "No changes",
   "noChangesDetected": "No changes detected",
   "passwordTooShort": "Password must be at least 8 characters long",
-  "enterName": "Enter your name"
+  "enterName": "Enter your name",
+  "joinAsPlayer": "Join as Player",
+  "enterYourDetailsToJoin": "Enter your details to join the game",
+  "submitting": "Submitting...",
+  "joinNow": "Join Now",
+  "missingJoinLink": "Join link is missing. Please use a valid invitation link.",
+  "pleaseCompletAllFields": "Please complete all fields",
+  "playerJoinedSuccessfully": "Successfully joined! You can now start playing.",
+  "errorJoiningPlayer": "Failed to join. Please try again."
 }

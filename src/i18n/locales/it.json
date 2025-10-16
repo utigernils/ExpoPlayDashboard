@@ -181,5 +181,13 @@
   "noChanges": "Nessuna modifica",
   "noChangesDetected": "Nessuna modifica rilevata",
   "passwordTooShort": "La password deve contenere almeno 8 caratteri",
-  "enterName": "Inserisci il tuo nome"
+  "enterName": "Inserisci il tuo nome",
+  "joinAsPlayer": "Unisciti come giocatore",
+  "enterYourDetailsToJoin": "Inserisci i tuoi dati per unirti al gioco",
+  "submitting": "Invio in corso...",
+  "joinNow": "Unisciti ora",
+  "missingJoinLink": "Link di accesso mancante. Utilizza un link di invito valido.",
+  "pleaseCompletAllFields": "Compila tutti i campi",
+  "playerJoinedSuccessfully": "Iscrizione riuscita! Ora puoi iniziare a giocare.",
+  "errorJoiningPlayer": "Impossibile unirsi. Riprova."
 }

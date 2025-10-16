@@ -19,6 +19,7 @@ import Quizzes from "./pages/Quizzes";
 import Users from "./pages/Users";
 import PlayedQuizzes from "./pages/PlayedQuizzes";
 import Profile from "./pages/Profile";
+import PlayerJoin from "./pages/PlayerJoin";
 import "./i18n";
 
 const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({
@@ -97,6 +98,7 @@ const App: React.FC = () => {
           <Router>
             <Routes>
               <Route path="/login" element={<LoginForm />} />
+              <Route path="/player-join" element={<PlayerJoin />} />
               <Route
                 path="/*"
                 element={
