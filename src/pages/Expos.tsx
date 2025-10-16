@@ -33,7 +33,7 @@ const Expos: React.FC = () => {
   const fetchExpos = async () => {
     try {
       const data = await ExpoConnector.index();
-      // Map the data to match the expected Expo type
+
       const mappedData = data.map((expo) => ({
         id: expo.id.toString(),
         name: expo.name,

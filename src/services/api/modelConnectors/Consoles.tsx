@@ -32,8 +32,13 @@ async function show(id: number): Promise<Console> {
   } as Console;
 }
 
-async function create(consoleData: Omit<Console, "id" | "created_at" | "updated_at">): Promise<Console> {
-  const response = await apiClient.post<ConsoleApiResponse>("/consoles", consoleData);
+async function create(
+  consoleData: Omit<Console, "id" | "created_at" | "updated_at">,
+): Promise<Console> {
+  const response = await apiClient.post<ConsoleApiResponse>(
+    "/consoles",
+    consoleData,
+  );
   return {
     ...response.data,
     created_at: new Date(response.data.created_at),
@@ -41,8 +46,14 @@ async function create(consoleData: Omit<Console, "id" | "created_at" | "updated_
   } as Console;
 }
 
-async function update(id: number, consoleData: Partial<Omit<Console, "id" | "created_at" | "updated_at">>): Promise<Console> {
-  const response = await apiClient.put<ConsoleApiResponse>(`/consoles/${id}`, consoleData);
+async function update(
+  id: number,
+  consoleData: Partial<Omit<Console, "id" | "created_at" | "updated_at">>,
+): Promise<Console> {
+  const response = await apiClient.put<ConsoleApiResponse>(
+    `/consoles/${id}`,
+    consoleData,
+  );
   return {
     ...response.data,
     created_at: new Date(response.data.created_at),

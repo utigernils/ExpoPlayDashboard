@@ -19,7 +19,8 @@ const Players: React.FC = () => {
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [deletingPlayer, setDeletingPlayer] = useState<Player | null>(null);
   const [deleteLoading, setDeleteLoading] = useState(false);
-  const [isPlayedQuizzesModalOpen, setIsPlayedQuizzesModalOpen] = useState(false);
+  const [isPlayedQuizzesModalOpen, setIsPlayedQuizzesModalOpen] =
+    useState(false);
   const [selectedPlayer, setSelectedPlayer] = useState<Player | null>(null);
   const [playedQuizzes, setPlayedQuizzes] = useState<PlayedQuiz[]>([]);
   const [playedQuizzesLoading, setPlayedQuizzesLoading] = useState(false);
@@ -27,7 +28,7 @@ const Players: React.FC = () => {
   const fetchPlayers = async () => {
     try {
       const data = await PlayerConnector.index();
-      // Map the data to match the expected Player type
+
       const mappedData = data.map((player) => ({
         id: player.id.toString(),
         firstName: player.first_name,
@@ -58,9 +59,11 @@ const Players: React.FC = () => {
     setSelectedPlayer(player);
     setIsPlayedQuizzesModalOpen(true);
     setPlayedQuizzesLoading(true);
-    
+
     try {
-      const quizzes = await PlayerConnector.getPlayedQuizzes(parseInt(player.id));
+      const quizzes = await PlayerConnector.getPlayedQuizzes(
+        parseInt(player.id),
+      );
       setPlayedQuizzes(quizzes);
     } catch (error) {
       console.error("Error fetching played quizzes:", error);
@@ -128,17 +131,17 @@ const Players: React.FC = () => {
           searchPlaceholder={t("searchPlayers")}
           addButtonText={t("addPlayer")}
           customActions={(player: Player) => (
-        <>
-          {(player.playedQuizzes ?? 0) > 0 && (
-            <button
-          onClick={() => handleViewPlayedQuizzes(player)}
-          className="rounded-full text-suva-blue-100 hover:text-suva-interaction-blue transition-colors duration-200"
-          title={t("viewPlayedQuizzes")}
-            >
-          <Eye className="h-4 w-4" />
-            </button>
-          )}
-        </>
+            <>
+              {(player.playedQuizzes ?? 0) > 0 && (
+                <button
+                  onClick={() => handleViewPlayedQuizzes(player)}
+                  className="rounded-full text-suva-blue-100 hover:text-suva-interaction-blue transition-colors duration-200"
+                  title={t("viewPlayedQuizzes")}
+                >
+                  <Eye className="h-4 w-4" />
+                </button>
+              )}
+            </>
           )}
         />
       </div>

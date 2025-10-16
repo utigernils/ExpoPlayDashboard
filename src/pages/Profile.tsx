@@ -11,14 +11,14 @@ const Profile: React.FC = () => {
   const { t } = useTranslation();
   const { user, checkAuth } = useAuth();
   const { notify } = useNotification();
-  
+
   const [formData, setFormData] = useState({
     name: user?.name || "",
     currentPassword: "",
     newPassword: "",
     confirmPassword: "",
   });
-  
+
   const [loading, setLoading] = useState(false);
   const [showPasswordSection, setShowPasswordSection] = useState(false);
 
@@ -35,14 +35,16 @@ const Profile: React.FC = () => {
     setLoading(true);
 
     try {
-      const updateData: { name?: string; password?: string; password_confirmation?: string } = {};
+      const updateData: {
+        name?: string;
+        password?: string;
+        password_confirmation?: string;
+      } = {};
 
-      // Check if name changed
       if (formData.name !== user?.name) {
         updateData.name = formData.name;
       }
 
-      // Check if password is being changed
       if (showPasswordSection && formData.newPassword) {
         if (formData.newPassword !== formData.confirmPassword) {
           notify({
@@ -68,11 +70,9 @@ const Profile: React.FC = () => {
       }
 
       await profileApi.updateProfile(updateData);
-      
-      // Refresh user data
+
       await checkAuth();
-      
-      // Clear password fields
+
       setFormData((prev) => ({
         ...prev,
         currentPassword: "",
@@ -87,7 +87,6 @@ const Profile: React.FC = () => {
         state: "success",
       });
     } catch (error: any) {
-      // Check if it's a validation error (422)
       if (error.message && error.message.includes("422")) {
         notify({
           title: t("error"),
@@ -107,11 +106,13 @@ const Profile: React.FC = () => {
   };
 
   return (
-    <Layout>        
-        <Header title={t("myProfile")} description={t("manageYourProfileSettings")} />
+    <Layout>
+      <Header
+        title={t("myProfile")}
+        description={t("manageYourProfileSettings")}
+      />
       <div className="px-4 sm:px-6 lg:px-8 py-8">
         <div className="max-w-3xl mx-auto">
-
           {/* Profile Form */}
           <form onSubmit={handleUpdateProfile} className="space-y-6">
             {/* Basic Information Card */}
@@ -146,9 +147,7 @@ const Profile: React.FC = () => {
 
                 {/* Email Field */}
                 <div>
-                  <label
-                    className="block text-sm font-medium text-suva-grey-100 mb-1"
-                  >
+                  <label className="block text-sm font-medium text-suva-grey-100 mb-1">
                     {t("email")}
                   </label>
                   <p className="text-sm text-suva-grey-75 px-3 py-2 bg-suva-bg-grey">
@@ -174,7 +173,7 @@ const Profile: React.FC = () => {
                       onClick={() => setShowPasswordSection(true)}
                       className="rounded-full text-suva-blue-100 hover:text-suva-interaction-blue transition-colors duration-200"
                     >
-                        <Edit2 className="h-4 w-4" />
+                      <Edit2 className="h-4 w-4" />
                     </button>
                   )}
                 </div>
@@ -252,9 +251,7 @@ const Profile: React.FC = () => {
                     {t("saving")}
                   </>
                 ) : (
-                  <>
-                    {t("saveChanges")}
-                  </>
+                  <>{t("saveChanges")}</>
                 )}
               </button>
             </div>

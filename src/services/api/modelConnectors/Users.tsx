@@ -30,7 +30,12 @@ async function show(id: number): Promise<User> {
   } as User;
 }
 
-async function create(userData: Omit<User, "id" | "created_at" | "updated_at"> & { password: string; password_confirmation?: string }): Promise<User> {
+async function create(
+  userData: Omit<User, "id" | "created_at" | "updated_at"> & {
+    password: string;
+    password_confirmation?: string;
+  },
+): Promise<User> {
   const response = await apiClient.post<UserApiResponse>("/register", userData);
   return {
     ...response.data,
@@ -39,8 +44,17 @@ async function create(userData: Omit<User, "id" | "created_at" | "updated_at"> &
   } as User;
 }
 
-async function update(id: number, userData: Partial<Omit<User, "id" | "created_at" | "updated_at">> & { password?: string; password_confirmation?: string }): Promise<User> {
-  const response = await apiClient.put<UserApiResponse>(`/users/${id}`, userData);
+async function update(
+  id: number,
+  userData: Partial<Omit<User, "id" | "created_at" | "updated_at">> & {
+    password?: string;
+    password_confirmation?: string;
+  },
+): Promise<User> {
+  const response = await apiClient.put<UserApiResponse>(
+    `/users/${id}`,
+    userData,
+  );
   return {
     ...response.data,
     created_at: new Date(response.data.created_at),

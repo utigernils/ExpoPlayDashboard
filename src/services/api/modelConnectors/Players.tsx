@@ -27,7 +27,9 @@ async function index(): Promise<Player[]> {
 }
 
 async function getPlayedQuizzes(id: number): Promise<PlayedQuiz[]> {
-  const response = await apiClient.get<PlayerApiResponse>(`/players/${id}/played-quizzes`);
+  const response = await apiClient.get<PlayerApiResponse>(
+    `/players/${id}/played-quizzes`,
+  );
   return (response.data as any[]).map((p) => ({
     ...p,
     created_at: new Date(p.created_at),

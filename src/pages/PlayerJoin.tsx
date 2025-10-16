@@ -79,19 +79,15 @@ const PlayerJoin: React.FC = () => {
         state: "success",
       });
 
-      // Clear form
       setFormData({
         first_name: "",
         last_name: "",
         email: "",
         newsletter: false,
       });
-
-      // Optional: Redirect or show success message
-      // navigate("/some-success-page");
     } catch (error: any) {
       let errorMessage = t("errorJoiningPlayer");
-      
+
       if (axios.isAxiosError(error)) {
         const message = (error.response?.data as any)?.message;
         if (message) {
@@ -111,13 +107,19 @@ const PlayerJoin: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-suva-bg-grey">
-      <Header title={t("joinAsPlayer")} description={t("enterYourDetailsToJoin")} />
-      
+      <Header
+        title={t("joinAsPlayer")}
+        description={t("enterYourDetailsToJoin")}
+      />
+
       <div className="max-w-2xl mx-auto p-6">
         <div className="bg-white shadow-lg border border-suva-grey-25 p-8">
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
-              <label htmlFor="first_name" className="block text-sm font-medium text-suva-grey-100 mb-2">
+              <label
+                htmlFor="first_name"
+                className="block text-sm font-medium text-suva-grey-100 mb-2"
+              >
                 {t("firstName")}
               </label>
               <input
@@ -133,7 +135,10 @@ const PlayerJoin: React.FC = () => {
             </div>
 
             <div>
-              <label htmlFor="last_name" className="block text-sm font-medium text-suva-grey-100 mb-2">
+              <label
+                htmlFor="last_name"
+                className="block text-sm font-medium text-suva-grey-100 mb-2"
+              >
                 {t("lastName")}
               </label>
               <input
@@ -149,7 +154,10 @@ const PlayerJoin: React.FC = () => {
             </div>
 
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-suva-grey-100 mb-2">
+              <label
+                htmlFor="email"
+                className="block text-sm font-medium text-suva-grey-100 mb-2"
+              >
                 {t("email")}
               </label>
               <input
@@ -173,7 +181,10 @@ const PlayerJoin: React.FC = () => {
                 onChange={handleChange}
                 className="h-4 w-4 text-suva-blue-100 focus:ring-suva-blue-100 border-suva-grey-25"
               />
-              <label htmlFor="newsletter" className="ml-2 block text-sm text-suva-grey-100">
+              <label
+                htmlFor="newsletter"
+                className="ml-2 block text-sm text-suva-grey-100"
+              >
                 {t("wantsToReceiveNewsletter")}
               </label>
             </div>

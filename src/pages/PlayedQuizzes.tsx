@@ -4,7 +4,11 @@ import Layout from "../components/Layout/Layout";
 import Header from "../components/Layout/Header";
 import DataTable from "../components/Common/DataTable";
 import ConfirmDialog from "../components/Common/ConfirmDialog";
-import { PlayedQuiz, index, destroy } from "../services/api/modelConnectors/PlayedQuizzes";
+import {
+  PlayedQuiz,
+  index,
+  destroy,
+} from "../services/api/modelConnectors/PlayedQuizzes";
 import { useNotification } from "../context/NotificationContext";
 
 const PlayedQuizzes: React.FC = () => {

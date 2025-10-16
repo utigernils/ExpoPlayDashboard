@@ -35,7 +35,7 @@ const Users: React.FC = () => {
   const fetchUsers = async () => {
     try {
       const data = await UserConnector.index();
-      // Map the data to match the expected User type
+
       const mappedData = data.map((user) => ({
         id: user.id.toString(),
         name: user.name,
@@ -247,7 +247,10 @@ const Users: React.FC = () => {
               required={!editingUser}
               value={formData.password_confirmation}
               onChange={(e) =>
-                setFormData({ ...formData, password_confirmation: e.target.value })
+                setFormData({
+                  ...formData,
+                  password_confirmation: e.target.value,
+                })
               }
               className="mt-1 block w-full  -md border-gray-300 shadow-lg focus:border-blue-500 focus:ring-blue-500 sm:text-sm border px-3 py-2"
               placeholder={t("confirmPassword")}

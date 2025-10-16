@@ -40,8 +40,7 @@ export const authApi = {
     }
 
     const data = await response.json();
-    
-    // Store token in localStorage
+
     if (data.token) {
       localStorage.setItem(TOKEN_KEY, data.token);
     }
@@ -51,13 +50,13 @@ export const authApi = {
 
   async logout(): Promise<void> {
     const token = this.getToken();
-    
+
     if (token) {
       try {
         await fetch(`${API_BASE_URL}/logout`, {
           method: "POST",
           headers: {
-            "Authorization": `Bearer ${token}`,
+            Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
           },
         });
@@ -71,13 +70,13 @@ export const authApi = {
 
   async logoutAll(): Promise<void> {
     const token = this.getToken();
-    
+
     if (token) {
       try {
         await fetch(`${API_BASE_URL}/logout-all`, {
           method: "POST",
           headers: {
-            "Authorization": `Bearer ${token}`,
+            Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
           },
         });
@@ -91,7 +90,7 @@ export const authApi = {
 
   async getUser(): Promise<UserResponse> {
     const token = this.getToken();
-    
+
     if (!token) {
       throw new Error("No token found");
     }
@@ -99,7 +98,7 @@ export const authApi = {
     const response = await fetch(`${API_BASE_URL}/user`, {
       method: "GET",
       headers: {
-        "Authorization": `Bearer ${token}`,
+        Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
     });
@@ -111,9 +110,13 @@ export const authApi = {
     return response.json();
   },
 
-  async updateUser(data: { name?: string; email?: string; password?: string }): Promise<UserResponse> {
+  async updateUser(data: {
+    name?: string;
+    email?: string;
+    password?: string;
+  }): Promise<UserResponse> {
     const token = this.getToken();
-    
+
     if (!token) {
       throw new Error("No token found");
     }
@@ -121,7 +124,7 @@ export const authApi = {
     const response = await fetch(`${API_BASE_URL}/user`, {
       method: "PUT",
       headers: {
-        "Authorization": `Bearer ${token}`,
+        Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify(data),

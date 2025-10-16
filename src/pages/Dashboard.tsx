@@ -42,7 +42,6 @@ ChartJS.register(
   Legend,
 );
 
-// Local type for PlayedQuiz based on model connector
 type PlayedQuizData = {
   id: string;
   player_id: number;
@@ -164,9 +163,13 @@ const Dashboard: React.FC = () => {
         return isSameDay(quizDate, date);
       });
 
-      const avgPointRate = quizzesOnDay.length > 0
-        ? quizzesOnDay.reduce((acc, quiz) => acc + (quiz.points_rate ?? 0), 0) / quizzesOnDay.length
-        : 0;
+      const avgPointRate =
+        quizzesOnDay.length > 0
+          ? quizzesOnDay.reduce(
+              (acc, quiz) => acc + (quiz.points_rate ?? 0),
+              0,
+            ) / quizzesOnDay.length
+          : 0;
 
       return {
         date: format(date, "MMM dd"),
@@ -240,13 +243,15 @@ const Dashboard: React.FC = () => {
           {
             name: "avgPointRate",
             value: playedQuizzes.length
-            ? Number(
-                (
-                  playedQuizzes.reduce((acc, q) => acc + (q.points_rate ?? 0), 0) /
-                  playedQuizzes.length
-                ).toFixed(2)
-              )
-            : 0,
+              ? Number(
+                  (
+                    playedQuizzes.reduce(
+                      (acc, q) => acc + (q.points_rate ?? 0),
+                      0,
+                    ) / playedQuizzes.length
+                  ).toFixed(2),
+                )
+              : 0,
             icon: Percent,
             color: "text-suva-blue-75",
             loading: false,
@@ -266,10 +271,14 @@ const Dashboard: React.FC = () => {
         const sortedQuizzes = [...playedQuizzes]
           .sort(
             (a, b) =>
-              new Date(b.created_at).getTime() - new Date(a.created_at).getTime(),
+              new Date(b.created_at).getTime() -
+              new Date(a.created_at).getTime(),
           )
           .slice(0, 4)
-          .map((quiz) => ({ ...quiz, id: String(quiz.id) })) as PlayedQuizData[];
+          .map((quiz) => ({
+            ...quiz,
+            id: String(quiz.id),
+          })) as PlayedQuizData[];
         setRecentQuizzes(sortedQuizzes);
       } catch (error) {
         console.error("Error fetching stats:", error);
@@ -435,11 +444,13 @@ const Dashboard: React.FC = () => {
                   <Line
                     data={{
                       ...pointRateChartData,
-                      datasets: pointRateChartData.datasets.map((dataset: any) => ({
-                        ...dataset,
-                        borderColor: "#00B8CF",
-                        backgroundColor: "rgba(0, 184, 207, 0.1)",
-                      })),
+                      datasets: pointRateChartData.datasets.map(
+                        (dataset: any) => ({
+                          ...dataset,
+                          borderColor: "#00B8CF",
+                          backgroundColor: "rgba(0, 184, 207, 0.1)",
+                        }),
+                      ),
                     }}
                     options={{
                       responsive: true,
@@ -457,9 +468,9 @@ const Dashboard: React.FC = () => {
                           beginAtZero: true,
                           max: 100,
                           ticks: {
-                            callback: function(value) {
-                              return value + '%';
-                            }
+                            callback: function (value) {
+                              return value + "%";
+                            },
                           },
                         },
                       },

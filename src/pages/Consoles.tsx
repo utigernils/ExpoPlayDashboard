@@ -42,11 +42,9 @@ const Consoles: React.FC = () => {
         QuizConnector.index(),
       ]);
 
-      // Create lookup maps for expo and quiz names
       const expoMap = new Map(expoData.map((e) => [e.id, e.name]));
       const quizMap = new Map(quizData.map((q) => [q.id, q.name]));
 
-      // Map console data to match expected Console type
       const mappedData = consoleData.map((console) => ({
         id: console.id.toString(),
         name: console.name,
@@ -123,8 +121,12 @@ const Consoles: React.FC = () => {
     try {
       const submitData = {
         name: formData.name,
-        current_expo_id: formData.currentExpo ? parseInt(formData.currentExpo) : null,
-        current_quiz_id: formData.currentQuiz ? parseInt(formData.currentQuiz) : null,
+        current_expo_id: formData.currentExpo
+          ? parseInt(formData.currentExpo)
+          : null,
+        current_quiz_id: formData.currentQuiz
+          ? parseInt(formData.currentQuiz)
+          : null,
         is_active: true,
       };
 

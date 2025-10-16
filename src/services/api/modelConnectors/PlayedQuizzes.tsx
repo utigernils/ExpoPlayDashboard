@@ -21,7 +21,8 @@ interface PlayedQuizApiResponse {
 }
 
 async function index(): Promise<PlayedQuiz[]> {
-  const response = await apiClient.get<PlayedQuizApiResponse>("/played-quizzes");
+  const response =
+    await apiClient.get<PlayedQuizApiResponse>("/played-quizzes");
   return (response.data as any[]).map((pq) => ({
     ...pq,
     created_at: new Date(pq.created_at),
@@ -30,7 +31,9 @@ async function index(): Promise<PlayedQuiz[]> {
 }
 
 async function show(id: number): Promise<PlayedQuiz> {
-  const response = await apiClient.get<PlayedQuizApiResponse>(`/played-quizzes/${id}`);
+  const response = await apiClient.get<PlayedQuizApiResponse>(
+    `/played-quizzes/${id}`,
+  );
   return {
     ...response.data,
     created_at: new Date(response.data.created_at),

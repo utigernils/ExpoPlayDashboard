@@ -46,7 +46,6 @@ const DataTable = <T extends { id: string }>({
     direction: "asc" | "desc";
   } | null>(null);
 
-  // Set default values for translations
   const finalSearchPlaceholder = searchPlaceholder || t("search");
   const finalAddButtonText = addButtonText || t("add");
 
@@ -93,7 +92,7 @@ const DataTable = <T extends { id: string }>({
 
   if (loading) {
     return (
-      <div className="bg-white    shadow-lg border border-suva-grey-25">
+      <div className="bg-white shadow-lg border border-suva-grey-25">
         <div className="px-6 py-4 border-b border-suva-grey-25">
           <div className="flex justify-between items-center">
             <div className="h-8 bg-suva-grey-50   w-48 animate-pulse"></div>
@@ -234,7 +233,10 @@ const DataTable = <T extends { id: string }>({
             {filteredData.length === 0 && (
               <tr>
                 <td
-                  colSpan={columns.length + (onEdit || onDelete || customActions ? 1 : 0)}
+                  colSpan={
+                    columns.length +
+                    (onEdit || onDelete || customActions ? 1 : 0)
+                  }
                   className="px-6 py-12 text-center text-suva-grey-75"
                 >
                   {searchTerm ? "No results found" : "No data available"}

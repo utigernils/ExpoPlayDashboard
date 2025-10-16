@@ -8,7 +8,10 @@ import {
 } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { AuthProvider, useAuth } from "./context/AuthContext";
-import { NotificationProvider, useNotification } from "./context/NotificationContext";
+import {
+  NotificationProvider,
+  useNotification,
+} from "./context/NotificationContext";
 import { setUnauthorizedCallback } from "./services/api/api";
 import LoginForm from "./components/Auth/LoginForm";
 import Dashboard from "./pages/Dashboard";
@@ -44,7 +47,6 @@ const AppRoutes: React.FC = () => {
   const { notify } = useNotification();
   const { t } = useTranslation();
 
-  // Set up the unauthorized callback
   useEffect(() => {
     setUnauthorizedCallback(() => {
       notify({

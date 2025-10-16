@@ -77,7 +77,7 @@ const Sidebar: React.FC = () => {
       </nav>
 
       {/* User section */}
-      <p className="px-4 py-4 text-suva-grey-50">Build 1.5.0</p>
+      <p className="px-4 py-4 text-suva-grey-25">Build 1.5.1</p>
       <div className="border-t border-suva-grey-25 p-2">
         {loading ? (
           <div className="flex items-center space-x-3 mb-3">
@@ -95,9 +95,7 @@ const Sidebar: React.FC = () => {
               to="/profile"
               className={({ isActive }) =>
                 `flex items-center space-x-3 mb-3 px-3 py-2 rounded-md transition-colors duration-200 ${
-                  isActive
-                    ? "bg-suva-bg-grey"
-                    : "hover:bg-suva-bg-grey"
+                  isActive ? "bg-suva-bg-grey" : "hover:bg-suva-bg-grey"
                 }`
               }
             >

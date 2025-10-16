@@ -31,7 +31,9 @@ async function show(id: number): Promise<Quiz> {
   } as Quiz;
 }
 
-async function create(quizData: Omit<Quiz, "id" | "created_at" | "updated_at" | "total_points">): Promise<Quiz> {
+async function create(
+  quizData: Omit<Quiz, "id" | "created_at" | "updated_at" | "total_points">,
+): Promise<Quiz> {
   const response = await apiClient.post<QuizApiResponse>("/quizzes", quizData);
   return {
     ...response.data,
@@ -40,8 +42,16 @@ async function create(quizData: Omit<Quiz, "id" | "created_at" | "updated_at" | 
   } as Quiz;
 }
 
-async function update(id: number, quizData: Partial<Omit<Quiz, "id" | "created_at" | "updated_at" | "total_points">>): Promise<Quiz> {
-  const response = await apiClient.put<QuizApiResponse>(`/quizzes/${id}`, quizData);
+async function update(
+  id: number,
+  quizData: Partial<
+    Omit<Quiz, "id" | "created_at" | "updated_at" | "total_points">
+  >,
+): Promise<Quiz> {
+  const response = await apiClient.put<QuizApiResponse>(
+    `/quizzes/${id}`,
+    quizData,
+  );
   return {
     ...response.data,
     created_at: new Date(response.data.created_at),

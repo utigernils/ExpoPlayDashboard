@@ -34,8 +34,13 @@ async function show(id: number): Promise<Question> {
   } as Question;
 }
 
-async function create(questionData: Omit<Question, "id" | "created_at" | "updated_at">): Promise<Question> {
-  const response = await apiClient.post<QuestionApiResponse>("/questions", questionData);
+async function create(
+  questionData: Omit<Question, "id" | "created_at" | "updated_at">,
+): Promise<Question> {
+  const response = await apiClient.post<QuestionApiResponse>(
+    "/questions",
+    questionData,
+  );
   return {
     ...response.data,
     created_at: new Date(response.data.created_at),
@@ -43,8 +48,14 @@ async function create(questionData: Omit<Question, "id" | "created_at" | "update
   } as Question;
 }
 
-async function update(id: number, questionData: Partial<Omit<Question, "id" | "created_at" | "updated_at">>): Promise<Question> {
-  const response = await apiClient.put<QuestionApiResponse>(`/questions/${id}`, questionData);
+async function update(
+  id: number,
+  questionData: Partial<Omit<Question, "id" | "created_at" | "updated_at">>,
+): Promise<Question> {
+  const response = await apiClient.put<QuestionApiResponse>(
+    `/questions/${id}`,
+    questionData,
+  );
   return {
     ...response.data,
     created_at: new Date(response.data.created_at),

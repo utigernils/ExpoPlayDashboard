@@ -47,7 +47,7 @@ const Quizzes: React.FC = () => {
   const fetchQuizzes = async () => {
     try {
       const data = await QuizConnector.index();
-      // Map the data to match the expected Quiz type
+
       const mappedData = data.map((quiz) => ({
         id: quiz.id.toString(),
         name: quiz.name,
@@ -136,7 +136,7 @@ const Quizzes: React.FC = () => {
     setQuestionsLoading(true);
     try {
       const data = await QuestionConnector.index();
-      // Filter questions by quiz_id and map to match expected Question type
+
       const filteredData = data
         .filter((q) => q.quiz_id === parseInt(quizId))
         .map((q) => ({
@@ -226,7 +226,10 @@ const Quizzes: React.FC = () => {
       };
 
       if (editingQuestion) {
-        await QuestionConnector.update(parseInt(editingQuestion.id), submitData);
+        await QuestionConnector.update(
+          parseInt(editingQuestion.id),
+          submitData,
+        );
       } else {
         await QuestionConnector.create(submitData);
       }
