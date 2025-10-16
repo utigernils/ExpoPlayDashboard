@@ -28,8 +28,6 @@ interface DataTableProps<T> {
   customActions?: (item: T) => React.ReactNode;
 }
 
-const { t } = useTranslation();
-
 const DataTable = <T extends { id: string }>({
   data,
   columns,
@@ -37,8 +35,8 @@ const DataTable = <T extends { id: string }>({
   onEdit,
   onDelete,
   loading = false,
-  searchPlaceholder = t("search"),
-  addButtonText = t("add"),
+  searchPlaceholder,
+  addButtonText,
   customActions,
 }: DataTableProps<T>) => {
   const { t } = useTranslation();
@@ -47,6 +45,10 @@ const DataTable = <T extends { id: string }>({
     key: keyof T;
     direction: "asc" | "desc";
   } | null>(null);
+
+  // Set default values for translations
+  const finalSearchPlaceholder = searchPlaceholder || t("search");
+  const finalAddButtonText = addButtonText || t("add");
 
   const handleSort = (key: keyof T) => {
     let direction: "asc" | "desc" = "asc";
@@ -123,7 +125,7 @@ const DataTable = <T extends { id: string }>({
             <input
               type="text"
               className="block w-full pl-10 pr-3 py-2 border border-suva-grey-25    leading-5 bg-white placeholder-suva-grey-50 focus:outline-none focus:placeholder-suva-grey-75 focus:ring-1 focus:ring-suva-blue-100 focus:border-suva-blue-100 sm:text-sm"
-              placeholder={searchPlaceholder}
+              placeholder={finalSearchPlaceholder}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
@@ -134,7 +136,7 @@ const DataTable = <T extends { id: string }>({
               className="rounded-full inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium    shadow-lg text-white bg-suva-blue-100 hover:bg-suva-interaction-blue focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-suva-blue-100 transition-colors duration-200"
             >
               <Plus className="h-4 w-4 mr-2" />
-              {addButtonText}
+              {finalAddButtonText}
             </button>
           )}
         </div>
