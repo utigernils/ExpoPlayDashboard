@@ -153,5 +153,11 @@
   "welcomeSubtitle": "Informations sous le message de bienvenue",
   "enterWelcomeTitle": "Saisir le message de bienvenue",
   "enterWelcomeSubtitle": "Saisir les informations",
-  "notDone": "Non terminé"
+  "notDone": "Non terminé",
+  "viewPlayedQuizzes": "Voir les quiz joués",
+  "noPlayedQuizzes": "Aucun quiz joué trouvé",
+  "quiz": "Quiz",
+  "expo": "Exposition",
+  "time": "Temps",
+  "date": "Date"
 }

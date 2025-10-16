@@ -153,5 +153,11 @@
   "welcomeSubtitle": "Informationen unterhalb der Willkommens Nachricht",
   "enterWelcomeTitle": "Willkommens Nachricht eingeben",
   "enterWelcomeSubtitle": "Informationen eingeben",
-  "notDone": "Nicht beendet"
+  "notDone": "Nicht beendet",
+  "viewPlayedQuizzes": "Gespielte Quiz anzeigen",
+  "noPlayedQuizzes": "Keine gespielten Quiz gefunden",
+  "quiz": "Quiz",
+  "expo": "Ausstellung",
+  "time": "Zeit",
+  "date": "Datum"
 }

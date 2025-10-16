@@ -25,6 +25,7 @@ interface DataTableProps<T> {
   loading?: boolean;
   searchPlaceholder?: string;
   addButtonText?: string;
+  customActions?: (item: T) => React.ReactNode;
 }
 
 const { t } = useTranslation();
@@ -38,6 +39,7 @@ const DataTable = <T extends { id: string }>({
   loading = false,
   searchPlaceholder = t("search"),
   addButtonText = t("add"),
+  customActions,
 }: DataTableProps<T>) => {
   const { t } = useTranslation();
   const [searchTerm, setSearchTerm] = useState("");
@@ -177,7 +179,7 @@ const DataTable = <T extends { id: string }>({
                   </div>
                 </th>
               ))}
-              {(onEdit || onDelete) && (
+              {(onEdit || onDelete || customActions) && (
                 <th className="px-6 py-3 text-right text-xs font-medium text-suva-grey-75 uppercase tracking-wider">
                   {t("actions")}
                 </th>
@@ -202,9 +204,10 @@ const DataTable = <T extends { id: string }>({
                       : String(item[column.key])}
                   </td>
                 ))}
-                {(onEdit || onDelete) && (
+                {(onEdit || onDelete || customActions) && (
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                     <div className="flex items-center justify-end space-x-2">
+                      {customActions && customActions(item)}
                       {onEdit && (
                         <button
                           onClick={() => onEdit(item)}
@@ -229,7 +232,7 @@ const DataTable = <T extends { id: string }>({
             {filteredData.length === 0 && (
               <tr>
                 <td
-                  colSpan={columns.length + (onEdit || onDelete ? 1 : 0)}
+                  colSpan={columns.length + (onEdit || onDelete || customActions ? 1 : 0)}
                   className="px-6 py-12 text-center text-suva-grey-75"
                 >
                   {searchTerm ? "No results found" : "No data available"}

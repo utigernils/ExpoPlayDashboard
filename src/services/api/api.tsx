@@ -4,7 +4,7 @@ export interface ApiCredentials {
     baseUrl: string;
 }
 
-export const API_BASE_URL = "http://localhost:8000/api";
+export const API_BASE_URL = "http://h50lr50:8000/api";
 
 export const apiCredentials: ApiCredentials = {
     baseUrl: API_BASE_URL,

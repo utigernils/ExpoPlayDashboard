@@ -30,6 +30,7 @@ export interface Player {
   email: string;
   joinLink: string;
   wantsNewsletter: boolean;
+  playedQuizzes?: number;
 }
 
 export interface Quiz {
