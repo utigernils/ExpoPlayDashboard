@@ -4,8 +4,7 @@ import Layout from "../components/Layout/Layout";
 import Header from "../components/Layout/Header";
 import DataTable from "../components/Common/DataTable";
 import ConfirmDialog from "../components/Common/ConfirmDialog";
-import { PlayedQuiz } from "../types";
-import { playedQuizApi } from "../services/api";
+import { PlayedQuiz, index, destroy } from "../services/api/modelConnectors/PlayedQuizzes";
 import { useNotification } from "../context/NotificationContext";
 
 const PlayedQuizzes: React.FC = () => {
@@ -20,7 +19,7 @@ const PlayedQuizzes: React.FC = () => {
 
   const fetchPlayedQuizzes = async () => {
     try {
-      const data = await playedQuizApi.getAll();
+      const data = await index();
       setPlayedQuizzes(data);
     } catch (error) {
       console.error("Error fetching played quizzes:", error);
@@ -44,7 +43,7 @@ const PlayedQuizzes: React.FC = () => {
 
     setDeleteLoading(true);
     try {
-      await playedQuizApi.delete(deletingPlayedQuiz.id);
+      await destroy(deletingPlayedQuiz.id);
       setIsDeleteDialogOpen(false);
       setDeletingPlayedQuiz(null);
       fetchPlayedQuizzes();
@@ -71,47 +70,37 @@ const PlayedQuizzes: React.FC = () => {
       sortable: true,
     },
     {
-      key: "quizName" as keyof PlayedQuiz,
+      key: "quiz_name" as keyof PlayedQuiz,
       label: t("quizName"),
       sortable: true,
     },
     {
-      key: "expoName" as keyof PlayedQuiz,
+      key: "expo_name" as keyof PlayedQuiz,
       label: t("expoName"),
       sortable: true,
     },
     {
-      key: "startedOn" as keyof PlayedQuiz,
-      label: t("started"),
+      key: "time" as keyof PlayedQuiz,
+      label: t("duration"),
       sortable: true,
       render: (value: string) => new Date(value).toLocaleString(),
     },
     {
-      key: "endedOn" as keyof PlayedQuiz,
-      label: t("ended"),
-      sortable: true,
-      render: (value: string) =>
-        value ? new Date(value).toLocaleString() : t("notFinished"),
-    },
-    {
-      key: "correctAnswers" as keyof PlayedQuiz,
+      key: "points" as keyof PlayedQuiz,
       label: t("points"),
       sortable: true,
     },
     {
-      key: "totalPoints" as keyof PlayedQuiz,
+      key: "quiz_max_points" as keyof PlayedQuiz,
       label: t("pointsPossible"),
       sortable: true,
     },
     {
-      key: "scorePercentage" as any,
+      key: "points_rate" as keyof PlayedQuiz,
       label: t("grading"),
-      sortable: false,
+      sortable: true,
       render: (_: any, row: PlayedQuiz) => {
-        const correct = row.correctAnswers;
-        const total = row.totalPoints;
-        if (total === 0) return 0 + "%";
-        const percentage = Math.round((correct / total) * 100);
+        const percentage = row.points_rate;
         return (
           <div className="flex items-center space-x-2">
             <span
@@ -129,33 +118,7 @@ const PlayedQuizzes: React.FC = () => {
         );
       },
     },
-    {
-      key: "duration" as any,
-      label: t("duration"),
-      sortable: false,
-      render: (_: any, row: PlayedQuiz) => {
-        const startedOn = row.startedOn;
-        if (!row.endedOn) return t("inProgress");
 
-        const startTime = new Date(startedOn);
-        const endTime = new Date(row.endedOn);
-        const durationMs = endTime.getTime() - startTime.getTime();
-
-        const hours = Math.floor(durationMs / (1000 * 60 * 60));
-        const minutes = Math.floor(
-          (durationMs % (1000 * 60 * 60)) / (1000 * 60),
-        );
-        const seconds = Math.floor((durationMs % (1000 * 60)) / 1000);
-
-        if (hours > 0) {
-          return `${hours}h ${minutes}m ${seconds}s`;
-        } else if (minutes > 0) {
-          return `${minutes}m ${seconds}s`;
-        } else {
-          return `${seconds}s`;
-        }
-      },
-    },
   ];
 
   return (

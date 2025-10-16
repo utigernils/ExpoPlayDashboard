@@ -6,7 +6,8 @@ import DataTable from "../components/Common/DataTable";
 import Modal from "../components/Common/Modal";
 import ConfirmDialog from "../components/Common/ConfirmDialog";
 import { Quiz, Question } from "../types";
-import { quizApi, questionApi } from "../services/api";
+import * as QuizConnector from "../services/api/modelConnectors/Quizzes";
+import * as QuestionConnector from "../services/api/modelConnectors/Questions";
 import { useNotification } from "../context/NotificationContext";
 
 const Quizzes: React.FC = () => {
@@ -45,8 +46,14 @@ const Quizzes: React.FC = () => {
 
   const fetchQuizzes = async () => {
     try {
-      const data = await quizApi.getAll();
-      setQuizzes(data);
+      const data = await QuizConnector.index();
+      // Map the data to match the expected Quiz type
+      const mappedData = data.map((quiz) => ({
+        id: quiz.id.toString(),
+        name: quiz.name,
+        totalPoints: quiz.total_points,
+      }));
+      setQuizzes(mappedData);
     } catch (error) {
       console.error("Error fetching quizzes:", error);
     } finally {
@@ -89,9 +96,9 @@ const Quizzes: React.FC = () => {
 
     try {
       if (editingQuiz) {
-        await quizApi.update(editingQuiz.id, formData);
+        await QuizConnector.update(parseInt(editingQuiz.id), formData);
       } else {
-        await quizApi.create(formData);
+        await QuizConnector.create({ ...formData, is_active: true });
       }
       setIsModalOpen(false);
       fetchQuizzes();
@@ -108,7 +115,7 @@ const Quizzes: React.FC = () => {
 
     setDeleteLoading(true);
     try {
-      await quizApi.delete(deletingQuiz.id);
+      await QuizConnector.destroy(parseInt(deletingQuiz.id));
       setIsDeleteDialogOpen(false);
       setDeletingQuiz(null);
       fetchQuizzes();
@@ -128,8 +135,19 @@ const Quizzes: React.FC = () => {
   const fetchQuestions = async (quizId: string) => {
     setQuestionsLoading(true);
     try {
-      const data = await questionApi.getAll(quizId);
-      setQuestions(data);
+      const data = await QuestionConnector.index();
+      // Filter questions by quiz_id and map to match expected Question type
+      const filteredData = data
+        .filter((q) => q.quiz_id === parseInt(quizId))
+        .map((q) => ({
+          id: q.id.toString(),
+          quizId: q.quiz_id.toString(),
+          question: q.question,
+          questionType: q.question_type.toString(),
+          answerPossibilities: q.answer_possibilities,
+          pointMultiplier: q.points,
+        }));
+      setQuestions(filteredData);
     } catch (error) {
       console.error("Error fetching questions:", error);
       setQuestions([]);
@@ -197,20 +215,20 @@ const Quizzes: React.FC = () => {
 
     try {
       const submitData = {
-        ...questionFormData,
-        answerPossibilities: questionFormData.answerPossibilities
+        quiz_id: parseInt(selectedQuiz.id),
+        question: questionFormData.question,
+        question_type: parseInt(questionFormData.questionType),
+        answer_possibilities: questionFormData.answerPossibilities
           ? JSON.stringify(questionFormData.answerPossibilities)
           : null,
+        points: questionFormData.pointMultiplier,
+        is_hidden: false,
       };
 
       if (editingQuestion) {
-        await questionApi.update(
-          selectedQuiz.id,
-          editingQuestion.id,
-          submitData,
-        );
+        await QuestionConnector.update(parseInt(editingQuestion.id), submitData);
       } else {
-        await questionApi.create(selectedQuiz.id, submitData);
+        await QuestionConnector.create(submitData);
       }
       setIsQuestionModalOpen(false);
       fetchQuestions(selectedQuiz.id);
@@ -228,7 +246,7 @@ const Quizzes: React.FC = () => {
 
     setQuestionDeleteLoading(true);
     try {
-      await questionApi.delete(selectedQuiz.id, deletingQuestion.id);
+      await QuestionConnector.destroy(parseInt(deletingQuestion.id));
       setIsQuestionDeleteDialogOpen(false);
       setDeletingQuestion(null);
       fetchQuestions(selectedQuiz.id);

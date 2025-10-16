@@ -6,7 +6,7 @@ import DataTable from "../components/Common/DataTable";
 import Modal from "../components/Common/Modal";
 import ConfirmDialog from "../components/Common/ConfirmDialog";
 import { Expo } from "../types";
-import { expoApi } from "../services/api";
+import * as ExpoConnector from "../services/api/modelConnectors/Expos";
 import { CheckCircle, XCircle } from "lucide-react";
 import { useNotification } from "../context/NotificationContext";
 
@@ -33,8 +33,19 @@ const Expos: React.FC = () => {
 
   const fetchExpos = async () => {
     try {
-      const data = await expoApi.getAll();
-      setExpos(data);
+      const data = await ExpoConnector.index();
+      // Map the data to match the expected Expo type
+      const mappedData = data.map((expo) => ({
+        id: expo.id.toString(),
+        name: expo.name,
+        startsOn: expo.starts_on.toISOString(),
+        endsOn: expo.ends_on.toISOString(),
+        location: expo.location,
+        isActive: true, // Model connector doesn't have isActive, defaulting to true
+        welcomeTitle: expo.introduction_title,
+        welcomeSubtitle: expo.introduction_subtitle || "",
+      }));
+      setExpos(mappedData);
     } catch (error) {
       console.error("Error fetching expos:", error);
     } finally {
@@ -93,15 +104,18 @@ const Expos: React.FC = () => {
 
     try {
       const submitData = {
-        ...formData,
-        startsOn: formData.startsOn + " 00:00:00",
-        endsOn: formData.endsOn + " 23:59:59",
+        name: formData.name,
+        introduction_title: formData.welcomeTitle,
+        introduction_subtitle: formData.welcomeSubtitle || null,
+        location: formData.location,
+        starts_on: new Date(formData.startsOn + "T00:00:00"),
+        ends_on: new Date(formData.endsOn + "T23:59:59"),
       };
 
       if (editingExpo) {
-        await expoApi.update(editingExpo.id, submitData);
+        await ExpoConnector.update(parseInt(editingExpo.id), submitData);
       } else {
-        await expoApi.create(submitData);
+        await ExpoConnector.create(submitData);
       }
       setIsModalOpen(false);
       fetchExpos();
@@ -118,7 +132,7 @@ const Expos: React.FC = () => {
 
     setDeleteLoading(true);
     try {
-      await expoApi.delete(deletingExpo.id);
+      await ExpoConnector.destroy(parseInt(deletingExpo.id));
       setIsDeleteDialogOpen(false);
       setDeletingExpo(null);
       fetchExpos();

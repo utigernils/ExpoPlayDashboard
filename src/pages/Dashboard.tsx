@@ -10,14 +10,11 @@ import {
   GamepadIcon,
   User,
 } from "lucide-react";
-import {
-  consoleApi,
-  expoApi,
-  playerApi,
-  quizApi,
-  userApi,
-  playedQuizApi,
-} from "../services/api";
+import * as ConsoleConnector from "../services/api/modelConnectors/Consoles";
+import * as ExpoConnector from "../services/api/modelConnectors/Expos";
+import * as PlayerConnector from "../services/api/modelConnectors/Players";
+import * as QuizConnector from "../services/api/modelConnectors/Quizzes";
+import * as PlayedQuizConnector from "../services/api/modelConnectors/PlayedQuizzes";
 import { useNotification } from "../context/NotificationContext";
 import {
   Chart as ChartJS,
@@ -32,7 +29,6 @@ import {
 } from "chart.js";
 import { Line } from "react-chartjs-2";
 import { subDays, format, startOfDay, isSameDay } from "date-fns";
-import { PlayedQuiz } from "../types";
 
 ChartJS.register(
   CategoryScale,
@@ -44,6 +40,22 @@ ChartJS.register(
   Tooltip,
   Legend,
 );
+
+// Local type for PlayedQuiz based on model connector
+type PlayedQuizData = {
+  id: number;
+  player_id: number;
+  quiz_id: number;
+  expo_id: number;
+  points: number;
+  quiz_max_points: number;
+  quiz_name: string;
+  expo_name: string;
+  created_at: Date;
+  updated_at: Date;
+  time: number;
+  points_rate: number;
+};
 
 interface StatsCard {
   name: string;
@@ -103,9 +115,9 @@ const Dashboard: React.FC = () => {
   ]);
 
   const [chartData, setChartData] = useState<any>(null);
-  const [recentQuizzes, setRecentQuizzes] = useState<PlayedQuiz[]>([]);
+  const [recentQuizzes, setRecentQuizzes] = useState<PlayedQuizData[]>([]);
 
-  const getLastWeekData = (playedQuizzes: PlayedQuiz[]) => {
+  const getLastWeekData = (playedQuizzes: PlayedQuizData[]) => {
     const today = new Date();
     const lastWeek = Array.from({ length: 7 }, (_, i) => {
       return startOfDay(subDays(today, 6 - i));
@@ -113,7 +125,7 @@ const Dashboard: React.FC = () => {
 
     const data = lastWeek.map((date) => {
       const count = playedQuizzes.filter((quiz) => {
-        const quizDate = new Date(quiz.startedOn);
+        const quizDate = new Date(quiz.created_at);
         return isSameDay(quizDate, date);
       }).length;
 
@@ -148,14 +160,13 @@ const Dashboard: React.FC = () => {
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        const [consoles, expos, players, quizzes, users, playedQuizzes] =
+        const [consoles, expos, players, quizzes, playedQuizzes] =
           await Promise.all([
-            consoleApi.getAll().catch(() => []),
-            expoApi.getAll().catch(() => []),
-            playerApi.getAll().catch(() => []),
-            quizApi.getAll().catch(() => []),
-            userApi.getAll().catch(() => []),
-            playedQuizApi.getAll().catch(() => []),
+            ConsoleConnector.index().catch(() => []),
+            ExpoConnector.index().catch(() => []),
+            PlayerConnector.index().catch(() => []),
+            QuizConnector.index().catch(() => []),
+            PlayedQuizConnector.index().catch(() => []),
           ]);
 
         setStats([
@@ -189,7 +200,7 @@ const Dashboard: React.FC = () => {
           },
           {
             name: "users",
-            value: users.length,
+            value: 0, // No users connector available
             icon: User,
             color: "text-suva-blue-75",
             loading: false,
@@ -208,7 +219,7 @@ const Dashboard: React.FC = () => {
         const sortedQuizzes = [...playedQuizzes]
           .sort(
             (a, b) =>
-              new Date(b.startedOn).getTime() - new Date(a.startedOn).getTime(),
+              new Date(b.created_at).getTime() - new Date(a.created_at).getTime(),
           )
           .slice(0, 4);
         setRecentQuizzes(sortedQuizzes);
@@ -328,15 +339,15 @@ const Dashboard: React.FC = () => {
                     >
                       <div className="flex-1">
                         <div className="text-sm font-medium text-gray-900">
-                          {quiz.quizName}
+                          {quiz.quiz_name}
                         </div>
                         <div className="text-xs text-gray-500">
-                          {quiz.expoName} • {t("player")}: {quiz.player}
+                          {quiz.expo_name} • {t("player")}: {quiz.player_id}
                         </div>
                       </div>
                       <div className="text-right">
                         <div className="text-xs text-gray-500">
-                          {format(new Date(quiz.startedOn), "MMM dd, HH:mm")}
+                          {format(new Date(quiz.created_at), "MMM dd, HH:mm")}
                         </div>
                       </div>
                     </div>

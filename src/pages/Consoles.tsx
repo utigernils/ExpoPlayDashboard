@@ -6,7 +6,9 @@ import DataTable from "../components/Common/DataTable";
 import Modal from "../components/Common/Modal";
 import ConfirmDialog from "../components/Common/ConfirmDialog";
 import { Console } from "../types";
-import { consoleApi, expoApi, quizApi } from "../services/api";
+import * as ConsoleConnector from "../services/api/modelConnectors/Consoles";
+import * as ExpoConnector from "../services/api/modelConnectors/Expos";
+import * as QuizConnector from "../services/api/modelConnectors/Quizzes";
 import { useNotification } from "../context/NotificationContext";
 
 const Consoles: React.FC = () => {
@@ -34,8 +36,31 @@ const Consoles: React.FC = () => {
 
   const fetchConsoles = async () => {
     try {
-      const data = await consoleApi.getAll();
-      setConsoles(data);
+      const [consoleData, expoData, quizData] = await Promise.all([
+        ConsoleConnector.index(),
+        ExpoConnector.index(),
+        QuizConnector.index(),
+      ]);
+
+      // Create lookup maps for expo and quiz names
+      const expoMap = new Map(expoData.map((e) => [e.id, e.name]));
+      const quizMap = new Map(quizData.map((q) => [q.id, q.name]));
+
+      // Map console data to match expected Console type
+      const mappedData = consoleData.map((console) => ({
+        id: console.id.toString(),
+        name: console.name,
+        currentExpo: console.current_expo_id?.toString() || "",
+        currentQuiz: console.current_quiz_id?.toString() || "",
+        expoName: console.current_expo_id
+          ? expoMap.get(console.current_expo_id) || ""
+          : "",
+        quizName: console.current_quiz_id
+          ? quizMap.get(console.current_quiz_id) || ""
+          : "",
+      }));
+
+      setConsoles(mappedData as any);
     } catch (error) {
       console.error("Error fetching consoles:", error);
     } finally {
@@ -49,11 +74,15 @@ const Consoles: React.FC = () => {
 
   useEffect(() => {
     if (isModalOpen) {
-      expoApi.getAll().then((data: any[]) => {
-        setExpoOptions(data.map((expo) => ({ id: expo.id, name: expo.name })));
+      ExpoConnector.index().then((data) => {
+        setExpoOptions(
+          data.map((expo) => ({ id: expo.id.toString(), name: expo.name })),
+        );
       });
-      quizApi.getAll().then((data: any[]) => {
-        setQuizOptions(data.map((quiz) => ({ id: quiz.id, name: quiz.name })));
+      QuizConnector.index().then((data) => {
+        setQuizOptions(
+          data.map((quiz) => ({ id: quiz.id.toString(), name: quiz.name })),
+        );
       });
     }
   }, [isModalOpen]);
@@ -79,7 +108,7 @@ const Consoles: React.FC = () => {
     setIsDeleteDialogOpen(true);
   };
 
-  const handleError = (err: any) => {
+  const handleError = (_err: any) => {
     notify({
       title: t("error"),
       description: t("errorOccurred"),
@@ -92,10 +121,17 @@ const Consoles: React.FC = () => {
     setFormLoading(true);
 
     try {
+      const submitData = {
+        name: formData.name,
+        current_expo_id: formData.currentExpo ? parseInt(formData.currentExpo) : null,
+        current_quiz_id: formData.currentQuiz ? parseInt(formData.currentQuiz) : null,
+        is_active: true,
+      };
+
       if (editingConsole) {
-        await consoleApi.update(editingConsole.id, formData);
+        await ConsoleConnector.update(parseInt(editingConsole.id), submitData);
       } else {
-        await consoleApi.create(formData);
+        await ConsoleConnector.create(submitData);
       }
       setIsModalOpen(false);
       fetchConsoles();
@@ -112,7 +148,7 @@ const Consoles: React.FC = () => {
 
     setDeleteLoading(true);
     try {
-      await consoleApi.delete(deletingConsole.id);
+      await ConsoleConnector.destroy(parseInt(deletingConsole.id));
       setIsDeleteDialogOpen(false);
       setDeletingConsole(null);
       fetchConsoles();

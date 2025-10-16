@@ -5,7 +5,7 @@ import Header from "../components/Layout/Header";
 import DataTable from "../components/Common/DataTable";
 import ConfirmDialog from "../components/Common/ConfirmDialog";
 import { Player } from "../types";
-import { playerApi } from "../services/api";
+import * as PlayerConnector from "../services/api/modelConnectors/Players";
 import { CheckCircle, XCircle } from "lucide-react";
 import { useNotification } from "../context/NotificationContext";
 
@@ -20,8 +20,17 @@ const Players: React.FC = () => {
 
   const fetchPlayers = async () => {
     try {
-      const data = await playerApi.getAll();
-      setPlayers(data);
+      const data = await PlayerConnector.index();
+      // Map the data to match the expected Player type
+      const mappedData = data.map((player) => ({
+        id: player.id.toString(),
+        firstName: player.first_name,
+        lastName: player.last_name,
+        email: player.email,
+        joinLink: player.join_link,
+        wantsNewsletter: player.wants_newsletter,
+      }));
+      setPlayers(mappedData);
     } catch (error) {
       console.error("Error fetching players:", error);
     } finally {
@@ -38,7 +47,7 @@ const Players: React.FC = () => {
     setIsDeleteDialogOpen(true);
   };
 
-  const handleError = (err: any) => {
+  const handleError = (_err: any) => {
     notify({
       title: t("error"),
       description: t("errorOccurred"),
@@ -51,7 +60,7 @@ const Players: React.FC = () => {
 
     setDeleteLoading(true);
     try {
-      await playerApi.delete(deletingPlayer.id);
+      await PlayerConnector.destroy(parseInt(deletingPlayer.id));
       setIsDeleteDialogOpen(false);
       setDeletingPlayer(null);
       fetchPlayers();

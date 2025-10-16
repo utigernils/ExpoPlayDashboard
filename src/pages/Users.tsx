@@ -6,7 +6,7 @@ import DataTable from "../components/Common/DataTable";
 import Modal from "../components/Common/Modal";
 import ConfirmDialog from "../components/Common/ConfirmDialog";
 import { User } from "../types";
-import { userApi } from "../services/api";
+import * as UserConnector from "../services/api/modelConnectors/Users";
 import { useNotification } from "../context/NotificationContext";
 
 const Users: React.FC = () => {
@@ -34,8 +34,15 @@ const Users: React.FC = () => {
 
   const fetchUsers = async () => {
     try {
-      const data = await userApi.getAll();
-      setUsers(data);
+      const data = await UserConnector.index();
+      // Map the data to match the expected User type
+      const mappedData = data.map((user) => ({
+        id: user.id.toString(),
+        firstName: user.first_name,
+        lastName: user.last_name,
+        email: user.email,
+      }));
+      setUsers(mappedData);
     } catch (error) {
       console.error("Error fetching users:", error);
     } finally {
@@ -74,7 +81,7 @@ const Users: React.FC = () => {
     setIsDeleteDialogOpen(true);
   };
 
-  const handleError = (err: any) => {
+  const handleError = (_err: any) => {
     notify({
       title: t("error"),
       description: t("errorOccurred"),
@@ -88,13 +95,22 @@ const Users: React.FC = () => {
 
     try {
       if (editingUser) {
-        const updateData = { ...formData };
-        if (!updateData.password) {
-          delete updateData.password;
+        const updateData: any = {
+          first_name: formData.firstName,
+          last_name: formData.lastName,
+          email: formData.email,
+        };
+        if (formData.password) {
+          updateData.password = formData.password;
         }
-        await userApi.update(editingUser.id, updateData);
+        await UserConnector.update(parseInt(editingUser.id), updateData);
       } else {
-        await userApi.create(formData);
+        await UserConnector.create({
+          first_name: formData.firstName,
+          last_name: formData.lastName,
+          email: formData.email,
+          password: formData.password || "",
+        });
       }
       setIsModalOpen(false);
       fetchUsers();
@@ -111,7 +127,7 @@ const Users: React.FC = () => {
 
     setDeleteLoading(true);
     try {
-      await userApi.delete(deletingUser.id);
+      await UserConnector.destroy(parseInt(deletingUser.id));
       setIsDeleteDialogOpen(false);
       setDeletingUser(null);
       fetchUsers();

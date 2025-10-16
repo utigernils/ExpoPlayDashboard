@@ -1,7 +1,6 @@
 import React from "react";
 import { useTranslation } from "../../hooks/useTranslation";
 import { NavLink } from "react-router-dom";
-import api from "../../services/api";
 import {
   Home,
   Monitor,
@@ -16,24 +15,10 @@ import { useAuth } from "../../context/AuthContext";
 import ExpoPlayLogo from "../../ExpoPlay_Logo.png";
 
 const Sidebar: React.FC = () => {
-  const { logout, checkAdmin, loading, checkAuth, user } = useAuth();
+  const { logout, checkAdmin, loading, user } = useAuth();
   const { t } = useTranslation();
 
   const [isAdmin, setIsAdmin] = React.useState(false);
-  const [userData, setUserData] = React.useState<any>(null);
-
-  React.useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await api.get("/login");
-        setUserData(response.data);
-      } catch (error) {
-        console.error("Error fetching user data:", error);
-      }
-    };
-
-    fetchData();
-  }, [checkAuth]);
 
   React.useEffect(() => {
     const check = async () => {
@@ -109,16 +94,16 @@ const Sidebar: React.FC = () => {
               <div className="flex-shrink-0">
                 <div className="h-8 w-8  rounded-full bg-suva-blue-100 flex items-center justify-center">
                   <span className="text-sm font-medium text-white">
-                    {userData?.firstName?.charAt(0) || "X"}
+                    {user.name?.charAt(0) || user.email?.charAt(0) || "X"}
                   </span>
                 </div>
               </div>
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-medium text-suva-grey-100 truncate">
-                  {userData?.firstName} {userData?.lastName}
+                  {user.name}
                 </p>
                 <p className="text-sm text-suva-grey-75 truncate">
-                  {userData?.email}
+                  {user.email}
                 </p>
               </div>
             </div>
