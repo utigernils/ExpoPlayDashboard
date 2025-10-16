@@ -65,7 +65,7 @@ const PlayedQuizzes: React.FC = () => {
 
   const columns = [
     {
-      key: "playerName" as keyof PlayedQuiz,
+      key: "player_name" as keyof PlayedQuiz,
       label: t("playerName"),
       sortable: true,
     },
@@ -83,7 +83,15 @@ const PlayedQuizzes: React.FC = () => {
       key: "time" as keyof PlayedQuiz,
       label: t("duration"),
       sortable: true,
-      render: (value: string) => new Date(value).toLocaleString(),
+      render: (value: any) => {
+        if (value == null) return "Not done";
+        const totalSeconds = Number(value);
+        if (Number.isNaN(totalSeconds)) return "Not done";
+        const minutes = Math.floor(totalSeconds / 60);
+        const seconds = Math.floor(totalSeconds % 60);
+        const pad = (n: number) => String(n).padStart(2, 0);
+        return `${pad(minutes)}m ${pad(seconds)}s`;
+      },
     },
     {
       key: "points" as keyof PlayedQuiz,
@@ -118,7 +126,6 @@ const PlayedQuizzes: React.FC = () => {
         );
       },
     },
-
   ];
 
   return (
