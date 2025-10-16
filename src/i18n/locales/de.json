@@ -152,5 +152,6 @@
   "welcomeTitle": "Willkommens Nachricht",
   "welcomeSubtitle": "Informationen unterhalb der Willkommens Nachricht",
   "enterWelcomeTitle": "Willkommens Nachricht eingeben",
-  "enterWelcomeSubtitle": "Informationen eingeben"
+  "enterWelcomeSubtitle": "Informationen eingeben",
+  "notDone": "Nicht beendet"
 }

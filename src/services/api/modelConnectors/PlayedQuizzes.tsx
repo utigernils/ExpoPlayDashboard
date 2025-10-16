@@ -13,6 +13,7 @@ type PlayedQuiz = {
   updated_at: Date;
   time: number;
   points_rate: number;
+  player_name: string;
 };
 
 interface PlayedQuizApiResponse {

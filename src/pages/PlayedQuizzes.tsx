@@ -84,9 +84,9 @@ const PlayedQuizzes: React.FC = () => {
       label: t("duration"),
       sortable: true,
       render: (value: any) => {
-        if (value == null) return "Not done";
+        if (value == null) return t("notDone");
         const totalSeconds = Number(value);
-        if (Number.isNaN(totalSeconds)) return "Not done";
+        if (Number.isNaN(totalSeconds)) return t("notDone");
         const minutes = Math.floor(totalSeconds / 60);
         const seconds = Math.floor(totalSeconds % 60);
         const pad = (n: number) => String(n).padStart(2, 0);
