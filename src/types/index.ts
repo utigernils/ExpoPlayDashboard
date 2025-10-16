@@ -17,7 +17,6 @@ export interface Expo {
   startsOn: string;
   endsOn: string;
   location: string;
-  isActive: boolean;
   welcomeTitle: string;
   welcomeSubtitle: string;
 }

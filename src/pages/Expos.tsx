@@ -7,7 +7,6 @@ import Modal from "../components/Common/Modal";
 import ConfirmDialog from "../components/Common/ConfirmDialog";
 import { Expo } from "../types";
 import * as ExpoConnector from "../services/api/modelConnectors/Expos";
-import { CheckCircle, XCircle } from "lucide-react";
 import { useNotification } from "../context/NotificationContext";
 import { formatDateInputForAPI } from "../utils/date";
 
@@ -25,7 +24,6 @@ const Expos: React.FC = () => {
     startsOn: "",
     endsOn: "",
     location: "",
-    isActive: false,
     welcomeTitle: "",
     welcomeSubtitle: "",
   });
@@ -42,7 +40,6 @@ const Expos: React.FC = () => {
         startsOn: expo.starts_on.toISOString(),
         endsOn: expo.ends_on.toISOString(),
         location: expo.location,
-        isActive: true, // Model connector doesn't have isActive, defaulting to true
         welcomeTitle: expo.introduction_title,
         welcomeSubtitle: expo.introduction_subtitle || "",
       }));
@@ -65,7 +62,6 @@ const Expos: React.FC = () => {
       startsOn: "",
       endsOn: "",
       location: "",
-      isActive: false,
       welcomeTitle: "",
       welcomeSubtitle: "",
     });
@@ -79,7 +75,6 @@ const Expos: React.FC = () => {
       startsOn: expo.startsOn.split("T")[0],
       endsOn: expo.endsOn.split("T")[0],
       location: expo.location,
-      isActive: expo.isActive,
       welcomeTitle: expo.welcomeTitle,
       welcomeSubtitle: expo.welcomeSubtitle,
     });
@@ -160,20 +155,6 @@ const Expos: React.FC = () => {
       render: (value: string) => new Date(value).toLocaleDateString(),
     },
     { key: "location" as keyof Expo, label: t("location"), sortable: true },
-    {
-      key: "isActive" as keyof Expo,
-      label: t("active"),
-      sortable: true,
-      render: (value: boolean) => (
-        <div className="flex items-center">
-          {value ? (
-            <CheckCircle className="h-5 w-5 text-suva-positive" />
-          ) : (
-            <XCircle className="h-5 w-5 text-red-500" />
-          )}
-        </div>
-      ),
-    },
   ];
 
   return (
@@ -316,24 +297,6 @@ const Expos: React.FC = () => {
               className="mt-1 block w-full  -md border-gray-300 shadow-lg focus:border-blue-500 focus:ring-blue-500 sm:text-sm border px-3 py-2"
               placeholder={t("enterWelcomeSubtitle")}
             />
-          </div>
-
-          <div className="flex items-center">
-            <input
-              id="isActive"
-              type="checkbox"
-              checked={formData.isActive}
-              onChange={(e) =>
-                setFormData({ ...formData, isActive: e.target.checked })
-              }
-              className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300  "
-            />
-            <label
-              htmlFor="isActive"
-              className="ml-2 block text-sm text-gray-900"
-            >
-              {t("expoIsActive")}
-            </label>
           </div>
 
           <div className="flex justify-end space-x-3">
