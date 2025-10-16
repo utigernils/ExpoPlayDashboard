@@ -77,6 +77,7 @@ const Sidebar: React.FC = () => {
       </nav>
 
       {/* User section */}
+      <p className="px-4 py-4 text-suva-grey-50">Build 1.5.0</p>
       <div className="border-t border-suva-grey-25 p-2">
         {loading ? (
           <div className="flex items-center space-x-3 mb-3">
