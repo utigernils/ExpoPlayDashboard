@@ -5,7 +5,12 @@ import Header from "../components/Layout/Header";
 import DataTable from "../components/Common/DataTable";
 import ConfirmDialog from "../components/Common/ConfirmDialog";
 import Modal from "../components/Common/Modal";
-import {Player, index, destroy, getPlayedQuizzes } from "../services/api/modelConnectors/Players";
+import {
+  Player,
+  index,
+  destroy,
+  getPlayedQuizzes,
+} from "../services/api/modelConnectors/Players";
 import { PlayedQuiz } from "../services/api/modelConnectors/PlayedQuizzes";
 import { CheckCircle, XCircle, Eye } from "lucide-react";
 import { useNotification } from "../context/NotificationContext";
@@ -86,7 +91,11 @@ const Players: React.FC = () => {
   };
 
   const columns = [
-    { key: "first_name" as keyof Player, label: t("firstName"), sortable: true },
+    {
+      key: "first_name" as keyof Player,
+      label: t("firstName"),
+      sortable: true,
+    },
     { key: "last_name" as keyof Player, label: t("lastName"), sortable: true },
     { key: "email" as keyof Player, label: t("email"), sortable: true },
     {
@@ -103,7 +112,11 @@ const Players: React.FC = () => {
         </div>
       ),
     },
-    { key: "played_quizzes" as keyof Player, label: t("playedQuizzes"), sortable: true },
+    {
+      key: "played_quizzes" as keyof Player,
+      label: t("playedQuizzes"),
+      sortable: true,
+    },
   ];
 
   return (

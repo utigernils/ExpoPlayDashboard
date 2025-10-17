@@ -17,7 +17,7 @@ import ExpoPlayLogo from "../../ExpoPlay_Logo.png";
 import { saveAs } from "file-saver";
 
 const downloadDocumentation = () => {
-  const pdfUrl = "https://expoplay.ch/documentation.pdf"; 
+  const pdfUrl = "https://expoplay.ch/documentation.pdf";
   const fileName = "ExpoPlay_Dashboard_Dokumentation.pdf";
   saveAs(pdfUrl, fileName);
 };
@@ -87,7 +87,10 @@ const Sidebar: React.FC = () => {
       {/* User section */}
       <div className="px-4 py-4 w-full flex items-center gap-2">
         <p className="text-suva-grey-25">Build 1.5.2</p>
-        <button onClick={downloadDocumentation} className="p-1 rounded hover:bg-suva-bg-grey text-suva-grey-25">
+        <button
+          onClick={downloadDocumentation}
+          className="p-1 rounded hover:bg-suva-bg-grey text-suva-grey-25"
+        >
           <FileQuestion className="h-4 w-4" />
         </button>
       </div>
