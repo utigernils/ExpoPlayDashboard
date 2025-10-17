@@ -133,7 +133,7 @@ const Players: React.FC = () => {
           addButtonText={t("addPlayer")}
           customActions={(player: Player) => (
             <>
-              {(player.playedQuizzes ?? 0) > 0 && (
+              {(player.played_quizzes ?? 0) > 0 && (
                 <button
                   onClick={() => handleViewPlayedQuizzes(player)}
                   className="rounded-full text-suva-blue-100 hover:text-suva-interaction-blue transition-colors duration-200"
