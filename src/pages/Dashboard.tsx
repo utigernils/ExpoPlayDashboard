@@ -303,7 +303,7 @@ const Dashboard: React.FC = () => {
       sortable: true,
     },
     {
-      key: "player_id" as keyof PlayedQuizData,
+      key: "player_name" as keyof PlayedQuizData,
       label: t("player"),
       sortable: true,
     },
