@@ -9,7 +9,8 @@ type User = {
 };
 
 interface UserApiResponse {
-  data: any;
+  user?: User;
+  data?: any;
 }
 
 async function index(): Promise<User[]> {
@@ -37,10 +38,11 @@ async function create(
   },
 ): Promise<User> {
   const response = await apiClient.post<UserApiResponse>("/register", userData);
+  console.log(response);
   return {
-    ...response.data,
-    created_at: new Date(response.data.created_at),
-    updated_at: new Date(response.data.updated_at),
+    ...response.user,
+    created_at: new Date(response.user.created_at),
+    updated_at: new Date(response.user.updated_at),
   } as User;
 }
 

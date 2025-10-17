@@ -5,8 +5,12 @@ import Header from "../components/Layout/Header";
 import DataTable from "../components/Common/DataTable";
 import ConfirmDialog from "../components/Common/ConfirmDialog";
 import Modal from "../components/Common/Modal";
-import { Player } from "../types";
-import * as PlayerConnector from "../services/api/modelConnectors/Players";
+import {
+  Player,
+  index,
+  destroy,
+  getPlayedQuizzes,
+} from "../services/api/modelConnectors/Players";
 import { PlayedQuiz } from "../services/api/modelConnectors/PlayedQuizzes";
 import { CheckCircle, XCircle, Eye } from "lucide-react";
 import { useNotification } from "../context/NotificationContext";
@@ -27,18 +31,8 @@ const Players: React.FC = () => {
 
   const fetchPlayers = async () => {
     try {
-      const data = await PlayerConnector.index();
-
-      const mappedData = data.map((player) => ({
-        id: player.id.toString(),
-        firstName: player.first_name,
-        lastName: player.last_name,
-        email: player.email,
-        joinLink: player.join_link,
-        wantsNewsletter: player.wants_newsletter,
-        playedQuizzes: player.played_quizzes,
-      }));
-      setPlayers(mappedData);
+      const data = await index();
+      setPlayers(data);
     } catch (error) {
       console.error("Error fetching players:", error);
     } finally {
@@ -61,9 +55,7 @@ const Players: React.FC = () => {
     setPlayedQuizzesLoading(true);
 
     try {
-      const quizzes = await PlayerConnector.getPlayedQuizzes(
-        parseInt(player.id),
-      );
+      const quizzes = await getPlayedQuizzes(player.id);
       setPlayedQuizzes(quizzes);
     } catch (error) {
       console.error("Error fetching played quizzes:", error);
@@ -76,7 +68,7 @@ const Players: React.FC = () => {
   const handleError = (_err: any) => {
     notify({
       title: t("error"),
-      description: t("errorOccurred"),
+      description: _err?.message || t("somethingWentWrong"),
       state: "error",
     });
   };
@@ -86,7 +78,7 @@ const Players: React.FC = () => {
 
     setDeleteLoading(true);
     try {
-      await PlayerConnector.destroy(parseInt(deletingPlayer.id));
+      await destroy(deletingPlayer.id);
       setIsDeleteDialogOpen(false);
       setDeletingPlayer(null);
       fetchPlayers();
@@ -99,11 +91,15 @@ const Players: React.FC = () => {
   };
 
   const columns = [
-    { key: "firstName" as keyof Player, label: t("firstName"), sortable: true },
-    { key: "lastName" as keyof Player, label: t("lastName"), sortable: true },
+    {
+      key: "first_name" as keyof Player,
+      label: t("firstName"),
+      sortable: true,
+    },
+    { key: "last_name" as keyof Player, label: t("lastName"), sortable: true },
     { key: "email" as keyof Player, label: t("email"), sortable: true },
     {
-      key: "wantsNewsletter" as keyof Player,
+      key: "wants_newsletter" as keyof Player,
       label: t("newsletter"),
       sortable: true,
       render: (value: boolean) => (
@@ -115,6 +111,11 @@ const Players: React.FC = () => {
           )}
         </div>
       ),
+    },
+    {
+      key: "played_quizzes" as keyof Player,
+      label: t("playedQuizzes"),
+      sortable: true,
     },
   ];
 
