@@ -40,11 +40,11 @@ const Sidebar: React.FC = () => {
 
   const navigation = [
     { name: t("dashboard"), href: "/", icon: Home },
-    { name: t("consoles"), href: "/consoles", icon: Monitor },
+    { name: t("quizzes"), href: "/quizzes", icon: FileText },
     { name: t("expos"), href: "/expos", icon: Calendar },
     { name: t("players"), href: "/players", icon: Users },
-    { name: t("quizzes"), href: "/quizzes", icon: FileText },
     { name: t("playedQuizzes"), href: "/played-quizzes", icon: GamepadIcon },
+    { name: t("consoles"), href: "/consoles", icon: Monitor },
     ...(isAdmin ? [{ name: t("users"), href: "/users", icon: User }] : []),
   ];
 
